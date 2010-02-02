@@ -5,7 +5,7 @@ use Test::Nginx::Socket;
 
 repeat_each(1);
 
-plan tests => repeat_each() * 3 * blocks();
+plan tests => repeat_each() * 2 * blocks();
 
 no_long_string();
 
@@ -49,4 +49,52 @@ GET /foo?bar=71
 --- response_body
 71
 25
+
+
+
+=== TEST 3: set if empty (using arg_xxx directly)
+buggy?
+--- config
+    location /foo {
+        set_if_empty $arg_bar 15;
+        echo $arg_bar;
+
+        set_if_empty $arg_bah 25;
+        echo $arg_bah;
+    }
+--- request
+GET /foo?bar=71
+--- response_body
+15
+25
+
+
+
+=== TEST 4: set quote sql value
+buggy?
+--- config
+    location /foo {
+        set $foo "hello\n\r'\"\\";
+        set_quote_sql_value $foo $foo;
+        echo $foo;
+    }
+--- request
+GET /foo
+--- response_body
+'hello\n\r\'\"\\'
+
+
+
+=== TEST 5: set unescape uri
+buggy?
+--- config
+    location /foo {
+        set $foo "hello%20world";
+        set_unescape_uri $foo $foo;
+        echo $foo;
+    }
+--- request
+GET /foo
+--- response_body
+hello world
 
