@@ -10,10 +10,35 @@ Status
 
 Synopsis
 
+    location /foo {
+        set $a $arg_a;
+        set_if_empty $a 56;
+
+        # GET /foo?a=32 will yield $a == 32
+        # while GET /foo and GET /foo?a= will
+        # yeild $a == 56 here.
+    }
+
+    location /bar {
+        set $foo "hello\n\n'\"\\";
+        set_quote_sql_value $foo $foo;
+        # now $foo is: 'hello\n\n\'\"\\'
+    }
+
+    location /baz {
+        set $foo "hello%20world";
+        set_unescape_uri $foo $foo;
+        # now $foo is: hello world
+    }
+
 Description
 
 Directives
-  more_set_headers
+  set_if_empty
+
+  set_quote_sql_value
+
+  set_unescape_uri
 
 Installation
     Grab the nginx source code from nginx.net (<http://nginx.net/>), for

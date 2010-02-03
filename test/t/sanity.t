@@ -52,7 +52,26 @@ GET /foo?bar=71
 
 
 
-=== TEST 3: set if empty (using arg_xxx directly)
+=== TEST 3: set if empty
+--- config
+    location /foo {
+        set $bar $arg_bar;
+        set_if_empty $bar 15;
+        echo $bar;
+
+        set $bah $arg_bah;
+        set_if_empty $bah 25;
+        echo $bah;
+    }
+--- request
+GET /foo?bar=
+--- response_body
+15
+25
+
+
+
+=== TEST 4: set if empty (using arg_xxx directly)
 buggy?
 --- config
     location /foo {
@@ -70,7 +89,7 @@ GET /foo?bar=71
 
 
 
-=== TEST 4: set quote sql value
+=== TEST 5: set quote sql value
 buggy?
 --- config
     location /foo {
@@ -85,7 +104,7 @@ GET /foo
 
 
 
-=== TEST 5: set unescape uri
+=== TEST 6: set unescape uri
 buggy?
 --- config
     location /foo {
