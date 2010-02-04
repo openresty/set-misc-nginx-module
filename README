@@ -31,6 +31,15 @@ Synopsis
         # now $foo is: hello world
     }
 
+    upstream_list universe moon sun earth;
+    upstream moon { ... }
+    upstream sun { ... }
+    upstream earth { ... }
+    location /foo {
+        set_hashed_upstream $backend universe $arg_id;
+        drizzle_pass $backend; # used with ngx_drizzle
+    }
+
 Description
 
 Directives
@@ -39,6 +48,8 @@ Directives
   set_quote_sql_value
 
   set_unescape_uri
+
+  set_hashed_upstream
 
 Installation
     1. Grab the nginx source code from nginx.net (<http://nginx.net/>), for
