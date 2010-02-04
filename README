@@ -55,7 +55,7 @@ Installation
 
         # Here we assume you would install you nginx under /opt/nginx/.
         $ ./configure --prefix=/opt/nginx \
-            --add-module=/path/to/nginx-devel-kit \
+            --add-module=/path/to/ngx_devel_kit \
             --add-module=/path/to/set-misc-nginx-module
 
         $ make -j2
