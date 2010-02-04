@@ -143,3 +143,30 @@ moon
 earth
 earth
 
+
+
+=== TEST 8: set hashed upstream (use var for upstream_list name)
+buggy?
+--- config
+    upstream_list universe moon sun earth;
+    location /foo {
+        set $list_name universe;
+        set_hashed_upstream $backend $list_name $arg_id;
+        echo $backend;
+    }
+    location /main {
+        echo_location_async /foo;
+        echo_location_async /foo?id=hello;
+        echo_location_async /foo?id=world;
+        echo_location_async /foo?id=larry;
+        echo_location_async /foo?id=audreyt;
+    }
+--- request
+GET /main
+--- response_body
+moon
+sun
+moon
+earth
+earth
+
