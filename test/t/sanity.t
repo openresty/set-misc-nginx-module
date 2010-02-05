@@ -90,7 +90,6 @@ GET /foo?bar=71
 
 
 === TEST 5: set quote sql value
-buggy?
 --- config
     location /foo {
         set $foo "hello\n\r'\"\\";
@@ -104,7 +103,21 @@ GET /foo
 
 
 
-=== TEST 6: set unescape uri
+=== TEST 6: set quote sql value (in place)
+--- config
+    location /foo {
+        set $foo "hello\n\r'\"\\";
+        set_quote_sql_value $foo;
+        echo $foo;
+    }
+--- request
+GET /foo
+--- response_body
+'hello\n\r\'\"\\'
+
+
+
+=== TEST 7: set unescape uri
 buggy?
 --- config
     location /foo {
@@ -119,7 +132,22 @@ hello world
 
 
 
-=== TEST 7: set hashed upstream
+=== TEST 8: set unescape uri (in-place)
+buggy?
+--- config
+    location /foo {
+        set $foo "hello%20world";
+        set_unescape_uri $foo;
+        echo $foo;
+    }
+--- request
+GET /foo
+--- response_body
+hello world
+
+
+
+=== TEST 9: set hashed upstream
 buggy?
 --- config
     upstream_list universe moon sun earth;
@@ -145,7 +173,7 @@ earth
 
 
 
-=== TEST 8: set hashed upstream (use var for upstream_list name)
+=== TEST 10: set hashed upstream (use var for upstream_list name)
 buggy?
 --- config
     upstream_list universe moon sun earth;

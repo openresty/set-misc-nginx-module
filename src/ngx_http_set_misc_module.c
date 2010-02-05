@@ -59,7 +59,7 @@ static ngx_command_t  ngx_http_set_misc_commands[] = {
     {
         ngx_string ("set_unescape_uri"),
         NGX_HTTP_MAIN_CONF|NGX_HTTP_SRV_CONF|NGX_HTTP_SIF_CONF
-            |NGX_HTTP_LOC_CONF|NGX_HTTP_LIF_CONF|NGX_CONF_TAKE2,
+            |NGX_HTTP_LOC_CONF|NGX_HTTP_LIF_CONF|NGX_CONF_TAKE12,
         ndk_set_var_value,
         0,
         0,
@@ -68,7 +68,7 @@ static ngx_command_t  ngx_http_set_misc_commands[] = {
     {
         ngx_string ("set_quote_sql_value"),
         NGX_HTTP_MAIN_CONF|NGX_HTTP_SRV_CONF|NGX_HTTP_SIF_CONF
-            |NGX_HTTP_LOC_CONF|NGX_HTTP_LIF_CONF|NGX_CONF_TAKE2,
+            |NGX_HTTP_LOC_CONF|NGX_HTTP_LIF_CONF|NGX_CONF_TAKE12,
         ndk_set_var_value,
         0,
         0,
@@ -325,18 +325,15 @@ ngx_http_set_if_empty(ngx_conf_t *cf, ngx_command_t *cmd, void *conf)
 {
     ngx_str_t               *value;
     ndk_set_var_t            filter;
-    ngx_str_t                args[2];
 
     value = cf->args->elts;
-    args[0] = value[1];
-    args[1] = value[2];
 
     filter.type = NDK_SET_VAR_MULTI_VALUE;
     filter.func = ngx_http_set_misc_set_if_empty;
     filter.size = 2;
     filter.data = NULL;
 
-    return  ndk_set_var_multi_value_core(cf, &value[1], args, &filter);
+    return  ndk_set_var_multi_value_core(cf, &value[1], &value[1], &filter);
 }
 
 
