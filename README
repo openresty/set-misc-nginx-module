@@ -22,12 +22,20 @@ Synopsis
     location /bar {
         set $foo "hello\n\n'\"\\";
         set_quote_sql_value $foo $foo;
+
+        # OR in-place editing:
+        #   set_quote_sql_value $foo;
+
         # now $foo is: 'hello\n\n\'\"\\'
     }
 
     location /baz {
         set $foo "hello%20world";
         set_unescape_uri $foo $foo;
+
+        # OR in-place editing:
+        #   set_quote_sql_value $foo;
+
         # now $foo is: hello world
     }
 
