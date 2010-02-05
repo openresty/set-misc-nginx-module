@@ -11,11 +11,6 @@ typedef enum {
     ngx_http_set_misc_distribution_random /* XXX not used */
 } ngx_http_set_misc_distribution_t;
 
-typedef struct {
-    ngx_str_t            var;
-    ngx_uint_t           hash;
-} ngx_http_set_if_empty_data_t;
-
 
 static ndk_upstream_list_t *
 ngx_http_set_misc_get_upstream_list(u_char *data, size_t len);
@@ -39,7 +34,7 @@ static ngx_int_t ngx_http_set_misc_quote_sql_value(ngx_http_request_t *r,
         ngx_str_t *res, ngx_http_variable_value_t *v);
 
 static ngx_int_t ngx_http_set_misc_set_if_empty(ngx_http_request_t *r,
-        ngx_str_t *res, ngx_http_variable_value_t *v, void *data);
+        ngx_str_t *res, ngx_http_variable_value_t *v);
 
 static ngx_int_t ngx_http_set_misc_set_hashed_upstream(ngx_http_request_t *r,
         ngx_str_t *res, ngx_http_variable_value_t *v, void *data);
@@ -304,27 +299,22 @@ ngx_http_set_misc_escape_sql_str(u_char *dst, u_char *src,
 
 static ngx_int_t
 ngx_http_set_misc_set_if_empty(ngx_http_request_t *r,
-        ngx_str_t *res, ngx_http_variable_value_t *v, void *data)
+        ngx_str_t *res, ngx_http_variable_value_t *v)
 {
-    ngx_http_set_if_empty_data_t      *var_data = data;
+    ngx_http_variable_value_t   *cur_v, *default_v;
 
-    ngx_http_variable_value_t   *orig_v;
+    cur_v = &v[0];
+    default_v = &v[1];
 
-    orig_v = ngx_http_get_variable(r, &var_data->var, var_data->hash, 0);
-    if (orig_v == NULL) {
-        return NGX_ERROR;
+    if (cur_v->not_found || cur_v->len == 0) {
+        res->data = default_v->data;
+        res->len = default_v->len;
+
+        return NGX_OK;
     }
 
-    if (orig_v->not_found || orig_v->len == 0) {
-        dd("variable %.*s not found", var_data->var.len,
-                var_data->var.data);
-        res->data = v->data;
-        res->len = v->len;
-
-    } else {
-        res->data = orig_v->data;
-        res->len = orig_v->len;
-    }
+    res->data = cur_v->data;
+    res->len = cur_v->len;
 
     return NGX_OK;
 }
@@ -335,41 +325,18 @@ ngx_http_set_if_empty(ngx_conf_t *cf, ngx_command_t *cmd, void *conf)
 {
     ngx_str_t               *value;
     ndk_set_var_t            filter;
-    ngx_uint_t               hash;
-    size_t                   len;
-    u_char                  *lowcase;
-    ngx_str_t                var;
-
-    ngx_http_set_if_empty_data_t        *data;
+    ngx_str_t                args[2];
 
     value = cf->args->elts;
+    args[0] = value[1];
+    args[1] = value[2];
 
-    data = ngx_palloc(cf->pool, sizeof(ngx_http_set_if_empty_data_t));
-    if (data == NULL) {
-        return NGX_CONF_ERROR;
-    }
-
-    len = value[1].len - 1;
-
-    lowcase = ngx_pnalloc(cf->pool, len);
-    if (lowcase == NULL) {
-        return NGX_CONF_ERROR;
-    }
-
-    hash = ngx_hash_strlow(lowcase, value[1].data + 1, len);
-
-    var.len = len;
-    var.data = lowcase;
-
-    data->var = var;
-    data->hash = hash;
-
-    filter.type = NDK_SET_VAR_VALUE_DATA;
+    filter.type = NDK_SET_VAR_MULTI_VALUE;
     filter.func = ngx_http_set_misc_set_if_empty;
-    filter.size = 1;
-    filter.data = data;
+    filter.size = 2;
+    filter.data = NULL;
 
-    return  ndk_set_var_value_core(cf, &value[1], &value[2], &filter);
+    return  ndk_set_var_multi_value_core(cf, &value[1], args, &filter);
 }
 
 
