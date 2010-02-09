@@ -93,7 +93,7 @@ GET /foo?bar=71
 --- config
     location /foo {
         set $foo "hello\n\r'\"\\";
-        set_quote_sql_value $foo $foo;
+        set_quote_sql_str $foo $foo;
         echo $foo;
     }
 --- request
@@ -107,7 +107,7 @@ GET /foo
 --- config
     location /foo {
         set $foo "hello\n\r'\"\\";
-        set_quote_sql_value $foo;
+        set_quote_sql_str $foo;
         echo $foo;
     }
 --- request

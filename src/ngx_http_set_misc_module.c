@@ -30,7 +30,7 @@ static uintptr_t ngx_http_set_misc_escape_sql_str(u_char *dst, u_char *src,
 static ngx_int_t ngx_http_set_misc_unescape_uri(ngx_http_request_t *r,
         ngx_str_t *res, ngx_http_variable_value_t *v);
 
-static ngx_int_t ngx_http_set_misc_quote_sql_value(ngx_http_request_t *r,
+static ngx_int_t ngx_http_set_misc_quote_sql_str(ngx_http_request_t *r,
         ngx_str_t *res, ngx_http_variable_value_t *v);
 
 static ngx_int_t ngx_http_set_misc_set_if_empty(ngx_http_request_t *r,
@@ -47,9 +47,9 @@ static  ndk_set_var_t  ngx_http_set_misc_unescape_uri_filter = {
     NULL
 };
 
-static  ndk_set_var_t  ngx_http_set_misc_quote_sql_value_filter = {
+static  ndk_set_var_t  ngx_http_set_misc_quote_sql_str_filter = {
     NDK_SET_VAR_VALUE,
-    ngx_http_set_misc_quote_sql_value,
+    ngx_http_set_misc_quote_sql_str,
     1,
     NULL
 };
@@ -66,13 +66,13 @@ static ngx_command_t  ngx_http_set_misc_commands[] = {
         &ngx_http_set_misc_unescape_uri_filter
     },
     {
-        ngx_string ("set_quote_sql_value"),
+        ngx_string ("set_quote_sql_str"),
         NGX_HTTP_MAIN_CONF|NGX_HTTP_SRV_CONF|NGX_HTTP_SIF_CONF
             |NGX_HTTP_LOC_CONF|NGX_HTTP_LIF_CONF|NGX_CONF_TAKE12,
         ndk_set_var_value,
         0,
         0,
-        &ngx_http_set_misc_quote_sql_value_filter
+        &ngx_http_set_misc_quote_sql_str_filter
     },
     {
         ngx_string ("set_if_empty"),
@@ -162,7 +162,7 @@ ngx_http_set_misc_unescape_uri(ngx_http_request_t *r,
 
 
 static ngx_int_t
-ngx_http_set_misc_quote_sql_value(ngx_http_request_t *r,
+ngx_http_set_misc_quote_sql_str(ngx_http_request_t *r,
         ngx_str_t *res, ngx_http_variable_value_t *v)
 {
     size_t                   len;
@@ -208,7 +208,7 @@ ngx_http_set_misc_quote_sql_value(ngx_http_request_t *r,
 
     if (p != res->data + res->len) {
         ngx_log_error(NGX_LOG_ERR, r->connection->log, 0,
-                "set_quote_sql_value: buffer error");
+                "set_quote_sql_str: buffer error");
         return NGX_ERROR;
     }
 
