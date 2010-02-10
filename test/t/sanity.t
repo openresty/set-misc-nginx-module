@@ -198,3 +198,30 @@ moon
 earth
 earth
 
+
+
+=== TEST 11: set quote empty sql value
+--- config
+    location /foo {
+        set $foo "";
+        set_quote_sql_str $foo;
+        echo $foo;
+    }
+--- request
+GET /foo
+--- response_body
+null
+
+
+
+=== TEST 12: set quote null sql value
+--- config
+    location /foo {
+        set_quote_sql_str $foo;
+        echo $foo;
+    }
+--- request
+GET /foo
+--- response_body
+null
+

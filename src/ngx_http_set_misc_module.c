@@ -169,15 +169,9 @@ ngx_http_set_misc_quote_sql_str(ngx_http_request_t *r,
     u_char                  *p;
     size_t                   escape;
 
-    if (v->not_found) {
+    if (v->not_found || v->len == 0) {
         res->data = (u_char *) "null";
         res->len = sizeof("null") - 1;
-        return NGX_OK;
-    }
-
-    if (v->len == 0) {
-        res->data = (u_char *)"''";
-        res->len = sizeof("''") - 1;
         return NGX_OK;
     }
 
