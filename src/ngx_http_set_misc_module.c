@@ -21,7 +21,7 @@ ngx_http_set_misc_get_upstream_list(u_char *data, size_t len);
 static ngx_uint_t ngx_http_set_misc_apply_distribution(ngx_log_t *log, ngx_uint_t hash,
         ndk_upstream_list_t *ul, ngx_http_set_misc_distribution_t type);
 
-static char * ngx_http_set_if_empty (ngx_conf_t *cf, ngx_command_t *cmd,
+static char * ngx_http_set_if_empty(ngx_conf_t *cf, ngx_command_t *cmd,
         void *conf);
 
 static char * ngx_http_set_hashed_upstream(ngx_conf_t *cf,
@@ -452,7 +452,7 @@ ngx_http_set_misc_apply_distribution(ngx_log_t *log, ngx_uint_t hash,
 {
     switch (type) {
     case ngx_http_set_misc_distribution_modula:
-        return hash % ul->nelts;
+        return (uint32_t) hash % (uint32_t) ul->nelts;
 
     default:
         ngx_log_error(NGX_LOG_ERR, log, 0, "apply_distribution: "
