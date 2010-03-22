@@ -64,9 +64,7 @@ Installation
         example, the version 0.8.29 (see nginx compatibility),
 
     2. Grab the NDK module from GitHub:
-        http://github.com/simpl-it/ngx_devel_kit
-        (For now, please use my fork of NDK here:
-            http://github.com/agentzh/ngx_devel_kit)
+        http://github.com/agentzh/ngx_devel_kit
 
     3. and then build the source with this module:
 
