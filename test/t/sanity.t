@@ -3,7 +3,7 @@
 use lib 'lib';
 use Test::Nginx::Socket;
 
-repeat_each(3);
+#repeat_each(3);
 
 plan tests => repeat_each() * 2 * blocks();
 
@@ -224,4 +224,18 @@ null
 GET /foo
 --- response_body
 null
+
+
+
+=== TEST 13: unescape '+' to ' '
+--- config
+    location /bar {
+        set $a 'a+b';
+        set_unescape_uri $a;
+        echo $a;
+    }
+--- request
+    GET /bar
+--- response_body
+a b
 
