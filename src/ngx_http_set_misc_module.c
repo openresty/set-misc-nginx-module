@@ -1,6 +1,7 @@
-#define DDEBUG 0
+#define DDEBUG 1
 #include "ddebug.h"
 
+#include "base32.h"
 #include <ndk.h>
 
 #define NGX_UNESCAPE_URI_COMPONENT  0
@@ -42,6 +43,12 @@ static ngx_int_t ngx_http_set_misc_set_if_empty(ngx_http_request_t *r,
 static ngx_int_t ngx_http_set_misc_set_hashed_upstream(ngx_http_request_t *r,
         ngx_str_t *res, ngx_http_variable_value_t *v, void *data);
 
+static ngx_int_t ngx_http_set_misc_encode_base32(ngx_http_request_t *r,
+        ngx_str_t *res, ngx_http_variable_value_t *v);
+
+static ngx_int_t ngx_http_set_misc_decode_base32(ngx_http_request_t *r,
+        ngx_str_t *res, ngx_http_variable_value_t *v);
+
 
 static  ndk_set_var_t  ngx_http_set_misc_unescape_uri_filter = {
     NDK_SET_VAR_VALUE,
@@ -53,6 +60,20 @@ static  ndk_set_var_t  ngx_http_set_misc_unescape_uri_filter = {
 static  ndk_set_var_t  ngx_http_set_misc_quote_sql_str_filter = {
     NDK_SET_VAR_VALUE,
     ngx_http_set_misc_quote_sql_str,
+    1,
+    NULL
+};
+
+static  ndk_set_var_t  ngx_http_set_misc_encode_base32_filter = {
+    NDK_SET_VAR_VALUE,
+    ngx_http_set_misc_encode_base32,
+    1,
+    NULL
+};
+
+static  ndk_set_var_t  ngx_http_set_misc_decode_base32_filter = {
+    NDK_SET_VAR_VALUE,
+    ngx_http_set_misc_decode_base32,
     1,
     NULL
 };
@@ -94,6 +115,24 @@ static ngx_command_t  ngx_http_set_misc_commands[] = {
         0,
         0,
         NULL
+    },
+    {
+        ngx_string("set_encode_base32"),
+        NGX_HTTP_MAIN_CONF|NGX_HTTP_SRV_CONF|NGX_HTTP_SIF_CONF
+            |NGX_HTTP_LOC_CONF|NGX_HTTP_LIF_CONF|NGX_CONF_TAKE12,
+        ndk_set_var_value,
+        0,
+        0,
+        &ngx_http_set_misc_encode_base32_filter
+    },
+    {
+        ngx_string("set_decode_base32"),
+        NGX_HTTP_MAIN_CONF|NGX_HTTP_SRV_CONF|NGX_HTTP_SIF_CONF
+            |NGX_HTTP_LOC_CONF|NGX_HTTP_LIF_CONF|NGX_CONF_TAKE12,
+        ndk_set_var_value,
+        0,
+        0,
+        &ngx_http_set_misc_decode_base32_filter
     },
 
     ngx_null_command
@@ -624,5 +663,74 @@ done:
 
     *dst = d;
     *src = s;
+}
+
+
+static ngx_int_t
+ngx_http_set_misc_encode_base32(ngx_http_request_t *r,
+        ngx_str_t *res, ngx_http_variable_value_t *v)
+{
+    size_t                   len;
+    u_char                  *p;
+    u_char                  *src, *dst;
+
+    len = base32_encoded_length(v->len);
+
+    dd("estimated dst len: %d", len);
+
+    p = ngx_palloc(r->pool, len);
+    if (p == NULL) {
+        return NGX_ERROR;
+    }
+
+    src = v->data; dst = p;
+
+    encode_base32((int)v->len, (const char *)src, (int *)&len, (char *)dst);
+
+    res->data = p;
+    res->len = len;
+
+    dd("res (len %d): %.*s", res->len, res->len, res->data);
+
+    return NGX_OK;
+}
+
+
+static ngx_int_t
+ngx_http_set_misc_decode_base32(ngx_http_request_t *r,
+        ngx_str_t *res, ngx_http_variable_value_t *v)
+{
+    size_t                   len;
+    u_char                  *p;
+    u_char                  *src, *dst;
+    int                      ret;
+
+    len = base32_decoded_length(v->len);
+
+    dd("estimated dst len: %d", len);
+
+    p = ngx_palloc(r->pool, len);
+    if (p == NULL) {
+        return NGX_ERROR;
+    }
+
+    src = v->data; dst = p;
+
+    ret = decode_base32((int)v->len, (const char *)src, (int *)&len,
+            (char *)dst);
+
+    if (ret == 0 /* OK */) {
+        res->data = p;
+        res->len = len;
+
+        return NGX_OK;
+    }
+
+    /* failed to decode */
+
+    res->data = NULL;
+    res->len = 0;
+
+    return NGX_OK;
 }
 

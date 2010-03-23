@@ -239,3 +239,79 @@ null
 --- response_body
 a b
 
+
+
+=== TEST 14: base32 (5 bytes)
+--- config
+    location /bar {
+        set $a 'abcde';
+        set_encode_base32 $a;
+        set $b $a;
+        set_decode_base32 $b;
+
+        echo $a;
+        echo $b;
+    }
+--- request
+    GET /bar
+--- response_body
+c5h66p35
+abcde
+
+
+
+=== TEST 15: base32 (1 byte)
+--- config
+    location /bar {
+        set $a '!';
+        set_encode_base32 $a;
+        set $b $a;
+        set_decode_base32 $b;
+
+        echo $a;
+        echo $b;
+    }
+--- request
+    GET /bar
+--- response_body
+44======
+!
+
+
+
+=== TEST 16: base32 (1 byte) - not in-place editing
+--- config
+    location /bar {
+        set $a '!';
+        set_encode_base32 $a $a;
+        set_decode_base32 $b $a;
+
+        echo $a;
+        echo $b;
+    }
+--- request
+    GET /bar
+--- response_body
+44======
+!
+
+
+
+=== TEST 17: base32 (hello world)
+--- config
+    location /bar {
+        set $a '"hello, world!\nhiya"';
+        set_encode_base32 $a;
+        set $b $a;
+        set_decode_base32 $b;
+
+        echo $a;
+        echo $b;
+    }
+--- request
+    GET /bar
+--- response_body
+49k6ar3cdsm20trfe9m6888ad1knio92
+"hello, world!
+hiya"
+
