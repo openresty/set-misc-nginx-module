@@ -48,6 +48,15 @@ Synopsis
         drizzle_pass $backend; # used with ngx_drizzle
     }
 
+    location /base32 {
+        set $a 'abcde';
+        set_encode_base32 $a;
+        set_decode_base32 $b $a;
+
+        # now $a == 'c5h66p35' and
+        # $b == 'abcde'
+    }
+
 Description
 
 Directives
@@ -58,6 +67,10 @@ Directives
   set_unescape_uri
 
   set_hashed_upstream
+
+  set_encode_base32
+
+  set_decode_base32
 
 Installation
     1. Grab the nginx source code from nginx.net (<http://nginx.net/>), for
