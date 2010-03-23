@@ -58,6 +58,9 @@ Synopsis
     }
 
 Description
+  Every directive provided by this module can be
+  mixed freely with other nginx rewrite module's
+  directives, like "if" and "set". (Thanks to NDK!)
 
 Directives
   set_if_empty
