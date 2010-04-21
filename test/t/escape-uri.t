@@ -41,4 +41,26 @@ GET /foo
 hello%20world
 
 
+=== TEST 3: blank string
+--- config
+	location /foo {
+		set $foo "";
+		set_escape_uri $foo;
+		echo $foo;
+	}
+--- request
+GET /foo
+--- response_body eval
+"\n"
 
+=== TEST 4: blank string(in place)
+--- config
+	location /foo {
+		set $foo "";
+		set_escape_uri $foo;
+		echo $foo;
+	}
+--- request
+GET /foo
+--- response_body eval
+"\n"

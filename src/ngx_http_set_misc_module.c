@@ -18,10 +18,10 @@ static  ndk_set_var_t  ngx_http_set_misc_unescape_uri_filter = {
 };
 
 static ndk_set_var_t ngx_http_set_misc_escape_uri_filter = {
-	NDK_SET_VAR_VALUE,
-	ngx_http_set_misc_escape_uri,
-	1,
-	NULL
+    NDK_SET_VAR_VALUE,
+    ngx_http_set_misc_escape_uri,
+    1,
+    NULL
 };
 
 static  ndk_set_var_t  ngx_http_set_misc_quote_sql_str_filter = {
@@ -56,15 +56,15 @@ static ngx_command_t  ngx_http_set_misc_commands[] = {
         0,
         &ngx_http_set_misc_unescape_uri_filter
     },
-	{
-		ngx_string ("set_escape_uri"),
-		NGX_HTTP_MAIN_CONF|NGX_HTTP_SRV_CONF|NGX_HTTP_SIF_CONF
-			|NGX_HTTP_LOC_CONF|NGX_HTTP_LIF_CONF|NGX_CONF_TAKE12,
-		ndk_set_var_value,
-		0,
-		0,
-		&ngx_http_set_misc_escape_uri_filter
-	},
+    {
+        ngx_string ("set_escape_uri"),
+        NGX_HTTP_MAIN_CONF|NGX_HTTP_SRV_CONF|NGX_HTTP_SIF_CONF
+            |NGX_HTTP_LOC_CONF|NGX_HTTP_LIF_CONF|NGX_CONF_TAKE12,
+        ndk_set_var_value,
+        0,
+        0,
+        &ngx_http_set_misc_escape_uri_filter
+    },
     {
         ngx_string ("set_quote_sql_str"),
         NGX_HTTP_MAIN_CONF|NGX_HTTP_SRV_CONF|NGX_HTTP_SIF_CONF

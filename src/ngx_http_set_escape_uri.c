@@ -6,40 +6,35 @@
 
 ngx_int_t
 ngx_http_set_misc_escape_uri(ngx_http_request_t *r,
-		ngx_str_t *res, ngx_http_variable_value_t *v)
+        ngx_str_t *res, ngx_http_variable_value_t *v)
 {
-	size_t		len;
-	//size_t		e_len;
-	u_char		*p;
-	u_char		*src, *dst;
+    size_t        len;
+    u_char        *p;
+    u_char        *src, *dst;
 
-	if (v->len == 0) {
-		res->len = 0;
-		res->data = (u_char*)"";
-		return NGX_OK;
-	}
-	else if ( v->len < 0) {
-		return NGX_ERROR;
-	}
+    if (v->len == 0) {
+        res->len = 0;
+        res->data = NULL;
+        return NGX_OK;
+    }
 
-	src = v->data; 
-	
-	len = v->len + 2 * ngx_escape_uri(NULL, src, v->len, NGX_ESCAPE_URI);
+    src = v->data;
 
-	p = ngx_palloc(r->pool, len);
+    len = v->len + 2 * ngx_escape_uri(NULL, src, v->len, NGX_ESCAPE_URI);
 
-	if(p == NULL) {
-		return NGX_ERROR;
-	}
+    p = ngx_palloc(r->pool, len);
 
-	dst = p;
+    if (p == NULL) {
+        return NGX_ERROR;
+    }
 
-	ngx_escape_uri(p, src, len, NGX_ESCAPE_URI);
+    dst = p;
 
-	res->data = dst;
-	res->len = len;
+    ngx_escape_uri(p, src, len, NGX_ESCAPE_URI);
 
-	return NGX_OK;
-	
+    res->data = dst;
+    res->len = len;
+
+    return NGX_OK;
 }
 

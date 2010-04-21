@@ -1,5 +1,6 @@
 #define DDEBUG 0
-#include "ddebug.h"#include "ngx_http_set_hashed_upstream.h"
+#include "ddebug.h"
+#include "ngx_http_set_hashed_upstream.h"
 
 
 ndk_upstream_list_t *
@@ -153,7 +154,4 @@ ngx_http_set_hashed_upstream(ngx_conf_t *cf, ngx_command_t *cmd, void *conf)
 
     return  ndk_set_var_value_core(cf, var, v, &filter);
 }
-
-
-
 

@@ -1,8 +1,9 @@
 #define DDEBUG 0
 #include "ddebug.h"
-
 #include <ndk.h>
-#include "ngx_http_set_quote_sql.h"
+#include "ngx_http_set_quote_sql.h"
+
+
 ngx_int_t
 ngx_http_set_misc_quote_sql_str(ngx_http_request_t *r,
         ngx_str_t *res, ngx_http_variable_value_t *v)
