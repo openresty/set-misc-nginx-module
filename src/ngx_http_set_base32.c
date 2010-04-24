@@ -73,11 +73,11 @@ ngx_http_set_misc_decode_base32(ngx_http_request_t *r,
 }
 
 
-/* ÊµÏÖ²Î¿¼ src/core/ngx_string.c ÖĞµÄ ngx_(encode|decode)_base64() Àı³Ì */
+/* å®ç°å‚è€ƒ src/core/ngx_string.c ä¸­çš„ ngx_(encode|decode)_base64() ä¾‹ç¨‹ */
 
 /**
- * ½«¸ø¶¨×Ö·û´®×ª»»³É¶ÔÓ¦µÄ Base32 ±àÂëĞÎÊ½. Ä¿±ê×Ö·û´®±ØĞë±£Ö¤ÓĞ³ä×ãµÄ¿Õ¼äÈİÄÉ±àÂëºóµÄÊı¾İ.
- * ¿ÉÒÔÓÃºê base32_encoded_length() Ô¤¹À±àÂëºóÊı¾İ³¤¶È²¢Ô¤ÏÈÎªÄ¿±ê×Ö·û´®·ÖÅä¿Õ¼ä.
+ * å°†ç»™å®šå­—ç¬¦ä¸²è½¬æ¢æˆå¯¹åº”çš„ Base32 ç¼–ç å½¢å¼. ç›®æ ‡å­—ç¬¦ä¸²å¿…é¡»ä¿è¯æœ‰å……è¶³çš„ç©ºé—´å®¹çº³ç¼–ç åçš„æ•°æ®.
+ * å¯ä»¥ç”¨å® base32_encoded_length() é¢„ä¼°ç¼–ç åæ•°æ®é•¿åº¦å¹¶é¢„å…ˆä¸ºç›®æ ‡å­—ç¬¦ä¸²åˆ†é…ç©ºé—´.
  * <code>
  * 	char *src, *dst;
  * 	int slen, dlen;
@@ -86,10 +86,10 @@ ngx_http_set_misc_decode_base32(ngx_http_request_t *r,
  * 	dst = malloc(base32_encoded_length(slen));
  * 	encode_base32(slen, src, &(dlen), dst);
  * </code>
- * @param slen Ô´Êı¾İ´®³¤¶È.
- * @param src Ô­Êı¾İ´®Ö¸Õë.
- * @param dlen Ä¿±êÊı¾İ´®³¤¶ÈÖ¸Õë, ±£´æ Base32 ±àÂëºóÊı¾İ³¤¶È.
- * @param dst Ä¿±êÊı¾İ´®Ö¸Õë, ±£´æ Base32 ±àÂëºóÊı¾İ.
+ * @param slen æºæ•°æ®ä¸²é•¿åº¦.
+ * @param src åŸæ•°æ®ä¸²æŒ‡é’ˆ.
+ * @param dlen ç›®æ ‡æ•°æ®ä¸²é•¿åº¦æŒ‡é’ˆ, ä¿å­˜ Base32 ç¼–ç åæ•°æ®é•¿åº¦.
+ * @param dst ç›®æ ‡æ•°æ®ä¸²æŒ‡é’ˆ, ä¿å­˜ Base32 ç¼–ç åæ•°æ®.
  * */
 void
 encode_base32(int slen, const char *src, int *dlen, char *dst)
@@ -132,7 +132,7 @@ encode_base32(int slen, const char *src, int *dlen, char *dst)
 		len -= 5;
 	}
 
-	/* ´¦Àí·Ç 5 Õû±¶ÊıµÄÊ£Óà×Ö½Ú´® */
+	/* å¤„ç†é 5 æ•´å€æ•°çš„å‰©ä½™å­—èŠ‚ä¸² */
 	/**
 	 * Remain 1 byte:
 	 *
@@ -163,10 +163,10 @@ encode_base32(int slen, const char *src, int *dlen, char *dst)
 		*d++ = basis32[s[0] >> 3];
 
 		if (len == 1) {
-			/* Ê£Óà 1 ¸ö×Ö½Ú */
+			/* å‰©ä½™ 1 ä¸ªå­—èŠ‚ */
 			*d++ = basis32[(s[0] & 0x07) << 2];
 
-			/* µ½½áÊøÎªÖ¹²¹ 6 ¸ö = */
+			/* åˆ°ç»“æŸä¸ºæ­¢è¡¥ 6 ä¸ª = */
 			*d++ = '=';
 			*d++ = '=';
 			*d++ = '=';
@@ -177,10 +177,10 @@ encode_base32(int slen, const char *src, int *dlen, char *dst)
 			*d++ = basis32[(s[1] >> 1) & 0x1f];
 
 			if (len == 2) {
-				/* Ê£Óà 2 ¸ö×Ö½Ú */
+				/* å‰©ä½™ 2 ä¸ªå­—èŠ‚ */
 				*d++ = basis32[(s[1] & 1) << 4];
 
-				/* µ½½áÊøÎªÖ¹²¹ 4 ¸ö = */
+				/* åˆ°ç»“æŸä¸ºæ­¢è¡¥ 4 ä¸ª = */
 				*d++ = '=';
 				*d++ = '=';
 				*d++ = '=';
@@ -188,19 +188,19 @@ encode_base32(int slen, const char *src, int *dlen, char *dst)
 				*d++ = basis32[((s[1] & 1) << 4) | (s[2] >> 4)];
 
 				if (len == 3) {
-					/* Ê£Óà 3 ¸ö×Ö½Ú */
+					/* å‰©ä½™ 3 ä¸ªå­—èŠ‚ */
 					*d++ = basis32[(s[2] & 0x0f) << 1];
 
-					/* µ½½áÊøÎªÖ¹²¹ 3 ¸ö = */
+					/* åˆ°ç»“æŸä¸ºæ­¢è¡¥ 3 ä¸ª = */
 					*d++ = '=';
 					*d++ = '=';
 				} else {
-					/* Ê£Óà 4 ¸ö×Ö½Ú */
+					/* å‰©ä½™ 4 ä¸ªå­—èŠ‚ */
 					*d++ = basis32[((s[2] & 0x0f) << 1) | (s[3] >> 7)];
 					*d++ = basis32[(s[3] >> 2) & 0x1f];
 					*d++ = basis32[(s[3] & 0x03) << 3];
 
-					/* µ½½áÊøÎªÖ¹²¹ 1 ¸ö = */
+					/* åˆ°ç»“æŸä¸ºæ­¢è¡¥ 1 ä¸ª = */
 				}
 			}
 		}
@@ -213,8 +213,8 @@ encode_base32(int slen, const char *src, int *dlen, char *dst)
 
 
 /**
- * ½«¸ø¶¨µÄ Base32 ±àÂë(´óĞ¡Ğ´²»Ãô¸Ğ)Êı¾İ×ª»»³É¶ÔÓ¦µÄÔ­Ê¼×Ö·û´®. Ä¿±ê×Ö·û´®±ØĞë±£Ö¤ÓĞ³ä×ãµÄ¿Õ¼äÈİÄÉ½âÂëºóµÄÊı¾İ.
- * ¿ÉÒÔÓÃºê base32_decoded_length() Ô¤¹À½âÂëºóÊı¾İ³¤¶È²¢Ô¤ÏÈÎªÄ¿±ê×Ö·û´®·ÖÅä¿Õ¼ä.
+ * å°†ç»™å®šçš„ Base32 ç¼–ç (å¤§å°å†™ä¸æ•æ„Ÿ)æ•°æ®è½¬æ¢æˆå¯¹åº”çš„åŸå§‹å­—ç¬¦ä¸². ç›®æ ‡å­—ç¬¦ä¸²å¿…é¡»ä¿è¯æœ‰å……è¶³çš„ç©ºé—´å®¹çº³è§£ç åçš„æ•°æ®.
+ * å¯ä»¥ç”¨å® base32_decoded_length() é¢„ä¼°è§£ç åæ•°æ®é•¿åº¦å¹¶é¢„å…ˆä¸ºç›®æ ‡å­—ç¬¦ä¸²åˆ†é…ç©ºé—´.
  * <code>
  * 	char *src, *dst;
  * 	int slen, dlen;
@@ -227,11 +227,11 @@ encode_base32(int slen, const char *src, int *dlen, char *dst)
  * 		// decoding error
  * 	}
  * </code>
- * @param slen Ô´Êı¾İ´®³¤¶È.
- * @param src Ô´Êı¾İ´®Ö¸Õë.
- * @param dlen Ä¿±êÊı¾İ³¤¶ÈÖ¸Õë, ±£´æ Base32 ½âÂëºóµÄÊı¾İ³¤¶È.
- * @param dst Ä¿±êÊı¾İ´®Ö¸Õë, ±£´æ Base32 ½âÂëºóµÄÊı¾İ.
- * @retval ½âÂë³É¹¦Ê±·µ»Ø0£¬Ê§°ÜÊ±·µ»Ø-1.
+ * @param slen æºæ•°æ®ä¸²é•¿åº¦.
+ * @param src æºæ•°æ®ä¸²æŒ‡é’ˆ.
+ * @param dlen ç›®æ ‡æ•°æ®é•¿åº¦æŒ‡é’ˆ, ä¿å­˜ Base32 è§£ç åçš„æ•°æ®é•¿åº¦.
+ * @param dst ç›®æ ‡æ•°æ®ä¸²æŒ‡é’ˆ, ä¿å­˜ Base32 è§£ç åçš„æ•°æ®.
+ * @retval è§£ç æˆåŠŸæ—¶è¿”å›0ï¼Œå¤±è´¥æ—¶è¿”å›-1.
  * */
 int
 decode_base32(int slen, const char *src, int *dlen, char *dst)
@@ -273,7 +273,7 @@ decode_base32(int slen, const char *src, int *dlen, char *dst)
 	mod = len % 8;
 
 	if (mod == 1 || mod == 3 || mod == 6) {
-		/* Base32 ±àÂë´®ÓĞĞ§³¤¶È´íÎó */
+		/* Base32 ç¼–ç ä¸²æœ‰æ•ˆé•¿åº¦é”™è¯¯ */
 		return -1;
 	}
 
@@ -302,7 +302,7 @@ decode_base32(int slen, const char *src, int *dlen, char *dst)
 		len -= 8;
 	}
 
-	/* ´¦Àí·Ç 8 Õû±¶ÊıµÄ Base32 ±àÂë´® */
+	/* å¤„ç†é 8 æ•´å€æ•°çš„ Base32 ç¼–ç ä¸² */
 	/**
 	 * Remain 1 byte:
 	 *
@@ -330,19 +330,19 @@ decode_base32(int slen, const char *src, int *dlen, char *dst)
 	 *
 	 **/
 	if (len) {
-		/* Ê£Óà 2 ¸ö×Ö½Ú */
+		/* å‰©ä½™ 2 ä¸ªå­—èŠ‚ */
 		*d++ = (basis32[s[0]] << 3) | ((basis32[s[1]] >> 2) & 0x07);
 
 		if (len > 2) {
-			/* Ê£Óà 4 ¸ö×Ö½Ú */
+			/* å‰©ä½™ 4 ä¸ªå­—èŠ‚ */
 			*d++ = ((basis32[s[1]] & 0x03) << 6) | ((basis32[s[2]] & 0x1f) << 1) | ((basis32[s[3]] >> 4) & 1);
 
 			if (len > 4) {
-				/* Ê£Óà 5 ¸ö×Ö½Ú */
+				/* å‰©ä½™ 5 ä¸ªå­—èŠ‚ */
 				*d++ = ((basis32[s[3]] & 0x0f) << 4) | ((basis32[s[4]] >> 1) & 0x0f);
 
 				if (len > 5) {
-					/* Ê£Óà 7 ¸ö×Ö½Ú */
+					/* å‰©ä½™ 7 ä¸ªå­—èŠ‚ */
 					*d++ = ((basis32[s[4]] & 1) << 7) | ((basis32[s[5]] & 0x1f) << 2) | ((basis32[s[6]] >> 3) & 0x03);
 				}
 			}

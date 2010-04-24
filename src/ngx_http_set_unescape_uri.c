@@ -1,8 +1,14 @@
 #define DDEBUG 0
 #include "ddebug.h"
 #include <ndk.h>
-#define NGX_UNESCAPE_URI_COMPONENT  0
 #include "ngx_http_set_unescape_uri.h"
+
+#define NGX_UNESCAPE_URI_COMPONENT  0
+
+
+static void ngx_unescape_uri_patched(u_char **dst, u_char **src,
+        size_t size, ngx_uint_t type);
+
 
 ngx_int_t
 ngx_http_set_misc_unescape_uri(ngx_http_request_t *r,
@@ -36,8 +42,9 @@ ngx_http_set_misc_unescape_uri(ngx_http_request_t *r,
     return NGX_OK;
 }
 
+
 /* XXX we also decode '+' to ' ' */
-void
+static void
 ngx_unescape_uri_patched(u_char **dst, u_char **src, size_t size,
         ngx_uint_t type)
 {
@@ -171,3 +178,4 @@ done:
     *dst = d;
     *src = s;
 }
+
