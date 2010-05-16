@@ -68,6 +68,8 @@ Directives
 
   set_unescape_uri
 
+  set_escape_uri
+
   set_hashed_upstream
 
   set_encode_base32
