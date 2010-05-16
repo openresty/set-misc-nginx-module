@@ -77,7 +77,7 @@ Directives
   set_decode_base32
 
 Installation
-    1. Grab the nginx source code from nginx.net (<http://nginx.net/>), for
+    1. Grab the nginx source code from nginx.net (<http://nginx.net/ >), for
         example, the version 0.8.29 (see nginx compatibility),
 
     2. Grab the NDK module from GitHub:
@@ -99,7 +99,7 @@ Installation
 
     Download the latest version of the release tarball of this module from
     set-misc-nginx-module file list
-    (<http://github.com/agentzh/set-misc-nginx-module/downloads>).
+    (<http://github.com/agentzh/set-misc-nginx-module/downloads >).
 
 Compatibility
     The following versions of Nginx should work with this module:
@@ -121,22 +121,22 @@ Report Bugs
     1.  send a bug report or even patches to <agentzh@gmail.com>,
 
     2.  or create a ticket on the issue tracking interface
-        (<http://github.com/agentzh/set-misc-nginx-module/issues>)
+        (<http://github.com/agentzh/set-misc-nginx-module/issues >)
         provided by GitHub.
 
 Source Repository
     Available on github at agentzh/set-misc-nginx-module
-    (<http://github.com/agentzh/set-misc-nginx-module>).
+    (<http://github.com/agentzh/set-misc-nginx-module >).
 
 ChangeLog
 
 Test Suite
     This module comes with a Perl-driven test suite. The test cases
-    (<http://github.com/agentzh/set-misc-nginx-module/tree/master/test/t
-    />) are declarative
-    (<http://github.com/agentzh/set-misc-nginx-module/blob/master/test/t
-    /sanity.t>) too. Thanks to the Test::Base
-    (<http://search.cpan.org/perldoc?Test::Base>) module in the Perl world.
+    (<http://github.com/agentzh/set-misc-nginx-module/tree/master/test/t/ >)
+    are declarative
+    (<http://github.com/agentzh/set-misc-nginx-module/blob/master/test/t/sanity.t >
+    ) too. Thanks to the Test::Base
+    (<http://search.cpan.org/perldoc?Test::Base >) module in the Perl world.
 
     To run it on your side:
 
@@ -146,11 +146,8 @@ Test Suite
     You need to terminate any Nginx processes before running the test suite
     if you have changed the Nginx server binary.
 
-    At the moment, LWP::UserAgent
-    (<http://search.cpan.org/perldoc?LWP::UserAgent>) is used by the test
-    scaffold
-    (<http://github.com/agentzh/set-misc-nginx-module/blob/master/test/l
-    ib/Test/Nginx/LWP.pm>) for simplicity.
+    Test::Nginx (<http://search.cpan.org/perldoc?Test::Nginx >) is used by
+    the test scaffold.
 
     Because a single nginx server (by default, "localhost:1984") is used
     across all the test scripts (".t" files), it's meaningless to run the
