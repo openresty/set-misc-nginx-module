@@ -64,3 +64,17 @@ GET /foo
 GET /foo
 --- response_body eval
 "\n"
+
+
+=== TEST 5: eacape chinese character
+--- config
+    location /foo {
+        set $foo "你好";
+        set_escape_uri $foo;
+        echo $foo;
+    }
+--- request
+GET /foo
+--- response_body
+%e4%bd%a0%e5%a5%bd
+

@@ -354,5 +354,5 @@ decode_base32(int slen, const char *src, int *dlen, char *dst)
 	return 0;
 }
 
-/* vi:ts=4 sw=4 */
+
 
