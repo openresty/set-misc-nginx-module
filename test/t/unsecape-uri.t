@@ -15,7 +15,7 @@ run_tests();
 
 __DATA__
 
-=== TEST 7: set unescape uri
+=== TEST 1: set unescape uri
 buggy?
 --- config
     location /foo {
@@ -30,7 +30,7 @@ hello world
 
 
 
-=== TEST 8: set unescape uri (in-place)
+=== TEST 2: set unescape uri (in-place)
 buggy?
 --- config
     location /foo {
@@ -45,7 +45,7 @@ hello world
 
 
 
-=== TEST 13: unescape '+' to ' '
+=== TEST 3: unescape '+' to ' '
 --- config
     location /bar {
         set $a 'a+b';

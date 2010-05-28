@@ -28,6 +28,7 @@ GET /foo
 hello%20world
 
 
+
 === TEST 2: set escape uri(in-place)
 --- config
 	location /foo {
@@ -39,6 +40,7 @@ hello%20world
 GET /foo
 --- response_body
 hello%20world
+
 
 
 === TEST 3: blank string
@@ -53,6 +55,8 @@ GET /foo
 --- response_body eval
 "\n"
 
+
+
 === TEST 4: blank string(in place)
 --- config
 	location /foo {
@@ -64,6 +68,7 @@ GET /foo
 GET /foo
 --- response_body eval
 "\n"
+
 
 
 === TEST 5: eacape chinese character
