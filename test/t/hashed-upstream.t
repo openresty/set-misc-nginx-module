@@ -15,7 +15,7 @@ run_tests();
 
 __DATA__
 
-=== TEST 9: set hashed upstream
+=== TEST 1: set hashed upstream
 buggy?
 --- config
     upstream_list universe moon sun earth;
@@ -41,7 +41,7 @@ earth
 
 
 
-=== TEST 10: set hashed upstream (use var for upstream_list name)
+=== TEST 2: set hashed upstream (use var for upstream_list name)
 buggy?
 --- config
     upstream_list universe moon sun earth;

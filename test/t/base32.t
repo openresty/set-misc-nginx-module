@@ -15,7 +15,7 @@ run_tests();
 
 __DATA__
 
-=== TEST 14: base32 (5 bytes)
+=== TEST 1: base32 (5 bytes)
 --- config
     location /bar {
         set $a 'abcde';
@@ -34,7 +34,7 @@ abcde
 
 
 
-=== TEST 15: base32 (1 byte)
+=== TEST 2: base32 (1 byte)
 --- config
     location /bar {
         set $a '!';
@@ -53,7 +53,7 @@ abcde
 
 
 
-=== TEST 16: base32 (1 byte) - not in-place editing
+=== TEST 3: base32 (1 byte) - not in-place editing
 --- config
     location /bar {
         set $a '!';
@@ -71,7 +71,7 @@ abcde
 
 
 
-=== TEST 17: base32 (hello world)
+=== TEST 4: base32 (hello world)
 --- config
     location /bar {
         set $a '"hello, world!\nhiya"';

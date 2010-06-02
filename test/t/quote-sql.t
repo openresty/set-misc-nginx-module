@@ -15,7 +15,7 @@ run_tests();
 
 __DATA__
 
-=== TEST 5: set quote sql value
+=== TEST 1: set quote sql value
 --- config
     location /foo {
         set $foo "hello\n\r'\"\\";
@@ -29,7 +29,7 @@ GET /foo
 
 
 
-=== TEST 6: set quote sql value (in place)
+=== TEST 2: set quote sql value (in place)
 --- config
     location /foo {
         set $foo "hello\n\r'\"\\";
@@ -43,7 +43,7 @@ GET /foo
 
 
 
-=== TEST 11: set quote empty sql value
+=== TEST 3: set quote empty sql value
 --- config
     location /foo {
         set $foo "";
@@ -57,7 +57,7 @@ null
 
 
 
-=== TEST 12: set quote null sql value
+=== TEST 4: set quote null sql value
 --- config
     location /foo {
         set_quote_sql_str $foo;
