@@ -20,10 +20,10 @@ Synopsis
 
     location /bar {
         set $foo "hello\n\n'\"\\";
-        set_quote_sql_value $foo $foo;
+        set_quote_sql_str $foo $foo;
 
         # OR in-place editing:
-        #   set_quote_sql_value $foo;
+        #   set_quote_sql_str $foo;
 
         # now $foo is: 'hello\n\n\'\"\\'
     }
@@ -33,7 +33,7 @@ Synopsis
         set_unescape_uri $foo $foo;
 
         # OR in-place editing:
-        #   set_quote_sql_value $foo;
+        #   set_quote_sql_str $foo;
 
         # now $foo is: hello world
     }
@@ -64,7 +64,7 @@ Description
 Directives
   set_if_empty
 
-  set_quote_sql_value
+  set_quote_sql_str
 
   set_unescape_uri
 
