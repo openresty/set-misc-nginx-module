@@ -78,7 +78,7 @@ Directives
 
 Caveats
     Do not use $arg_XXX or $http_XXX or other special variables defined in
-    in nginx core module as the target variable in this module's directives.
+    the nginx core module as the target variable in this module's directives.
     For instance,
 
         set_if_empty $arg_user 'foo';
