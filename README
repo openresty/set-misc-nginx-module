@@ -76,6 +76,15 @@ Directives
 
   set_decode_base32
 
+Caveats
+    Do not use $arg_XXX or $http_XXX or other special variables defined in
+    in nginx core module as the target variable in this module's directives.
+    For instance,
+
+        set_if_empty $arg_user 'foo';
+
+    will lead to data corruption.
+
 Installation
     1. Grab the nginx source code from nginx.net (<http://nginx.net/ >), for
         example, the version 0.8.29 (see nginx compatibility),

@@ -16,6 +16,7 @@ tar -xzvf nginx-$version.tar.gz
 cd nginx-$version/
 if [[ "$BUILD_CLEAN" -eq 1 || ! -f Makefile || "$root/config" -nt Makefile || "$root/util/build.sh" -nt Makefile ]]; then
     ./configure --prefix=/opt/nginx \
+          --with-cc-opt="-O0" \
           --add-module=$root/../echo-nginx-module \
           --add-module=$root/../ndk-nginx-module \
           --add-module=$root $opts \
