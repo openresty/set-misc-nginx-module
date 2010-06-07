@@ -81,7 +81,7 @@ Caveats
     the nginx core module as the target variable in this module's directives.
     For instance,
 
-        set_if_empty $arg_user 'foo';
+        set_if_empty $arg_user 'foo';  # DO NOT USE THIS!
 
     will lead to data corruption.
 
