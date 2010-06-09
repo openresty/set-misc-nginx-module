@@ -20,10 +20,10 @@ Synopsis
 
     location /bar {
         set $foo "hello\n\n'\"\\";
-        set_quote_sql_value $foo $foo;
+        set_quote_sql_str $foo $foo;
 
         # OR in-place editing:
-        #   set_quote_sql_value $foo;
+        #   set_quote_sql_str $foo;
 
         # now $foo is: 'hello\n\n\'\"\\'
     }
@@ -33,7 +33,7 @@ Synopsis
         set_unescape_uri $foo $foo;
 
         # OR in-place editing:
-        #   set_quote_sql_value $foo;
+        #   set_quote_sql_str $foo;
 
         # now $foo is: hello world
     }
@@ -64,7 +64,7 @@ Description
 Directives
   set_if_empty
 
-  set_quote_sql_value
+  set_quote_sql_str
 
   set_unescape_uri
 
@@ -75,6 +75,15 @@ Directives
   set_encode_base32
 
   set_decode_base32
+
+Caveats
+    Do not use $arg_XXX or $http_XXX or other special variables defined in
+    the nginx core module as the target variable in this module's directives.
+    For instance,
+
+        set_if_empty $arg_user 'foo';  # DO NOT USE THIS!
+
+    will lead to data corruption.
 
 Installation
     1. Grab the nginx source code from nginx.net (<http://nginx.net/ >), for

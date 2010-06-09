@@ -446,12 +446,13 @@ start_nginx:
 
             if ($UseValgrind) {
                 if (-f 'valgrind.suppress') {
-                    $cmd = "valgrind --leak-check=full --gen-suppressions=all --suppressions=valgrind.suppress $cmd";
+                    $cmd = "valgrind -q --leak-check=full --gen-suppressions=all --suppressions=valgrind.suppress $cmd";
                 } else {
-                    $cmd = "valgrind --leak-check=full --gen-suppressions=all $cmd";
+                    $cmd = "valgrind -q --leak-check=full --gen-suppressions=all $cmd";
                 }
 
-                warn $cmd;
+                warn "$name\n";
+                #warn "$cmd\n";
             }
 
             if ($Profiling || $UseValgrind) {
@@ -473,7 +474,7 @@ start_nginx:
 =cut
 
                 }
-                warn "sleeping";
+                #warn "sleeping";
                 sleep 1;
             } else {
                 if (system($cmd) != 0) {
