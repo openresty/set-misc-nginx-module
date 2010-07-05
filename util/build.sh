@@ -9,10 +9,26 @@ home=~
 cd ~/work
 version=$1
 opts=$2
-if [ ! -f "nginx-$version.tar.gz" ]; then
-    lwp-mirror "http://sysoev.ru/nginx/nginx-$version.tar.gz" nginx-$version.tar.gz
+if [ ! -s "nginx-$version.tar.gz" ]; then
+    wget "http://sysoev.ru/nginx/nginx-$version.tar.gz" -O nginx-$version.tar.gz
+    if [ $? -ne 0 ]; then
+        echo Abort.
+        exit 1;
+    fi
+    tar -xzvf nginx-$version.tar.gz
+    if [ $? -ne 0 ]; then
+        echo Abort.
+        exit 1;
+    fi
 fi
-tar -xzvf nginx-$version.tar.gz
+if [ "$version" -eq "0.8.41" ]; then
+    cp $root/../no-pool-nginx/nginx-0.8.41-no_pool.patch ./
+    patch -p0 < nginx-0.8.41-no_pool.patch
+    if [ $? -ne 0 ]; then
+        echo Abort.
+        exit 1
+    fi
+fi
 cd nginx-$version/
 if [[ "$BUILD_CLEAN" -eq 1 || ! -f Makefile || "$root/config" -nt Makefile || "$root/util/build.sh" -nt Makefile ]]; then
     ./configure --prefix=/opt/nginx \
