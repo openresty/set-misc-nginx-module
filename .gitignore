@@ -30,3 +30,5 @@ genmobi.sh
 misc/chunked
 ctags
 src/module.c
+src/base32.h
+src/uri.c
