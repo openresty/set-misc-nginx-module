@@ -8,6 +8,7 @@
 #include "ngx_http_set_unescape_uri.h"
 #include "ngx_http_set_quote_sql.h"
 #include "ngx_http_set_escape_uri.h"
+#include "ngx_http_set_local_today.h"
 
 
 static  ndk_set_var_t  ngx_http_set_misc_unescape_uri_filter = {
@@ -45,6 +46,12 @@ static  ndk_set_var_t  ngx_http_set_misc_decode_base32_filter = {
     NULL
 };
 
+static ndk_set_var_t ngx_http_set_misc_local_today_filter = {
+    NDK_SET_VAR_VALUE,
+    ngx_http_set_local_today,
+    0,
+    NULL
+};
 
 static ngx_command_t  ngx_http_set_misc_commands[] = {
     {
@@ -109,6 +116,15 @@ static ngx_command_t  ngx_http_set_misc_commands[] = {
         0,
         0,
         &ngx_http_set_misc_decode_base32_filter
+    },
+    {
+        ngx_string("set_local_today"),
+        NGX_HTTP_MAIN_CONF|NGX_HTTP_SRV_CONF|NGX_HTTP_SIF_CONF
+            |NGX_HTTP_LOC_CONF|NGX_HTTP_LIF_CONF|NGX_CONF_TAKE1,
+        ndk_set_var_value,
+        0,
+        0,
+        &ngx_http_set_misc_local_today_filter
     },
 
     ngx_null_command
