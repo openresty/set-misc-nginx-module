@@ -4,6 +4,14 @@
 #include "ngx_http_set_base32.h"
 
 
+#define base32_encoded_length(len) ((((len)+4)/5)*8)
+#define base32_decoded_length(len) ((((len)+7)/8)*5)
+
+
+static void encode_base32(int slen, const char *src, int *dlen, char *dst);
+static int decode_base32(int slen, const char *src, int *dlen, char *dst);
+
+
 ngx_int_t
 ngx_http_set_misc_encode_base32(ngx_http_request_t *r,
         ngx_str_t *res, ngx_http_variable_value_t *v)
@@ -91,7 +99,7 @@ ngx_http_set_misc_decode_base32(ngx_http_request_t *r,
  * @param dlen 目标数据串长度指针, 保存 Base32 编码后数据长度.
  * @param dst 目标数据串指针, 保存 Base32 编码后数据.
  * */
-void
+static void
 encode_base32(int slen, const char *src, int *dlen, char *dst)
 {
 	static unsigned char basis32[] = "0123456789abcdefghijklmnopqrstuv";
@@ -233,7 +241,7 @@ encode_base32(int slen, const char *src, int *dlen, char *dst)
  * @param dst 目标数据串指针, 保存 Base32 解码后的数据.
  * @retval 解码成功时返回0，失败时返回-1.
  * */
-int
+static int
 decode_base32(int slen, const char *src, int *dlen, char *dst)
 {
 	static unsigned char basis32[] = {

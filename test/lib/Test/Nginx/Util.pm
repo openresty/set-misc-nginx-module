@@ -534,7 +534,7 @@ start_nginx:
                 if (kill(SIGQUIT, $pid) == 0) { # send quit signal
                     warn("$name - Failed to send quit signal to the nginx process with PID $pid");
                 }
-                sleep 0.1;
+                sleep 1;
                 if (-f $PidFile) {
                     #warn "killing with force (valgrind or profile)...\n";
                     kill(SIGKILL, $pid);
