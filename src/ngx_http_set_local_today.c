@@ -16,7 +16,7 @@ ngx_http_set_local_today(ngx_http_request_t *r, ngx_str_t *res,
 
     now = ngx_time();
 
-    ngx_gmtime(now, &tm);
+    ngx_gmtime(now + ngx_cached_time->gmtoff * 60, &tm);
 
     dd("tm.ngx_tm_hour:%d", tm.ngx_tm_hour);
     p = ngx_palloc(r->pool, sizeof("xxxx-xx-xx") - 1);

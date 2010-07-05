@@ -2,7 +2,7 @@
 
 # this file is mostly meant to be used by the author himself.
 
-rm ~/work/nginx-0.8.33/objs/addon/ndk/ndk.o ~/work/nginx-0.8.33/objs/addon/ndk-nginx-module/ndk.o
+rm ~/work/nginx-0.8.41/objs/addon/ndk/ndk.o ~/work/nginx-0.8.41/objs/addon/ndk-nginx-module/ndk.o
 
 root=`pwd`
 home=~
