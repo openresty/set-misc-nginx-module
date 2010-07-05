@@ -230,9 +230,9 @@ encode_base32(int slen, const char *src, int *dlen, char *dst)
  * 	src = (char*)"6RRU6H5CI3======";
  * 	dst = malloc(base32_decoded_length(slen));
  * 	if (!decode_base32(slen, src, &(dlen), dst)) {
- * 		// do something with dst
+ * 		...do something with dst
  * 	} else {
- * 		// decoding error
+ * 		...decoding error
  * 	}
  * </code>
  * @param slen 源数据串长度.
