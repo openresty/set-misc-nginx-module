@@ -56,6 +56,20 @@ Synopsis
         # $b == 'abcde'
     }
 
+    # GET /sha1 yields the output
+    #   aaf4c61ddcc5e8a2dabede0f3b482cd9aea9434d
+    location /sha1 {
+        set_sha1 $a hello;
+        echo $a;
+    }
+
+    # ditto
+    location /sha1 {
+        set $a hello;
+        set_sha1 $a;
+        echo $a;
+    }
+
 Description
   Every directive provided by this module can be
   mixed freely with other nginx rewrite module's
@@ -75,6 +89,8 @@ Directives
   set_encode_base32
 
   set_decode_base32
+
+  set_sha1
 
 Caveats
     Do not use $arg_XXX or $http_XXX or other special variables defined in

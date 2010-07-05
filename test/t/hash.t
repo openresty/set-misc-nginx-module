@@ -15,7 +15,7 @@ run_tests();
 
 __DATA__
 
-=== TEST 1: sha1 hello
+=== TEST 1: sha1 hello (copy)
 --- config
     location /sha1 {
         set_sha1 $a hello;
@@ -27,7 +27,22 @@ GET /sha1
 aaf4c61ddcc5e8a2dabede0f3b482cd9aea9434d
 
 
-=== TEST 1: sha1 (empty)
+
+=== TEST 2: sha1 hello (in-place)
+--- config
+    location /sha1 {
+        set $a hello;
+        set_sha1 $a;
+        echo $a;
+    }
+--- request
+GET /sha1
+--- response_body
+aaf4c61ddcc5e8a2dabede0f3b482cd9aea9434d
+
+
+
+=== TEST 3: sha1 (empty)
 --- config
     location /sha1 {
         set_sha1 $a "";
