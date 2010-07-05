@@ -15,6 +15,8 @@ use Cwd qw( cwd );
 use List::Util qw( shuffle );
 use Time::HiRes qw( sleep );
 
+our $LatestNginxVersion = 0.008039;
+
 our $NoNginxManager = 0;
 our $Profiling = 0;
 
@@ -317,8 +319,14 @@ sub parse_headers ($) {
     open my $in, '<', \$s;
     while (<$in>) {
         s/^\s+|\s+$//g;
-        my ($key, $val) = split /\s*:\s*/, $_, 2;
-        $headers{$key} = $val;
+        my $neg = ($_ =~ s/^!\s*//);
+        #warn "neg: $neg ($_)";
+        if ($neg) {
+            $headers{$_} = undef;
+        } else {
+            my ($key, $val) = split /\s*:\s*/, $_, 2;
+            $headers{$key} = $val;
+        }
     }
     close $in;
     return \%headers;
@@ -437,6 +445,10 @@ start_nginx:
         #Test::More::BAIL_OUT("$name - Invalid config file");
         #}
         #my $cmd = "nginx -p $ServRoot -c $ConfFile > /dev/null";
+            if (!defined $NginxVersion) {
+                $NginxVersion = $LatestNginxVersion;
+            }
+
             my $cmd;
             if ($NginxVersion >= 0.007053) {
                 $cmd = "nginx -p $ServRoot/ -c $ConfFile > /dev/null";

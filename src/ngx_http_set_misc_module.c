@@ -1,7 +1,7 @@
 #define DDEBUG 0
 #include "ddebug.h"
+
 #include <ndk.h>
-#define NGX_UNESCAPE_URI_COMPONENT  0
 #include "ngx_http_set_base32.h"
 #include "ngx_http_set_default_value.h"
 #include "ngx_http_set_hashed_upstream.h"
@@ -9,6 +9,7 @@
 #include "ngx_http_set_quote_sql.h"
 #include "ngx_http_set_escape_uri.h"
 
+#define NGX_UNESCAPE_URI_COMPONENT  0
 
 static  ndk_set_var_t  ngx_http_set_misc_unescape_uri_filter = {
     NDK_SET_VAR_VALUE,
