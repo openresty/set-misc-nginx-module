@@ -86,6 +86,8 @@ Caveats
     will lead to data corruption.
 
 Installation
+    First ensure you have openssl installed in your system.
+
     1. Grab the nginx source code from nginx.net (<http://nginx.net/ >), for
         example, the version 0.8.29 (see nginx compatibility),
 
