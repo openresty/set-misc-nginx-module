@@ -70,6 +70,12 @@ Synopsis
         echo $a;
     }
 
+    # GET /today yields the date of today in local time using format 'yyyy-mm-dd'
+    location /today {
+        set_local_today $today;
+        echo $today;
+    }
+
 Description
   Every directive provided by this module can be
   mixed freely with other nginx rewrite module's
@@ -91,6 +97,8 @@ Directives
   set_decode_base32
 
   set_sha1
+
+  set_local_today
 
 Caveats
     Do not use $arg_XXX or $http_XXX or other special variables defined in
