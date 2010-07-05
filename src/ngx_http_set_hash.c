@@ -11,7 +11,7 @@ ngx_http_set_misc_set_sha1(ngx_http_request_t *r,
 {
     u_char                  *p;
 
-    p = ngx_palloc(r->pool, SHA1_DIGEST_LENGTH * 2);
+    p = ngx_palloc(r->pool, SHA_DIGEST_LENGTH * 2);
     if (p == NULL) {
         return NGX_ERROR;
     }
@@ -19,7 +19,7 @@ ngx_http_set_misc_set_sha1(ngx_http_request_t *r,
     ndk_sha1_lower_hash((char *) p, (char *) v->data, v->len);
 
     res->data = p;
-    res->len = SHA1_DIGEST_LENGTH * 2;
+    res->len = SHA_DIGEST_LENGTH * 2;
 
     return NGX_OK;
 }
