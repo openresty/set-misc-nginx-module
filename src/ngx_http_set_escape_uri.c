@@ -8,8 +8,9 @@ ngx_int_t
 ngx_http_set_misc_escape_uri(ngx_http_request_t *r,
         ngx_str_t *res, ngx_http_variable_value_t *v)
 {
-    size_t        len;
-    u_char        *src, *dst;
+    size_t           len;
+    uintptr_t        escape;
+    u_char          *src, *dst;
 
     if (v->len == 0) {
         res->len = 0;
@@ -20,7 +21,9 @@ ngx_http_set_misc_escape_uri(ngx_http_request_t *r,
     src = v->data;
 
     dd("before escape:%.*s", v->len, v->data);
-    len = v->len + 2 * ngx_escape_uri(NULL, src, v->len, NGX_ESCAPE_URI);
+    escape = 2 * ngx_escape_uri(NULL, src, v->len, NGX_ESCAPE_URI);
+    /* len = v->len + 2 * ngx_escape_uri(NULL, src, v->len, NGX_ESCAPE_URI); */
+    len = escape + v->len;
     dd("escaped string len:%zu", len);
 
     dst = ngx_palloc(r->pool, len);
@@ -29,7 +32,12 @@ ngx_http_set_misc_escape_uri(ngx_http_request_t *r,
         return NGX_ERROR;
     }
 
-    ngx_escape_uri(dst, src, v->len, NGX_ESCAPE_URI);
+    if (escape == 0) {
+        ngx_memcpy(dst, src, len);
+        dd("escape == 0");
+    } else {
+        ngx_escape_uri(dst, src, v->len, NGX_ESCAPE_URI);
+    }
 
     res->data = dst;
     res->len = len;
