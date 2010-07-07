@@ -13,6 +13,13 @@
 
 #define NGX_UNESCAPE_URI_COMPONENT  0
 
+static  ndk_set_var_t  ngx_http_set_misc_set_md5_filter = {
+    NDK_SET_VAR_VALUE,
+    ngx_http_set_misc_set_md5,
+    1,
+    NULL
+};
+
 static  ndk_set_var_t  ngx_http_set_misc_set_sha1_filter = {
     NDK_SET_VAR_VALUE,
     ngx_http_set_misc_set_sha1,
@@ -63,6 +70,14 @@ static ndk_set_var_t ngx_http_set_misc_local_today_filter = {
 };
 
 static ngx_command_t  ngx_http_set_misc_commands[] = {
+    {   ngx_string ("set_md5"),
+        NGX_HTTP_MAIN_CONF|NGX_HTTP_SRV_CONF|NGX_HTTP_SIF_CONF
+            |NGX_HTTP_LOC_CONF|NGX_HTTP_LIF_CONF|NGX_CONF_TAKE12,
+        ndk_set_var_value,
+        0,
+        0,
+        &ngx_http_set_misc_set_md5_filter
+    },
     {
         ngx_string ("set_sha1"),
         NGX_HTTP_MAIN_CONF|NGX_HTTP_SRV_CONF|NGX_HTTP_SIF_CONF
