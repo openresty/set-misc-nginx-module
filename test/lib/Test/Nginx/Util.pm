@@ -3,7 +3,7 @@ package Test::Nginx::Util;
 use strict;
 use warnings;
 
-our $VERSION = '0.08';
+our $VERSION = '0.09';
 
 use base 'Exporter';
 
@@ -50,7 +50,6 @@ our $ServerPort             = 1984;
 our $ServerPortForClient    = $ENV{TEST_NGINX_CLIENT_PORT} || 1984;
 our $NoRootLocation = 0;
 #our $ServerPortForClient    = 1984;
-
 
 sub repeat_each (@) {
     if (@_) {
@@ -128,6 +127,8 @@ our @EXPORT_OK = qw(
     log_level
     no_shuffle
     no_root_location
+    html_dir
+    server_root
 );
 
 
@@ -158,6 +159,14 @@ our $HtmlDir    = File::Spec->catfile($ServRoot, 'html');
 our $ConfDir    = File::Spec->catfile($ServRoot, 'conf');
 our $ConfFile   = File::Spec->catfile($ConfDir, 'nginx.conf');
 our $PidFile    = File::Spec->catfile($LogDir, 'nginx.pid');
+
+sub html_dir () {
+    return $HtmlDir;
+}
+
+sub server_root () {
+    return $ServRoot;
+}
 
 sub run_tests () {
     $NginxVersion = get_nginx_version();
@@ -203,6 +212,51 @@ sub setup_server_root () {
 
     mkdir $ConfDir or
         die "Failed to do mkdir $ConfDir\n";
+}
+
+sub write_user_files ($) {
+    my $block = shift;
+
+    my $name = $block->name;
+
+    if ($block->user_files) {
+        my $raw = $block->user_files;
+
+        open my $in, '<', \$raw;
+
+        my @files;
+        my ($fname, $body);
+        while (<$in>) {
+            if (/>>> (\S+)/) {
+                if ($fname) {
+                    push @files, [$fname, $body];
+                }
+
+                $fname = $1;
+                undef $body;
+            } else {
+                $body .= $_;
+            }
+        }
+
+        if ($fname) {
+            push @files, [$fname, $body];
+        }
+
+        for my $file (@files) {
+            my ($fname, $body) = @$file;
+            #warn "write file $fname with content [$body]\n";
+
+            if (!defined $body) {
+                $body = '';
+            }
+
+            open my $out, ">$HtmlDir/$fname" or
+                die "$name - Cannot open $HtmlDir/$fname for writing: $!\n";
+            print $out $body;
+            close $out;
+        }
+    }
 }
 
 sub write_config_file ($$) {
@@ -344,6 +398,7 @@ sub run_test ($) {
     }
 
     my $skip_nginx = $block->skip_nginx;
+    my $skip_nginx2 = $block->skip_nginx2;
     my ($tests_to_skip, $should_skip, $skip_reason);
     if (defined $skip_nginx) {
         if ($skip_nginx =~ m{
@@ -366,7 +421,37 @@ sub run_test ($) {
                 $skip_nginx);
             die;
         }
+    } elsif (defined $skip_nginx2) {
+        if ($skip_nginx2 =~ m{
+                ^ \s* (\d+) \s* : \s*
+                    ([<>]=?) \s* (\d+)\.(\d+)\.(\d+)
+                    \s* (or|and) \s*
+                    ([<>]=?) \s* (\d+)\.(\d+)\.(\d+)
+                    (?: \s* : \s* (.*) )?
+                \s*$}x) {
+            $tests_to_skip = $1;
+            my ($opa, $ver1a, $ver2a, $ver3a) = ($2, $3, $4, $5);
+            my $opx = $6;
+            my ($opb, $ver1b, $ver2b, $ver3b) = ($7, $8, $9, $10);
+            $skip_reason = $11;
+            my $vera = get_canon_version($ver1a, $ver2a, $ver3a);
+            my $verb = get_canon_version($ver1b, $ver2b, $ver3b);
+
+            if ((!defined $NginxVersion)
+                or (($opx eq "or") and (eval "$NginxVersion $opa $vera"
+                                        or eval "$NginxVersion $opb $verb"))
+                or (($opx eq "and") and (eval "$NginxVersion $opa $vera"
+                                        and eval "$NginxVersion $opb $verb")))
+            {
+                $should_skip = 1;
+            }
+        } else {
+            Test::More::BAIL_OUT("$name - Invalid --- skip_nginx2 spec: " .
+                $skip_nginx2);
+            die;
+        }
     }
+
     if (!defined $skip_reason) {
         $skip_reason = "various reasons";
     }
@@ -436,6 +521,7 @@ start_nginx:
 
             #warn "*** Restarting the nginx server...\n";
             setup_server_root();
+            write_user_files($block);
             write_config_file($config, $block->http_config);
             if ( ! Module::Install::Can->can_run('nginx') ) {
                 Test::More::BAIL_OUT("$name - Cannot find the nginx executable in the PATH environment");
@@ -487,7 +573,7 @@ start_nginx:
 
                 }
                 #warn "sleeping";
-                sleep 2;
+                sleep 1;
             } else {
                 if (system($cmd) != 0) {
                     Test::More::BAIL_OUT("$name - Cannot start nginx using command \"$cmd\".");
@@ -534,7 +620,7 @@ start_nginx:
                 if (kill(SIGQUIT, $pid) == 0) { # send quit signal
                     warn("$name - Failed to send quit signal to the nginx process with PID $pid");
                 }
-                sleep 2;
+                sleep 0.1;
                 if (-f $PidFile) {
                     #warn "killing with force (valgrind or profile)...\n";
                     kill(SIGKILL, $pid);
