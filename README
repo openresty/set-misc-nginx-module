@@ -28,6 +28,16 @@ Synopsis
         # now $foo is: 'hello\n\n\'\"\\'
     }
 
+    lacation /bar {
+        set $foo "hello\n\n'\"\\";
+        set_quote_sql_str for=pg $foo;
+
+        # if your db is pg, use 'for=pg'
+        # default db is mysql
+
+        # now $foo is: E'hello\n\n\'\"\\'
+    }
+
     location /json {
         set $foo "hello\n\n'\"\\";
         set_quote_json_str $foo $foo;
