@@ -31,6 +31,7 @@ if [[ "$BUILD_CLEAN" = 1 || ! -f Makefile || "$root/config" -nt Makefile || "$ro
           --with-cc-opt="-O0" \
           --add-module=$root/../echo-nginx-module \
           --add-module=$root/../ndk-nginx-module \
+          --add-module=$root/../iconv-nginx-module \
           --add-module=$root $opts \
           --with-debug \
       || exit 1

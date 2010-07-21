@@ -41,9 +41,9 @@ static ndk_set_var_t ngx_http_set_misc_escape_uri_filter = {
     NULL
 };
 
-static  ndk_set_var_t  ngx_http_set_misc_quote_sql_str_filter = {
+static  ndk_set_var_t  ngx_http_set_misc_decode_base32_filter = {
     NDK_SET_VAR_VALUE,
-    ngx_http_set_misc_quote_sql_str,
+    ngx_http_set_misc_decode_base32,
     1,
     NULL
 };
@@ -51,13 +51,6 @@ static  ndk_set_var_t  ngx_http_set_misc_quote_sql_str_filter = {
 static  ndk_set_var_t  ngx_http_set_misc_encode_base32_filter = {
     NDK_SET_VAR_VALUE,
     ngx_http_set_misc_encode_base32,
-    1,
-    NULL
-};
-
-static  ndk_set_var_t  ngx_http_set_misc_decode_base32_filter = {
-    NDK_SET_VAR_VALUE,
-    ngx_http_set_misc_decode_base32,
     1,
     NULL
 };
@@ -109,10 +102,10 @@ static ngx_command_t  ngx_http_set_misc_commands[] = {
         ngx_string ("set_quote_sql_str"),
         NGX_HTTP_MAIN_CONF|NGX_HTTP_SRV_CONF|NGX_HTTP_SIF_CONF
             |NGX_HTTP_LOC_CONF|NGX_HTTP_LIF_CONF|NGX_CONF_TAKE12,
-        ndk_set_var_value,
+        ngx_http_set_quote_sql_str,
         0,
         0,
-        &ngx_http_set_misc_quote_sql_str_filter
+        NULL
     },
     {
         ngx_string ("set_if_empty"),

@@ -15,6 +15,7 @@ run_tests();
 
 __DATA__
 
+
 === TEST 1: set quote sql value
 --- config
     location /foo {
@@ -26,7 +27,6 @@ __DATA__
 GET /foo
 --- response_body
 'hello\n\r\'\"\\'
-
 
 
 === TEST 2: set quote sql value (in place)
@@ -69,3 +69,53 @@ GET /foo
 null
 
 
+=== TEST 5: set quote null pgsql value
+--- config
+    location /foo {
+        set_quote_sql_str for=pg $foo;
+        echo $foo;
+    }
+--- request
+GET /foo
+--- response_body
+null
+
+
+=== TEST 6: set quote pgsql value
+--- config
+    location /foo {
+        set $foo "hello\n\r'\"\\";
+        set_quote_sql_str for=pg $foo;
+        echo $foo;
+    }
+--- request
+GET /foo
+--- response_body
+E'hello\n\r\'\"\\'
+
+
+=== TEST 7: set quote pgsql valid utf8 value
+--- config
+    location /foo {
+        set $foo "你好";
+        set_quote_sql_str for=pg $foo;
+        echo $foo;
+    }
+--- request
+GET /foo
+--- response_body
+E'你好'
+
+
+=== TEST 8: set quote pgsql invalid utf8 value
+--- config
+    location /foo {
+        set $foo "你好";
+        set_iconv $foo $foo from=utf-8 to=gbk;
+        set_quote_sql_str for=pg $foo;
+        echo $foo;
+    }
+--- request
+GET /foo
+--- response_body
+E'\\304\\343\\272\\303'
