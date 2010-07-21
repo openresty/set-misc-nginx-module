@@ -573,7 +573,7 @@ start_nginx:
 
                 }
                 #warn "sleeping";
-                sleep 2;
+                sleep 1;
             } else {
                 if (system($cmd) != 0) {
                     Test::More::BAIL_OUT("$name - Cannot start nginx using command \"$cmd\".");

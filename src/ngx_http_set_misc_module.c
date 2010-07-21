@@ -7,6 +7,7 @@
 #include "ngx_http_set_hashed_upstream.h"
 #include "ngx_http_set_unescape_uri.h"
 #include "ngx_http_set_quote_sql.h"
+#include "ngx_http_set_quote_json.h"
 #include "ngx_http_set_escape_uri.h"
 #include "ngx_http_set_local_today.h"
 #include "ngx_http_set_hash.h"
@@ -44,6 +45,13 @@ static ndk_set_var_t ngx_http_set_misc_escape_uri_filter = {
 static  ndk_set_var_t  ngx_http_set_misc_decode_base32_filter = {
     NDK_SET_VAR_VALUE,
     ngx_http_set_misc_decode_base32,
+    1,
+    NULL
+};
+
+static  ndk_set_var_t  ngx_http_set_misc_quote_json_str_filter = {
+    NDK_SET_VAR_VALUE,
+    ngx_http_set_misc_quote_json_str,
     1,
     NULL
 };
@@ -106,6 +114,15 @@ static ngx_command_t  ngx_http_set_misc_commands[] = {
         0,
         0,
         NULL
+    },
+    {
+        ngx_string ("set_quote_json_str"),
+        NGX_HTTP_MAIN_CONF|NGX_HTTP_SRV_CONF|NGX_HTTP_SIF_CONF
+            |NGX_HTTP_LOC_CONF|NGX_HTTP_LIF_CONF|NGX_CONF_TAKE12,
+        ndk_set_var_value,
+        0,
+        0,
+        &ngx_http_set_misc_quote_json_str_filter
     },
     {
         ngx_string ("set_if_empty"),
