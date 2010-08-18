@@ -1,59 +1,8 @@
 #define DDEBUG 0
+
 #include "ddebug.h"
 #include <ndk.h>
 #include "ngx_http_set_quote_sql.h"
-#define         true            1
-#define         false           0
-
-char *
-ngx_http_set_quote_sql_str(ngx_conf_t *cf, ngx_command_t *cmd, void *conf)
-{
-    ndk_set_var_t               filter;
-    ngx_str_t                   *value;
-    ngx_str_t                   result[3];
-    ngx_str_t                   *bad_arg;
-
-    filter.type = NDK_SET_VAR_MULTI_VALUE;
-    filter.size = 1;
-
-    value = cf->args->elts;
-    result[0] = value[1];
-
-    if (cf->args->nelts == 2) {
-        dd("set_quote_sql $foo");
-        filter.func = &ngx_http_set_misc_quote_sql_str;
-        return ndk_set_var_multi_value_core(cf, &result[0], &value[1], &filter);
-    }
-
-    if (value[1].len >= sizeof("for=") -1 && (ngx_strncasecmp((u_char *) "for=", value[1].data, sizeof("for=") -1))==0)
-    {
-        result[1] = value[2];
-        result[0].data += sizeof("for=") -1;
-
-        if (ngx_strncasecmp((u_char *) "pg", result[0].data, sizeof("pg") - 1) == 0) {
-             filter.func = &ngx_http_set_misc_quote_pgsql_str;
-        } else {
-            bad_arg = &result[0];
-        }
-
-        if (cf->args->nelts > 4){
-            bad_arg = &value[4];
-        } else {
-            return ndk_set_var_multi_value_core(cf, &result[1], &value[2], &filter);
-        }
-    } else if (cf->args->nelts == 3){
-        dd("set_quote_sql $foo $foo");
-        filter.func = &ngx_http_set_misc_quote_sql_str;
-        return ndk_set_var_multi_value_core(cf, &result[0], &value[1], &filter);
-    } else {
-        bad_arg = &value[1];
-    }
-
-    ngx_conf_log_error(NGX_LOG_EMERG, cf, 0,
-            "%V: unexpected argument \"%V\"",
-            &cmd->name, bad_arg);
-    return NGX_CONF_ERROR;
-}
 
 
 ngx_int_t
@@ -123,57 +72,59 @@ ngx_http_pg_utf_islegal(const unsigned char *s, ngx_int_t len)
     while (slen > 0) {
         mblen = ngx_http_pg_utf_mblen(s);
         if (slen < mblen)
-            return false;
+            return 0;
 
         switch(mblen)
         {
             default:
-                return false;
+                return 0;
             case 4:
                 a = *(s + 3);
                 if (a < 0x80 || a > 0xBF)
-                    return false;
+                    return 0;
             case 3:
                 a = *(s + 2);
                 if (a < 0x80 || a > 0xBF)
-                    return false;
+                    return 0;
             case 2:
                 a = *(s + 1);
                 switch (*s)
                 {
                     case 0xE0:
                         if (a < 0xA0 || a > 0xBF)
-                            return false;
+                            return 0;
                         break;
                     case 0xED:
                         if (a < 0x80 || a > 0x9F)
-                            return false;
+                            return 0;
                         break;
                     case 0xF0:
                         if (a < 0x90 || a > 0xBF)
-                            return false;
+                            return 0;
                         break;
                     case 0xF4:
                         if (a < 0x80 || a > 0x8F)
-                            return false;
+                            return 0;
                         break;
                     default:
                         if (a < 0x80 || a > 0xBF)
-                            return false;
+                            return 0;
                         break;
                 }
             case 1:
                 a = *s;
                 if (a >= 0x80 && a < 0xC2)
-                    return false;
+                    return 0;
                 if (a > 0xF4)
-                    return false;
+                    return 0;
                 break;
         }
+
         s       += mblen;
         slen    -= mblen;
     }
-    return true;
+
+    return 1;
 }
 
 
@@ -199,6 +150,7 @@ ngx_http_pg_utf_escape(ngx_http_request_t *r, ngx_str_t *res)
 
     d   = res->data;
     l   = res->len;
+
     p   = ngx_palloc(r->pool, count);
     if (p == NULL) {
         return result;

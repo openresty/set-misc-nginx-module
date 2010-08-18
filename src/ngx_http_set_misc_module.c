@@ -49,6 +49,20 @@ static  ndk_set_var_t  ngx_http_set_misc_decode_base32_filter = {
     NULL
 };
 
+static  ndk_set_var_t  ngx_http_set_misc_quote_sql_str_filter = {
+    NDK_SET_VAR_VALUE,
+    ngx_http_set_misc_quote_sql_str,
+    1,
+    NULL
+};
+
+static  ndk_set_var_t  ngx_http_set_misc_quote_pgsql_str_filter = {
+    NDK_SET_VAR_VALUE,
+    ngx_http_set_misc_quote_pgsql_str,
+    1,
+    NULL
+};
+
 static  ndk_set_var_t  ngx_http_set_misc_quote_json_str_filter = {
     NDK_SET_VAR_VALUE,
     ngx_http_set_misc_quote_json_str,
@@ -110,10 +124,19 @@ static ngx_command_t  ngx_http_set_misc_commands[] = {
         ngx_string ("set_quote_sql_str"),
         NGX_HTTP_MAIN_CONF|NGX_HTTP_SRV_CONF|NGX_HTTP_SIF_CONF
             |NGX_HTTP_LOC_CONF|NGX_HTTP_LIF_CONF|NGX_CONF_TAKE12,
-        ngx_http_set_quote_sql_str,
+        ndk_set_var_value,
         0,
         0,
-        NULL
+        &ngx_http_set_misc_quote_sql_str_filter
+    },
+    {
+        ngx_string ("set_quote_pgsql_str"),
+        NGX_HTTP_MAIN_CONF|NGX_HTTP_SRV_CONF|NGX_HTTP_SIF_CONF
+            |NGX_HTTP_LOC_CONF|NGX_HTTP_LIF_CONF|NGX_CONF_TAKE12,
+        ndk_set_var_value,
+        0,
+        0,
+        &ngx_http_set_misc_quote_pgsql_str_filter
     },
     {
         ngx_string ("set_quote_json_str"),

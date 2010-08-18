@@ -1,4 +1,4 @@
-# vi:filetype=perl
+# vi:filetype=
 
 use lib 'lib';
 use Test::Nginx::Socket;
@@ -72,7 +72,7 @@ null
 === TEST 5: set quote null pgsql value
 --- config
     location /foo {
-        set_quote_sql_str for=pg $foo;
+        set_quote_pgsql_str $foo;
         echo $foo;
     }
 --- request
@@ -85,7 +85,7 @@ null
 --- config
     location /foo {
         set $foo "hello\n\r'\"\\";
-        set_quote_sql_str for=pg $foo;
+        set_quote_pgsql_str $foo;
         echo $foo;
     }
 --- request
@@ -98,7 +98,7 @@ E'hello\n\r\'\"\\'
 --- config
     location /foo {
         set $foo "你好";
-        set_quote_sql_str for=pg $foo;
+        set_quote_pgsql_str $foo;
         echo $foo;
     }
 --- request
@@ -112,7 +112,7 @@ E'你好'
     location /foo {
         set $foo "你好";
         set_iconv $foo $foo from=utf-8 to=gbk;
-        set_quote_sql_str for=pg $foo;
+        set_quote_pgsql_str $foo;
         echo $foo;
     }
 --- request

@@ -35,13 +35,16 @@ ngx_http_set_misc_escape_uri(ngx_http_request_t *r,
     if (escape == 0) {
         ngx_memcpy(dst, src, len);
         dd("escape == 0");
+
     } else {
         ngx_escape_uri(dst, src, v->len, NGX_ESCAPE_URI);
     }
 
     res->data = dst;
     res->len = len;
+
     dd("after eacape:%.*s", res->len, res->data);
+
     return NGX_OK;
 }
 

@@ -20,7 +20,7 @@ Synopsis
 
     location /bar {
         set $foo "hello\n\n'\"\\";
-        set_quote_sql_str $foo $foo;
+        set_quote_sql_str $foo $foo; # for mysql
 
         # OR in-place editing:
         #   set_quote_sql_str $foo;
@@ -28,12 +28,9 @@ Synopsis
         # now $foo is: 'hello\n\n\'\"\\'
     }
 
-    lacation /bar {
+    location /bar {
         set $foo "hello\n\n'\"\\";
-        set_quote_sql_str for=pg $foo;
-
-        # if your db is pg, use 'for=pg'
-        # default db is mysql
+        set_quote_pgsql_str $foo;  # for PostgreSQL
 
         # now $foo is: E'hello\n\n\'\"\\'
     }
@@ -161,9 +158,9 @@ Installation
 Compatibility
     The following versions of Nginx should work with this module:
 
-    *   0.8.x (last tested version is 0.8.38)
+    *   0.8.x (last tested version is 0.8.49)
 
-    *   0.7.x >= 0.7.46 (last tested version is 0.7.65)
+    *   0.7.x >= 0.7.46 (last tested version is 0.7.67)
 
     Earlier versions of Nginx like 0.6.x and 0.5.x will *not* work.
 
