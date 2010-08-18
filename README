@@ -103,6 +103,8 @@ Directives
 
   set_quote_sql_str
 
+  set_quote_pgsql_str
+
   set_quote_json_str
 
   set_unescape_uri
