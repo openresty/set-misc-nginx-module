@@ -101,23 +101,24 @@ Description
 Directives
   set_if_empty
 
-  set_quote_sql_str
+  set_quote_sql_str (can be used with ngx_array module's array_map_op)
 
-  set_quote_pgsql_str
+  set_quote_pgsql_str (can be used with ngx_array module's array_map_op)
 
-  set_quote_json_str
 
-  set_unescape_uri
+  set_quote_json_str (can be used with ngx_array module's array_map_op)
 
-  set_escape_uri
+  set_unescape_uri (can be used with ngx_array module's array_map_op)
+
+  set_escape_uri (can be used with ngx_array module's array_map_op)
 
   set_hashed_upstream
 
-  set_encode_base32
+  set_encode_base32 (can be used with ngx_array module's array_map_op)
 
-  set_decode_base32
+  set_decode_base32 (can be used with ngx_array module's array_map_op)
 
-  set_sha1
+  set_sha1 (can be used with ngx_array module's array_map_op)
 
   set_local_today
 
