@@ -4,7 +4,7 @@
 #include <ndk.h>
 #include "ngx_http_set_hash.h"
 
-
+#ifndef NGX_HTTP_SET_HASH
 ngx_int_t
 ngx_http_set_misc_set_sha1(ngx_http_request_t *r,
         ngx_str_t *res, ngx_http_variable_value_t *v)
@@ -16,7 +16,7 @@ ngx_http_set_misc_set_sha1(ngx_http_request_t *r,
         return NGX_ERROR;
     }
 
-    ndk_sha1_lower_hash((char *) p, (char *) v->data, v->len);
+    ndk_sha1_hash((char *) p, (char *) v->data, v->len);
 
     res->data = p;
     res->len = SHA_DIGEST_LENGTH * 2;
@@ -34,10 +34,11 @@ ngx_http_set_misc_set_md5(ngx_http_request_t *r,
         return NGX_ERROR;
     }
 
-    ndk_md5_lower_hash((char *) p, (char *) v->data, v->len);
+    ndk_md5_hash((char *) p, (char *) v->data, v->len);
 
     res->data = p;
     res->len = MD5_DIGEST_LENGTH * 2;
 
     return NGX_OK;
 }
+#endif
