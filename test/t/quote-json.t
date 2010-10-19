@@ -28,6 +28,7 @@ GET /foo
 "hello\n\r'\"\\"
 
 
+
 === TEST 2: set quote json value (in place)
 --- config
     location /foo {

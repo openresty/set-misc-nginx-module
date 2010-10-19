@@ -84,7 +84,6 @@ buggy?
 --- request
 GET /foo?bar=71
 --- response_body
-15
+71
 25
-
 
