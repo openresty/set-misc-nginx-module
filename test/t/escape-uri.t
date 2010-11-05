@@ -116,12 +116,12 @@ welcometotheworldofnginx
 === TEST 8: fixed ngx_escape_uri issues: + and / should also be escaped
 --- config
     location /foo {
-        set $foo '+/';
+        set $foo '+/=';
         set_escape_uri $foo;
         echo $foo;
     }
 --- request
 GET /foo
 --- response_body
-%2b%2f
+%2b%2f%3d
 
