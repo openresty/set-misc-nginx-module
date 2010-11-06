@@ -6,7 +6,7 @@ root=`pwd`
 home=~
 cd ~/work
 version=$1
-opts=$2
+#opts=$2
 
 rm -f ~/work/nginx-$version/objs/addon/ndk/ndk.o \
     ~/work/nginx-$version/objs/addon/ndk-nginx-module/ndk.o
@@ -24,17 +24,21 @@ fi
 #cp $root/../no-pool-nginx/nginx-0.8.41-no_pool.patch ./
 #patch -p0 < nginx-0.8.41-no_pool.patch
 
-cd nginx-$version/
+if [ -n "$2" ]; then
+    cd nginx-$version-$2/
+else
+    cd nginx-$version/
+fi
 
 if [[ "$BUILD_CLEAN" = 1 || ! -f Makefile || "$root/config" -nt Makefile || "$root/util/build.sh" -nt Makefile ]]; then
     ./configure --prefix=/opt/nginx \
-          --with-cc-opt="-O0" \
           --add-module=$root/../echo-nginx-module \
           --add-module=$root/../ndk-nginx-module \
           --add-module=$root/../iconv-nginx-module \
           --add-module=$root $opts \
           --with-debug \
       || exit 1
+        # --with-cc-opt="-O0" \
           #--add-module=$home/work/ndk \
   #--without-http_ssi_module  # we cannot disable ssi because echo_location_async depends on it (i dunno why?!)
 fi
