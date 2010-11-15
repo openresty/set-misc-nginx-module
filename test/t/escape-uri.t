@@ -125,3 +125,17 @@ GET /foo
 --- response_body
 %2b%2f%3d
 
+
+
+=== TEST 9: fixed ngx_escape_uri issues: / {} : & [] and more
+--- config
+    location /foo {
+        set $foo '"a/b={}:<>;&[]\\^';
+        set_escape_uri $foo;
+        echo $foo;
+    }
+--- request
+GET /foo
+--- response_body
+%22a%2fb%3d%7b%7d%3a%3c%3e%3b%26%5b%5d%5c%5e
+
