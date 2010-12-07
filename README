@@ -116,7 +116,13 @@ Directives
 
   set_encode_base32 (can be used with ngx_array module's array_map_op)
 
+      RFC forces the [A-Z2-7] RFC-3548 compliant encoding, but we're using the
+      "base32hex" encoding [0-9a-v].
+
   set_decode_base32 (can be used with ngx_array module's array_map_op)
+
+      RFC forces the [A-Z2-7] RFC-3548 compliant encoding, but we're using the
+      "base32hex" encoding [0-9a-v].
 
   set_sha1 (can be used with ngx_array module's array_map_op)
 
