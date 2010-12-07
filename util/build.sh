@@ -21,8 +21,8 @@ if [ ! -s "nginx-$version.tar.gz" ]; then
 fi
 
 #tar -xzvf nginx-$version.tar.gz || exit 1
-#cp $root/../no-pool-nginx/nginx-0.8.41-no_pool.patch ./
-#patch -p0 < nginx-0.8.41-no_pool.patch
+#cp $root/../no-pool-nginx/nginx-0.8.53-no_pool.patch ./
+#patch -p0 < nginx-0.8.53-no_pool.patch
 
 if [ -n "$2" ]; then
     cd nginx-$version-$2/
