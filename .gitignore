@@ -11,7 +11,7 @@ print.txt
 .rsync
 *.tar.gz
 dist
-build[78]
+build[789]
 build
 tags
 update-readme
@@ -46,3 +46,7 @@ src/hash.h
 src/hash.c
 src/today.h
 src/today.c
+src/json.[ch]
+all.sh
+go
+t/servroot/
