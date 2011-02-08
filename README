@@ -138,20 +138,13 @@ Caveats
     will lead to data corruption.
 
 Installation
-    First ensure you have openssl installed in your system.
-
-    1. Ensure you have the OpenSSL crypto library installed on
-       your system. For Ubuntu/Debian users, just install
-       the `libssl-dev` package. For Fedora/RHEL/CentOS users,
-       just install the `openssl-devel` package.
-
-    2. Grab the nginx source code from nginx.net (<http://nginx.net/ >), for
+    1. Grab the nginx source code from nginx.net (<http://nginx.net/ >), for
         example, the version 0.8.54 (see nginx compatibility),
 
-    3. Grab the NDK module from GitHub:
+    2. Grab the NDK module from GitHub:
         http://github.com/simpl/ngx_devel_kit
 
-    4. and then build the source with this module:
+    3. and then build the source with this module:
 
         $ wget 'http://sysoev.ru/nginx/nginx-0.8.54.tar.gz'
         $ tar -xzvf nginx-0.8.54.tar.gz
