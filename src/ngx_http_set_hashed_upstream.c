@@ -1,5 +1,6 @@
 #define DDEBUG 0
 #include "ddebug.h"
+
 #include "ngx_http_set_hashed_upstream.h"
 
 
@@ -26,6 +27,7 @@ ngx_http_set_misc_get_upstream_list(u_char *data, size_t len)
     return NULL;
 }
 
+
 ngx_uint_t
 ngx_http_set_misc_apply_distribution(ngx_log_t *log, ngx_uint_t hash,
         ndk_upstream_list_t *ul, ngx_http_set_misc_distribution_t type)
@@ -44,6 +46,7 @@ ngx_http_set_misc_apply_distribution(ngx_log_t *log, ngx_uint_t hash,
     /* impossible to reach here */
     return 0;
 }
+
 
 ngx_int_t
 ngx_http_set_misc_set_hashed_upstream(ngx_http_request_t *r,
@@ -108,6 +111,7 @@ ngx_http_set_misc_set_hashed_upstream(ngx_http_request_t *r,
     return NGX_OK;
 }
 
+
 char *
 ngx_http_set_hashed_upstream(ngx_conf_t *cf, ngx_command_t *cmd, void *conf)
 {
@@ -154,4 +158,3 @@ ngx_http_set_hashed_upstream(ngx_conf_t *cf, ngx_command_t *cmd, void *conf)
 
     return  ndk_set_var_value_core(cf, var, v, &filter);
 }
-

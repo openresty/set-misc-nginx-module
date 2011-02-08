@@ -1,6 +1,5 @@
-
-#ifndef NGX_HTTP_HASHED_UPSTREAM
-#define NGX_HTTP_HASHED_UPSTREAM
+#ifndef NGX_HTTP_SET_HASHED_UPSTREAM
+#define NGX_HTTP_SET_HASHED_UPSTREAM
 
 
 #include <ngx_core.h>
@@ -13,6 +12,7 @@ typedef enum {
     ngx_http_set_misc_distribution_modula,
     ngx_http_set_misc_distribution_random /* XXX not used */
 } ngx_http_set_misc_distribution_t;
+
 
 ndk_upstream_list_t *
 ngx_http_set_misc_get_upstream_list(u_char *data, size_t len);
@@ -27,4 +27,4 @@ ngx_int_t ngx_http_set_misc_set_hashed_upstream(ngx_http_request_t *r,
         ngx_str_t *res, ngx_http_variable_value_t *v, void *data);
 
 
-#endif /* NGX_HTTP_HASHED_UPSTREAM */
+#endif /* NGX_HTTP_SET_HASHED_UPSTREAM */

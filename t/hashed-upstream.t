@@ -1,4 +1,4 @@
-# vi:filetype=perl
+# vi:filetype=
 
 use lib 'lib';
 use Test::Nginx::Socket;
@@ -8,6 +8,8 @@ use Test::Nginx::Socket;
 plan tests => repeat_each() * 2 * blocks();
 
 no_long_string();
+#master_on();
+#log_level("warn");
 
 run_tests();
 
@@ -65,5 +67,4 @@ sun
 moon
 earth
 earth
-
 
