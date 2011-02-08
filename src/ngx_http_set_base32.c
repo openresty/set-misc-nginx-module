@@ -273,7 +273,7 @@ decode_base32(int slen, const char *src, int *dlen, char *dst)
     }
 
     if (len) {
-        /* 剩余 2 个字节 */
+        /* 2 bytes left */
         *d++ = (basis32[s[0]] << 3) | ((basis32[s[1]] >> 2) & 0x07);
 
         if (len > 2) {
