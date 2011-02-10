@@ -49,9 +49,9 @@ static  ndk_set_var_t  ngx_http_set_misc_set_encode_hex_filter = {
 };
 
 #if NGX_OPENSSL
-static  ndk_set_var_t  ngx_http_set_misc_set_hmac_sha1_b64_filter = {
+static  ndk_set_var_t  ngx_http_set_misc_set_hmac_sha1_filter = {
     NDK_SET_VAR_MULTI_VALUE,
-    ngx_http_set_misc_set_hmac_sha1_b64,
+    ngx_http_set_misc_set_hmac_sha1,
     2,
     NULL
 };
@@ -163,13 +163,13 @@ static ngx_command_t  ngx_http_set_misc_commands[] = {
         &ngx_http_set_misc_set_encode_hex_filter
     },
 #if NGX_OPENSSL
-    {   ngx_string ("set_hmac_sha1_b64"),
+    {   ngx_string ("set_hmac_sha1"),
         NGX_HTTP_MAIN_CONF|NGX_HTTP_SRV_CONF|NGX_HTTP_SIF_CONF
             |NGX_HTTP_LOC_CONF|NGX_HTTP_LIF_CONF|NGX_CONF_TAKE3,
         ndk_set_var_multi_value,
         0,
         0,
-        &ngx_http_set_misc_set_hmac_sha1_b64_filter
+        &ngx_http_set_misc_set_hmac_sha1_filter
     },
 #endif
 #ifndef NGX_HTTP_SET_HASH

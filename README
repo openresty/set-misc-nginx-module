@@ -111,13 +111,15 @@ Synopsis
         echo $today;
     }
 
-    # GET /signature yields the hmac-sha-1 signature in base64 encoding
+    # GET /signature yields the hmac-sha-1 signature
     # given a secret and a string to sign
-    # this example yields HkADYytcoQQzqbjQX33k/ZBB/DQ=
+    # this example yields the base64 encoded singature which is
+    # "HkADYytcoQQzqbjQX33k/ZBB/DQ="
     location /signature {
         set $secret_key 'secret-key';
         set $string_to_sign "some-string-to-sign";
-        set_hmac_sha1_b64 $signature $secret_key $string_to_sign;
+        set_hmac_sha1 $signature $secret_key $string_to_sign;
+        set_encode_base64 $signature $signature;
         echo $signature;
     }
 
@@ -164,7 +166,7 @@ Directives
 
   set_local_today
 
-  set_hmac_sha1_b64 (only enabled when nginx uses openssl, as with ssl support)
+  set_hmac_sha1 (only enabled when nginx uses openssl, as with ssl support)
 
 
 Caveats

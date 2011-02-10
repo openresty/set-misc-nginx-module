@@ -20,7 +20,8 @@ __DATA__
     location /bar {
         set $secret 'thisisverysecretstuff';
         set $string_to_sign 'some string we want to sign';
-        set_hmac_sha1_b64 $signature $secret $string_to_sign;
+        set_hmac_sha1 $signature $secret $string_to_sign;
+        set_encode_base64 $signature $signature;
         echo $signature;
     }
 --- request
@@ -33,7 +34,8 @@ R/pvxzHC4NLtj7S+kXFg/NePTmk=
     location /bar {
         set $secret '';
         set $string_to_sign '';
-        set_hmac_sha1_b64 $signature $secret $string_to_sign;
+        set_hmac_sha1 $signature $secret $string_to_sign;
+        set_encode_base64 $signature $signature;
         echo $signature;
     }
 --- request
