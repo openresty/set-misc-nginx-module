@@ -11,8 +11,21 @@
 #include "ngx_http_set_escape_uri.h"
 #include "ngx_http_set_local_today.h"
 #include "ngx_http_set_hash.h"
+#if NGX_OPENSSL
+#include "ngx_http_set_hmac.h"
+#endif
 
 #define NGX_UNESCAPE_URI_COMPONENT  0
+
+
+#if NGX_OPENSSL
+static  ndk_set_var_t  ngx_http_set_misc_set_hmac_sha1_b64_filter = {
+    NDK_SET_VAR_MULTI_VALUE,
+    ngx_http_set_misc_set_hmac_sha1_b64,
+    2,
+    NULL
+};
+#endif
 
 #ifndef NGX_HTTP_SET_HASH
 static  ndk_set_var_t  ngx_http_set_misc_set_md5_filter = {
@@ -87,6 +100,16 @@ static ndk_set_var_t ngx_http_set_misc_local_today_filter = {
 };
 
 static ngx_command_t  ngx_http_set_misc_commands[] = {
+#if NGX_OPENSSL
+    {   ngx_string ("set_hmac_sha1_b64"),
+        NGX_HTTP_MAIN_CONF|NGX_HTTP_SRV_CONF|NGX_HTTP_SIF_CONF
+            |NGX_HTTP_LOC_CONF|NGX_HTTP_LIF_CONF|NGX_CONF_TAKE3,
+        ndk_set_var_multi_value,
+        0,
+        0,
+        &ngx_http_set_misc_set_hmac_sha1_b64_filter
+    },
+#endif
 #ifndef NGX_HTTP_SET_HASH
     {   ngx_string ("set_md5"),
         NGX_HTTP_MAIN_CONF|NGX_HTTP_SRV_CONF|NGX_HTTP_SIF_CONF
