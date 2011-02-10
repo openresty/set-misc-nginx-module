@@ -73,6 +73,24 @@ Synopsis
         # $b == 'abcde'
     }
 
+    location /base64 {
+        set $a 'abcde';
+        set_encode_base64 $a;
+        set_decode_base64 $b $a;
+
+        # now $a == 'YWJjZGU=' and
+        # $b == 'abcde'
+    }
+
+    location /hex {
+        set $a 'abcde';
+        set_encode_hex $a;
+        set_decode_hex $b $a;
+
+        # now $a == '6162636465' and
+        # $b == 'abcde'
+    }
+
     # GET /sha1 yields the output
     #   aaf4c61ddcc5e8a2dabede0f3b482cd9aea9434d
     location /sha1 {
@@ -133,6 +151,14 @@ Directives
 
       RFC forces the [A-Z2-7] RFC-3548 compliant encoding, but we're using the
       "base32hex" encoding [0-9a-v].
+
+  set_encode_base64
+
+  set_decode_base64
+
+  set_encode_hex
+
+  set_decode_hex
 
   set_sha1 (can be used with ngx_array module's array_map_op)
 
