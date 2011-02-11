@@ -26,6 +26,8 @@ __DATA__
 --- response_body
 6162636465
 
+
+
 === TEST 2: hex decode
 --- config
     location /bar {

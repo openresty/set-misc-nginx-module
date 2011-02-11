@@ -1,4 +1,4 @@
-# vi:filetype=perl
+# vi:filetype=
 
 use lib 'lib';
 use Test::Nginx::Socket;
@@ -28,6 +28,8 @@ __DATA__
     GET /bar
 --- response_body
 R/pvxzHC4NLtj7S+kXFg/NePTmk=
+
+
 
 === TEST 2: hmac empty vars
 --- config

@@ -1,4 +1,4 @@
-# vi:filetype=perl
+# vi:filetype=
 
 use lib 'lib';
 use Test::Nginx::Socket;
@@ -26,6 +26,8 @@ __DATA__
 --- response_body
 YWJjZGU=
 
+
+
 === TEST 2: base64 decode
 --- config
     location /bar {
@@ -36,3 +38,4 @@ YWJjZGU=
     GET /bar
 --- response_body
 abcde
+
