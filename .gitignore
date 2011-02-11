@@ -50,3 +50,9 @@ src/json.[ch]
 all.sh
 go
 t/servroot/
+src/base64.c
+src/base64.h
+src/hex.c
+src/hex.h
+src/hmac.c
+src/hmac.h
