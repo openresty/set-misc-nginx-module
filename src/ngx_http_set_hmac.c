@@ -14,12 +14,14 @@ ngx_http_set_misc_set_hmac_sha1(ngx_http_request_t *r,
                                 ngx_str_t *res, ngx_http_variable_value_t *v)
 {
     ngx_http_variable_value_t   *secret, *string_to_sign;
-    unsigned int                md_len;
-    unsigned char               md[EVP_MAX_MD_SIZE];
-    const EVP_MD                *evp_md = EVP_sha1();
+    unsigned int                 md_len;
+    unsigned char                md[EVP_MAX_MD_SIZE];
+    const EVP_MD                *evp_md;
+
+    evp_md = EVP_sha1();
 
     secret = v;
-    string_to_sign = v+1;
+    string_to_sign = v + 1;
 
     dd("secret=%s, string_to_sign=%s", secret->data, string_to_sign->data);
 
@@ -28,10 +30,11 @@ ngx_http_set_misc_set_hmac_sha1(ngx_http_request_t *r,
 
     res->len = md_len;
     ndk_palloc_re(res->data, r->pool, md_len);
+
     ngx_memcpy(res->data,
                &md,
                md_len);
+
     return NGX_OK;
 }
-
 

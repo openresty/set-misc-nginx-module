@@ -1,8 +1,9 @@
 #define DDEBUG 0
 #include "ddebug.h"
-#include    <ndk.h>
 
+#include    <ndk.h>
 #include "ngx_http_set_base64.h"
+
 
 ngx_int_t
 ngx_http_set_misc_set_decode_base64(ngx_http_request_t *r,
@@ -22,6 +23,7 @@ ngx_http_set_misc_set_decode_base64(ngx_http_request_t *r,
                       "set_decode_base64: invalid value");
         return NGX_ERROR;
     }
+
     return NGX_OK;
 }
 
@@ -38,7 +40,9 @@ ngx_http_set_misc_set_encode_base64(ngx_http_request_t *r,
 
     res->len = ngx_base64_encoded_length(v->len);
     ndk_palloc_re(res->data, r->pool, res->len);
+
     ngx_encode_base64(res, &src);
+
     return NGX_OK;
 }
 
