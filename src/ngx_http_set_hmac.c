@@ -6,6 +6,7 @@
 #include <openssl/evp.h>
 #include <openssl/hmac.h>
 
+
 /* this function's implementation is partly borrowed from
  * https://github.com/anomalizer/ngx_aws_auth */
 ngx_int_t
