@@ -8,8 +8,8 @@
 #define base32_decoded_length(len) ((((len)+7)/8)*5)
 
 
-static void encode_base32(int slen, const char *src, int *dlen, char *dst);
-static int decode_base32(int slen, const char *src, int *dlen, char *dst);
+static void encode_base32(size_t slen, u_char *src, size_t *dlen, u_char *dst);
+static int decode_base32(size_t slen, u_char *src, size_t *dlen, u_char *dst);
 
 
 ngx_int_t
@@ -31,7 +31,7 @@ ngx_http_set_misc_encode_base32(ngx_http_request_t *r,
 
     src = v->data; dst = p;
 
-    encode_base32((int)v->len, (const char *)src, (int *)&len, (char *)dst);
+    encode_base32(v->len, src, &len, dst);
 
     res->data = p;
     res->len = len;
@@ -62,8 +62,7 @@ ngx_http_set_misc_decode_base32(ngx_http_request_t *r,
 
     src = v->data; dst = p;
 
-    ret = decode_base32((int)v->len, (const char *)src, (int *)&len,
-            (char *)dst);
+    ret = decode_base32(v->len, src, &len, dst);
 
     if (ret == 0 /* OK */) {
         res->data = p;
@@ -103,17 +102,17 @@ ngx_http_set_misc_decode_base32(ngx_http_request_t *r,
  * @param dst 目标数据串指针, 保存 Base32 编码后数据.
  * */
 static void
-encode_base32(int slen, const char *src, int *dlen, char *dst)
+encode_base32(size_t slen, u_char *src, size_t *dlen, u_char *dst)
 {
     static unsigned char basis32[] = "0123456789abcdefghijklmnopqrstuv";
 
-    int len;
-    const unsigned char *s;
-    unsigned char *d;
+    size_t len;
+    u_char *s;
+    u_char *d;
 
     len = slen;
-    s = (const unsigned char*)src;
-    d = (unsigned char*)dst;
+    s = src;
+    d = dst;
 
     while (len > 4) {
         *d++ = basis32[s[0] >> 3];
@@ -178,12 +177,12 @@ encode_base32(int slen, const char *src, int *dlen, char *dst)
         *d++ = '=';
     }
 
-    *dlen = d - (unsigned char*)dst;
+    *dlen = (size_t) (d - dst);
 }
 
 
 static int
-decode_base32(int slen, const char *src, int *dlen, char *dst)
+decode_base32(size_t slen, u_char *src, size_t *dlen, u_char *dst)
 {
     static unsigned char basis32[] = {
         /* 0 - 15 */
@@ -235,9 +234,9 @@ decode_base32(int slen, const char *src, int *dlen, char *dst)
         77, 77, 77, 77, 77, 77, 77, 77, 77, 77, 77, 77, 77, 77, 77, 77
     };
 
-    int len, mod;
-    const unsigned char *s = (const unsigned char*)src;
-    unsigned char *d = (unsigned char*)dst;
+    size_t                   len, mod;
+    u_char                  *s = src;
+    u_char                  *d = dst;
 
     for (len = 0; len < slen; len++) {
         if (s[len] == '=') {
@@ -296,7 +295,7 @@ decode_base32(int slen, const char *src, int *dlen, char *dst)
         }
     }
 
-    *dlen = d - (unsigned char*)dst;
+    *dlen = (size_t) (d - dst);
 
     return 0;
 }
