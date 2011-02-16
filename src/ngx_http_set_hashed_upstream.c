@@ -4,29 +4,6 @@
 #include "ngx_http_set_hashed_upstream.h"
 
 
-ndk_upstream_list_t *
-ngx_http_set_misc_get_upstream_list(u_char *data, size_t len)
-{
-    ndk_upstream_list_t         *ul, *ule;
-
-    if (ndk_upstreams == NULL) {
-        return NULL;
-    }
-
-    ul = ndk_upstreams->elts;
-    ule = ul + ndk_upstreams->nelts;
-
-    for (; ul < ule; ul++) {
-        if (ul->name.len == len &&
-                ngx_strncasecmp(ul->name.data, data, len) == 0)
-        {
-            return ul;
-        }
-    }
-
-    return NULL;
-}
-
 
 ngx_uint_t
 ngx_http_set_misc_apply_distribution(ngx_log_t *log, ngx_uint_t hash,
@@ -57,14 +34,15 @@ ngx_http_set_misc_set_hashed_upstream(ngx_http_request_t *r,
     ngx_str_t                    ulname;
     ngx_uint_t                   hash, index;
     ngx_http_variable_value_t   *key;
-
+    
     if (ul == NULL) {
         ulname.data = v->data;
         ulname.len = v->len;
 
         dd("ulname: %.*s", ulname.len, ulname.data);
-
-        ul = ngx_http_set_misc_get_upstream_list(ulname.data, ulname.len);
+       
+        ul = ndk_get_upstream_list(ndk_http_get_main_conf(r), 
+                                            ulname.data, ulname.len);
 
         if (ul == NULL) {
             ngx_log_error(NGX_LOG_ERR, r->connection->log, 0,
@@ -142,7 +120,8 @@ ngx_http_set_hashed_upstream(ngx_conf_t *cf, ngx_command_t *cmd, void *conf)
         return  ndk_set_var_multi_value_core(cf, var, v, &filter);
     }
 
-    ul = ngx_http_set_misc_get_upstream_list(ulname->data, ulname->len);
+    ul = ndk_get_upstream_list(ndk_http_conf_get_main_conf(cf),
+                                            ulname->data, ulname->len);
     if (ul == NULL) {
         ngx_log_error(NGX_LOG_ERR, cf->log, 0,
                 "set_hashed_upstream: upstream list \"%V\" "

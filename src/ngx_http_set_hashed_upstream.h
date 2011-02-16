@@ -14,9 +14,6 @@ typedef enum {
 } ngx_http_set_misc_distribution_t;
 
 
-ndk_upstream_list_t *
-ngx_http_set_misc_get_upstream_list(u_char *data, size_t len);
-
 ngx_uint_t ngx_http_set_misc_apply_distribution(ngx_log_t *log, ngx_uint_t hash,
         ndk_upstream_list_t *ul, ngx_http_set_misc_distribution_t type);
 
