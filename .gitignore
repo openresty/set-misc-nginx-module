@@ -56,3 +56,5 @@ src/hex.c
 src/hex.h
 src/hmac.c
 src/hmac.h
+buildroot/
+work/
