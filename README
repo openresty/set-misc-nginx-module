@@ -164,6 +164,8 @@ Directives
 
   set_sha1 (can be used with ngx_array module's array_map_op)
 
+  set_md5 (can be used with ngx_array module's array_map_op and ngx_lua's ndk.set_var)
+
   set_local_today
 
   set_hmac_sha1 (only enabled when nginx uses openssl, as with ssl support)
