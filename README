@@ -50,7 +50,7 @@ Synopsis
         set_unescape_uri $foo $foo;
 
         # OR in-place editing:
-        #   set_quote_sql_str $foo;
+        #   set_unescape_uri $foo;
 
         # now $foo is: hello world
     }
