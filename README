@@ -123,6 +123,17 @@ Synopsis
         echo $signature;
     }
 
+    location = /rand {
+        set $from 3;
+        set $to 15;
+        set_random $rand $from $to;
+
+        # or write directly
+        #   set_random $rand 3 15;
+
+        echo $rand;  # will print a random integer in the range [3, 15]
+    }
+
 Description
   Every directive provided by this module can be
   mixed freely with other nginx rewrite module's
@@ -170,6 +181,11 @@ Directives
 
   set_hmac_sha1 (only enabled when nginx uses openssl, as with ssl support)
 
+  set_random $res <from> <to>
+    Note that only non-negative numbers in the "from" to "to" argument are allowed.
+    A (psuedo) random number in the range [<from>, <to>] (inclusive) will be assigned
+    to $res. For now, there's no way to configure a custom random generator seed.
+    Behind the scene, it makes use of the standard C function rand().
 
 Caveats
     Do not use $arg_XXX or $http_XXX or other special variables defined in

@@ -153,3 +153,17 @@ __DATA__
 --- error_code: 500
 --- SKIP
 
+
+
+=== TEST 10: zero is fine
+--- config
+    location /rand {
+        set_random $res 0 0;
+
+        echo $res;
+    }
+--- request
+    GET /rand
+--- response_body
+0
+
