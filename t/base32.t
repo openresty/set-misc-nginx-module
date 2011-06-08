@@ -1,9 +1,8 @@
 # vi:filetype=perl
 
-use lib 'lib';
 use Test::Nginx::Socket;
 
-#repeat_each(3);
+repeat_each(3);
 
 plan tests => repeat_each() * 2 * blocks();
 

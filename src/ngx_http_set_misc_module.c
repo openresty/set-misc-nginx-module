@@ -16,6 +16,7 @@
 #if NGX_OPENSSL
 #include "ngx_http_set_hmac.h"
 #endif
+#include "ngx_http_set_random.h"
 
 #define NGX_UNESCAPE_URI_COMPONENT  0
 
@@ -126,6 +127,13 @@ static ndk_set_var_t ngx_http_set_misc_local_today_filter = {
     NDK_SET_VAR_VALUE,
     ngx_http_set_local_today,
     0,
+    NULL
+};
+
+static  ndk_set_var_t  ngx_http_set_misc_set_random_filter = {
+    NDK_SET_VAR_MULTI_VALUE,
+    ngx_http_set_misc_set_random,
+    2,
     NULL
 };
 
@@ -280,6 +288,14 @@ static ngx_command_t  ngx_http_set_misc_commands[] = {
         0,
         0,
         &ngx_http_set_misc_local_today_filter
+    },
+    {   ngx_string ("set_random"),
+        NGX_HTTP_MAIN_CONF|NGX_HTTP_SRV_CONF|NGX_HTTP_SIF_CONF
+            |NGX_HTTP_LOC_CONF|NGX_HTTP_LIF_CONF|NGX_CONF_TAKE3,
+        ndk_set_var_multi_value,
+        0,
+        0,
+        &ngx_http_set_misc_set_random_filter
     },
 
     ngx_null_command

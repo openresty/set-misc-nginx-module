@@ -58,3 +58,4 @@ src/hmac.c
 src/hmac.h
 buildroot/
 work/
+src/random.[ch]
