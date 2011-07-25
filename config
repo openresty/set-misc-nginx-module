@@ -1,7 +1,7 @@
 if echo $HTTP_MODULES | grep " ndk_http_module" > /dev/null; then
     echo "found ngx_devel_kit for ngx_set_misc; looks good."
 else
-    echo "ngx_devel_kit is required to build ngx_set_misc; please put it before ngx_set_misc." 1>&2
+    echo "error: ngx_devel_kit is required to build ngx_set_misc; please put it before ngx_set_misc." 1>&2
     exit 1
 fi
 
