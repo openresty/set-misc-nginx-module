@@ -160,8 +160,15 @@ Directives
       RFC forces the [A-Z2-7] RFC-3548 compliant encoding, but we're using the
       "base32hex" encoding [0-9a-v].
 
-  set_decode_base32 (can be used with ngx_array module's array_map_op)
+      By default, the "=" character is used to pad the left-over bytes
+      due to alignment. But the padding behavior can be completely
+      disabled by setting set_misc_base32_padding off.
 
+  set_misc_base32_padding on|off
+      this directive can control whether to pad left-over bytes
+      with the "=" character when encoding a base32 digest.
+
+  set_decode_base32 (can be used with ngx_array module's array_map_op)
       RFC forces the [A-Z2-7] RFC-3548 compliant encoding, but we're using the
       "base32hex" encoding [0-9a-v].
 
