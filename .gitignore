@@ -57,5 +57,7 @@ src/hex.h
 src/hmac.c
 src/hmac.h
 buildroot/
+src/module.h
 work/
 src/random.[ch]
+build10

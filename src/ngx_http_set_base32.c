@@ -1,14 +1,18 @@
 #define DDEBUG 0
 #include "ddebug.h"
+
 #include <ndk.h>
+
 #include "ngx_http_set_base32.h"
+#include "ngx_http_set_misc_module.h"
 
 
 #define base32_encoded_length(len) ((((len)+4)/5)*8)
 #define base32_decoded_length(len) ((((len)+7)/8)*5)
 
 
-static void encode_base32(size_t slen, u_char *src, size_t *dlen, u_char *dst);
+static void encode_base32(size_t slen, u_char *src, size_t *dlen, u_char *dst,
+        ngx_flag_t padding);
 static int decode_base32(size_t slen, u_char *src, size_t *dlen, u_char *dst);
 
 
@@ -19,6 +23,10 @@ ngx_http_set_misc_encode_base32(ngx_http_request_t *r,
     size_t                   len;
     u_char                  *p;
     u_char                  *src, *dst;
+
+    ngx_http_set_misc_loc_conf_t        *conf;
+
+    conf = ngx_http_get_module_loc_conf(r, ngx_http_set_misc_module);
 
     len = base32_encoded_length(v->len);
 
@@ -31,7 +39,7 @@ ngx_http_set_misc_encode_base32(ngx_http_request_t *r,
 
     src = v->data; dst = p;
 
-    encode_base32(v->len, src, &len, dst);
+    encode_base32(v->len, src, &len, dst, conf->base32_padding);
 
     res->data = p;
     res->len = len;
@@ -102,7 +110,8 @@ ngx_http_set_misc_decode_base32(ngx_http_request_t *r,
  * @param dst 目标数据串指针, 保存 Base32 编码后数据.
  * */
 static void
-encode_base32(size_t slen, u_char *src, size_t *dlen, u_char *dst)
+encode_base32(size_t slen, u_char *src, size_t *dlen, u_char *dst,
+        ngx_flag_t padding)
 {
     static unsigned char basis32[] = "0123456789abcdefghijklmnopqrstuv";
 
@@ -132,49 +141,60 @@ encode_base32(size_t slen, u_char *src, size_t *dlen, u_char *dst)
         *d++ = basis32[s[0] >> 3];
 
         if (len == 1) {
-            /* 剩余 1 个字节 */
+            /* 1 byte left */
             *d++ = basis32[(s[0] & 0x07) << 2];
 
-            /* 到结束为止补 6 个 = */
-            *d++ = '=';
-            *d++ = '=';
-            *d++ = '=';
-            *d++ = '=';
-            *d++ = '=';
+            /* pad six '='s to the end */
+            if (padding) {
+                *d++ = '=';
+                *d++ = '=';
+                *d++ = '=';
+                *d++ = '=';
+                *d++ = '=';
+            }
+
         } else {
             *d++ = basis32[((s[0] & 0x07) << 2) | (s[1] >> 6)];
             *d++ = basis32[(s[1] >> 1) & 0x1f];
 
             if (len == 2) {
-                /* 剩余 2 个字节 */
+                /* 2 bytes left */
                 *d++ = basis32[(s[1] & 1) << 4];
 
-                /* 到结束为止补 4 个 = */
-                *d++ = '=';
-                *d++ = '=';
-                *d++ = '=';
+                /* pad four '='s to the end */
+                if (padding) {
+                    *d++ = '=';
+                    *d++ = '=';
+                    *d++ = '=';
+                }
+
             } else {
                 *d++ = basis32[((s[1] & 1) << 4) | (s[2] >> 4)];
 
                 if (len == 3) {
-                    /* 剩余 3 个字节 */
+                    /* 3 bytes left */
                     *d++ = basis32[(s[2] & 0x0f) << 1];
 
-                    /* 到结束为止补 3 个 = */
-                    *d++ = '=';
-                    *d++ = '=';
+                    if (padding) {
+                        /* pad three '='s to the end */
+                        *d++ = '=';
+                        *d++ = '=';
+                    }
+
                 } else {
-                    /* 剩余 4 个字节 */
+                    /* 4 bytes left */
                     *d++ = basis32[((s[2] & 0x0f) << 1) | (s[3] >> 7)];
                     *d++ = basis32[(s[3] >> 2) & 0x1f];
                     *d++ = basis32[(s[3] & 0x03) << 3];
 
-                    /* 到结束为止补 1 个 = */
+                    /* pad one '=' to the end */
                 }
             }
         }
 
-        *d++ = '=';
+        if (padding) {
+            *d++ = '=';
+        }
     }
 
     *dlen = (size_t) (d - dst);
