@@ -800,13 +800,16 @@ the version 1.0.5 (see [[#Compatibility|nginx compatibility]]), and then build t
     
     # Here we assume you would install you nginx under /opt/nginx/.
     $ ./configure --prefix=/opt/nginx \
+        --add-module=/path/to/ngx_devel_kit \
         --add-module=/path/to/set-misc-nginx-module
      
     $ make -j2
     $ make install
 </geshi>
 
-Download the latest version of the release tarball of this module from [http://github.com/agentzh/set-misc-nginx-module/downloads set-misc-nginx-module file list].
+Download the latest version of the release tarball of this module from [http://github.com/agentzh/set-misc-nginx-module/downloads set-misc-nginx-module file list], and the latest tarball for [https://github.com/simpl/ngx_devel_kit ngx_devel_kit] from its [https://github.com/simpl/ngx_devel_kit/downloads file list].
+
+Also, this module is included and enabled by default in the [http://openresty.org/ ngx_openresty bundle].
 
 = Compatibility =
 
