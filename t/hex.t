@@ -38,3 +38,21 @@ __DATA__
     GET /bar
 --- response_body
 abcde
+
+
+
+=== TEST 3: hex encode (chinese)
+--- config
+    location /bar {
+        set $raw "章亦春";
+        set_encode_hex $digest $raw;
+        set_decode_hex $hex $digest;
+        echo $digest;
+        echo $hex;
+    }
+--- request
+    GET /bar
+--- response_body
+e7aba0e4baa6e698a5
+章亦春
+

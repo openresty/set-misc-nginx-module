@@ -20,7 +20,7 @@ ngx_http_set_local_today(ngx_http_request_t *r, ngx_str_t *res,
 
     dd("tm.ngx_tm_hour:%d", tm.ngx_tm_hour);
 
-    p = ngx_palloc(r->pool, sizeof("xxxx-xx-xx") - 1);
+    p = ngx_palloc(r->pool, sizeof("yyyy-mm-dd") - 1);
     if (p == NULL) {
         return NGX_ERROR;
     }
@@ -29,7 +29,7 @@ ngx_http_set_local_today(ngx_http_request_t *r, ngx_str_t *res,
             tm.ngx_tm_mday);
 
     res->data = p;
-    res->len = sizeof("xxxx-xx-xx") - 1;
+    res->len = sizeof("yyyy-mm-dd") - 1;
 
     return NGX_OK;
 }

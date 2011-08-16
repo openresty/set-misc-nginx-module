@@ -2,9 +2,10 @@
 
 use lib 'lib';
 use Test::Nginx::Socket;
-our($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst)
-  = localtime();
-our $str = sprintf("%04d-%02d-%02d\n", $main::year + 1900, $main::mon + 1, $main::mday);
+
+my ($sec, $min, $hour, $mday, $mon, $year) = localtime;
+
+our $str = sprintf("%04d-%02d-%02d\n", $year + 1900, $mon + 1, $mday);
 #repeat_each(3);
 
 plan tests => repeat_each() * 2 * blocks();
@@ -17,7 +18,7 @@ run_tests();
 
 __DATA__
 
-=== TEST 1: set if empty
+=== TEST 1: sanity
 --- config
     location /foo {
         set_local_today $today;
