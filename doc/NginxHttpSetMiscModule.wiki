@@ -152,6 +152,8 @@ Every directive provided by this module can be mixed freely with other [[NginxHt
 
 '''context:''' ''location, location if''
 
+'''phase:''' ''rewrite''
+
 Assign the value of the argument <code><src></code> if and only if variable <code>$dst</code> is empty (i.e., not found or has an empty string value).
 
 In the following example,
@@ -180,6 +182,8 @@ the variable <code>$dst</code> will take the value 32 at last. But in the sample
 
 '''context:''' ''location, location if''
 
+'''phase:''' ''rewrite''
+
 '''category:''' ''ndk_set_var_value''
 
 When taking two arguments, this directive will quote the value of the second argument <code><src></code> by MySQL's string value quoting rule and assign the result into the first argument, variable <code>$dst</code>. For example,
@@ -201,7 +205,7 @@ Then request <code>GET /test</code> will yield the following output
 
 Please note that we're using [[NginxHttpEchoModule]]'s [[NginxHttpEchoModule#echo|echo directive]] here to output values of nginx variables directly.
 
-When taking a single argument, this directive will does in-place modification of the argument variable. For example,
+When taking a single argument, this directive will do in-place modification of the argument variable. For example,
 
 <geshi lang="nginx">
     location /test {
@@ -227,6 +231,8 @@ This directive can be invoked by [[NginxHttpLuaModule]]'s [[NginxHttpLuaModule#n
 
 '''context:''' ''location, location if''
 
+'''phase:''' ''rewrite''
+
 '''category:''' ''ndk_set_var_value''
 
 Very much like [[#set_quote_sql_str|set_quote_sql_str]], but with PostgreSQL quoting rules for SQL string literals.
@@ -239,6 +245,8 @@ Very much like [[#set_quote_sql_str|set_quote_sql_str]], but with PostgreSQL quo
 '''default:''' ''no''
 
 '''context:''' ''location, location if''
+
+'''phase:''' ''rewrite''
 
 '''category:''' ''ndk_set_var_value''
 
@@ -261,7 +269,7 @@ Then request <code>GET /test</code> will yield the following output
 
 Please note that we're using [[NginxHttpEchoModule]]'s [[NginxHttpEchoModule#echo|echo directive]] here to output values of nginx variables directly.
 
-When taking a single argument, this directive will does in-place modification of the argument variable. For example,
+When taking a single argument, this directive will do in-place modification of the argument variable. For example,
 
 <geshi lang="nginx">
     location /test {
@@ -285,6 +293,8 @@ This directive can be invoked by [[NginxHttpLuaModule]]'s [[NginxHttpLuaModule#n
 
 '''context:''' ''location, location if''
 
+'''phase:''' ''rewrite''
+
 '''category:''' ''ndk_set_var_value''
 
 When taking two arguments, this directive will unescape the value of the second argument <code><src></code> as a URI component and assign the result into the first argument, variable <code>$dst</code>. For example,
@@ -306,14 +316,14 @@ The nginx standard [[NginxHttpCoreModule#$arg_PARAMETER|$arg_PARAMETER]] variabl
 
 Please note that we're using [[NginxHttpEchoModule]]'s [[NginxHttpEchoModule#echo|echo directive]] here to output values of nginx variables directly.
 
-When taking a single argument, this directive will does in-place modification of the argument variable. For example,
+When taking a single argument, this directive will do in-place modification of the argument variable. For example,
 
 <geshi lang="nginx">
     location /test {
         set $key $arg_key;
         set_unescape_uri $key;
 
-        echo $value;
+        echo $key;
     }
 </geshi>
 
@@ -330,17 +340,95 @@ This directive can be invoked by [[NginxHttpLuaModule]]'s [[NginxHttpLuaModule#n
 
 '''context:''' ''location, location if''
 
+'''phase:''' ''rewrite''
+
 '''category:''' ''ndk_set_var_value''
 
 Very much like the [[#set_unescape_uri|set_unescape_uri]] directive, but does the conversion the other way around, i.e., URL component escaping.
 
 == set_hashed_upstream ==
+'''syntax:''' ''set_hashed_upstream $dst <upstream_list_name> <src>''
+
+'''default:''' ''no''
+
+'''context:''' ''location, location if''
+
+'''phase:''' ''rewrite''
+
+Hashes the string argument <code><src></code> into one of the upstream name included in the upstream list named <code><upstream_list_name></code>. The hash function being used is simple modulo.
+
+Here's an example,
+
+<geshi lang="nginx">
+    upstream moon { ... }
+    upstream sun { ... }
+    upstream earth { ... }
+
+    upstream_list universe moon sun earth;
+
+    location /test {
+        set_unescape_uri $key $arg_key;
+        set $list_name universe;
+        set_hashed_upstream $backend $list_name $key;
+
+        echo $backend;        
+    }
+</geshi>
+
+Then <code>GET /test?key=blah</code> will output either "moon", "sun", or "earth", depending on the actual value of the <code>key</code> query argument.
+
+This directive is usually used to compute an nginx variable to be passed to [[NginxHttpMemcModule]]'s [[NginxHttpMemcModule#memc_pass|memc_pass]] directive, [[NginxHttpRedis2Module]]'s [[NginxHttpRedis2Module#redis2_pass]] directive, and [[NginxHttpProxyModule]]'s [[NginxHttpProxyModule#proxy_pass|proxy_pass]] directive, among others.
 
 == set_encode_base32 ==
+'''syntax:''' ''set_encode_base32 $dst <src>''
 
-RFC forces the [A-Z2-7] RFC-3548 compliant encoding, but we're using the "base32hex" encoding [0-9a-v].
+'''syntax:''' ''set_encode_base32 $dst''
 
-By default, the "=" character is used to pad the left-over bytes due to alignment. But the padding behavior can be completely disabled by setting set_misc_base32_padding off.
+'''default:''' ''no''
+
+'''context:''' ''location, location if''
+
+'''phase:''' ''rewrite''
+
+'''category:''' ''ndk_set_var_value''
+
+When taking two arguments, this directive will encode the value of the second argument <code><src></code> to its base32(hex) digest and assign the result into the first argument, variable <code>$dst</code>. For example,
+
+<geshi lang="nginx">
+    location /test {
+        set $raw "abcde";
+        set_encode_base32 $digest $raw;
+
+        echo $digest;
+    }
+</geshi>
+
+Then request <code>GET /test</code> will yield the following output
+
+<geshi lang="text">
+c5h66p35
+</geshi>
+
+Please note that we're using [[NginxHttpEchoModule]]'s [[NginxHttpEchoModule#echo|echo directive]] here to output values of nginx variables directly.
+
+RFC forces the <code>[A-Z2-7]</code> RFC-3548 compliant encoding, but we're using the "base32hex" encoding (<code>[0-9a-v]</code>).
+
+By default, the <code>=</code> character is used to pad the left-over bytes due to alignment. But the padding behavior can be completely disabled by setting [[#set_misc_base32_padding|set_misc_base32_padding]] <code>off</code>.
+
+When taking a single argument, this directive will do in-place modification of the argument variable. For example,
+
+<geshi lang="nginx">
+    location /test {
+        set $value "abcde";
+        set_encode_base32 $value;
+
+        echo $value;
+    }
+</geshi>
+
+then request <code>GET /test</code> will give exactly the same output as the previous example.
+
+This directive can be invoked by [[NginxHttpLuaModule]]'s [[NginxHttpLuaModule#ndk.set_var.DIRECTIVE|ndk.set_var.DIRECTIVE]] interface and [[NginxHttpArrayVarModule]]'s [[NginxHttpArrayVarModule#array_map_op|array_map_op]] directive.
 
 == set_misc_base32_padding ==
 '''syntax:''' ''set_misc_base32_padding on|off''
@@ -349,34 +437,346 @@ By default, the "=" character is used to pad the left-over bytes due to alignmen
 
 '''context:''' ''http, server, server if, location, location if''
 
+'''phase:''' ''no''
+
 This directive can control whether to pad left-over bytes with the "=" character when encoding a base32 digest by the [[#set_encode_base32|set_encode_base32]] directive.
 
 == set_decode_base32 ==
+'''syntax:''' ''set_decode_base32 $dst <src>''
 
-RFC forces the [A-Z2-7] RFC-3548 compliant encoding, but we're using the "base32hex" encoding [0-9a-v].
+'''syntax:''' ''set_decode_base32 $dst''
+
+'''default:''' ''no''
+
+'''context:''' ''location, location if''
+
+'''phase:''' ''rewrite''
+
+'''category:''' ''ndk_set_var_value''
+
+Similar to the [[#set_encode_base32|set_encode_base32]] directive, but does exactly the the opposite operation, .i.e, decoding a base32(hex) digest into its original form.
 
 == set_encode_base64 ==
+'''syntax:''' ''set_encode_base64 $dst <src>''
+
+'''syntax:''' ''set_encode_base64 $dst''
+
+'''default:''' ''no''
+
+'''context:''' ''location, location if''
+
+'''phase:''' ''rewrite''
+
+'''category:''' ''ndk_set_var_value''
+
+When taking two arguments, this directive will encode the value of the second argument <code><src></code> to its base64 digest and assign the result into the first argument, variable <code>$dst</code>. For example,
+
+<geshi lang="nginx">
+    location /test {
+        set $raw "abcde";
+        set_encode_base64 $digest $raw;
+
+        echo $digest;
+    }
+</geshi>
+
+Then request <code>GET /test</code> will yield the following output
+
+<geshi lang="text">
+YWJjZGU=
+</geshi>
+
+Please note that we're using [[NginxHttpEchoModule]]'s [[NginxHttpEchoModule#echo|echo directive]] here to output values of nginx variables directly.
+
+When taking a single argument, this directive will do in-place modification of the argument variable. For example,
+
+<geshi lang="nginx">
+    location /test {
+        set $value "abcde";
+        set_encode_base64 $value;
+
+        echo $value;
+    }
+</geshi>
+
+then request <code>GET /test</code> will give exactly the same output as the previous example.
+
+This directive can be invoked by [[NginxHttpLuaModule]]'s [[NginxHttpLuaModule#ndk.set_var.DIRECTIVE|ndk.set_var.DIRECTIVE]] interface and [[NginxHttpArrayVarModule]]'s [[NginxHttpArrayVarModule#array_map_op|array_map_op]] directive.
 
 == set_decode_base64 ==
+'''syntax:''' ''set_decode_base64 $dst <src>''
+
+'''syntax:''' ''set_decode_base64 $dst''
+
+'''default:''' ''no''
+
+'''context:''' ''location, location if''
+
+'''phase:''' ''rewrite''
+
+'''category:''' ''ndk_set_var_value''
+
+Similar to the [[#set_encode_base64|set_encode_base64]] directive, but does exactly the the opposite operation, .i.e, decoding a base64 digest into its original form.
 
 == set_encode_hex ==
+'''syntax:''' ''set_encode_hex $dst <src>''
+
+'''syntax:''' ''set_encode_hex $dst''
+
+'''default:''' ''no''
+
+'''context:''' ''location, location if''
+
+'''phase:''' ''rewrite''
+
+'''category:''' ''ndk_set_var_value''
+
+When taking two arguments, this directive will encode the value of the second argument <code><src></code> to its hexadecimal digest and assign the result into the first argument, variable <code>$dst</code>. For example,
+
+<geshi lang="nginx">
+    location /test {
+        set $raw "章亦春";
+        set_encode_hex $digest $raw;
+
+        echo $digest;
+    }
+</geshi>
+
+Then request <code>GET /test</code> will yield the following output
+
+<geshi lang="text">
+e7aba0e4baa6e698a5
+</geshi>
+
+Please note that we're using [[NginxHttpEchoModule]]'s [[NginxHttpEchoModule#echo|echo directive]] here to output values of nginx variables directly.
+
+When taking a single argument, this directive will do in-place modification of the argument variable. For example,
+
+<geshi lang="nginx">
+    location /test {
+        set $value "章亦春";
+        set_encode_hex $value;
+
+        echo $value;
+    }
+</geshi>
+
+then request <code>GET /test</code> will give exactly the same output as the previous example.
+
+This directive can be invoked by [[NginxHttpLuaModule]]'s [[NginxHttpLuaModule#ndk.set_var.DIRECTIVE|ndk.set_var.DIRECTIVE]] interface and [[NginxHttpArrayVarModule]]'s [[NginxHttpArrayVarModule#array_map_op|array_map_op]] directive.
 
 == set_decode_hex ==
+'''syntax:''' ''set_decode_hex $dst <src>''
+
+'''syntax:''' ''set_decode_hex $dst''
+
+'''default:''' ''no''
+
+'''context:''' ''location, location if''
+
+'''phase:''' ''rewrite''
+
+'''category:''' ''ndk_set_var_value''
+
+Similar to the [[#set_encode_hex|set_encode_hex]] directive, but does exactly the the opposite operation, .i.e, decoding a hexadecimal digest into its original form.
 
 == set_sha1 ==
+'''syntax:''' ''set_sha1 $dst <src>''
+
+'''syntax:''' ''set_sha1 $dst''
+
+'''default:''' ''no''
+
+'''context:''' ''location, location if''
+
+'''phase:''' ''rewrite''
+
+'''category:''' ''ndk_set_var_value''
+
+When taking two arguments, this directive will encode the value of the second argument <code><src></code> to its [http://en.wikipedia.org/wiki/SHA-1 SHA-1] digest and assign the result into the first argument, variable <code>$dst</code>. The hexadecimal form of the <code>SHA-1</code> digest will be generated automatically, use [[#set_decode_hex|set_decode_hex]] to decode the result if you want the binary form of the <code>SHA-1</code> digest.
+
+For example,
+
+<geshi lang="nginx">
+    location /test {
+        set $raw "hello";
+        set_sha1 $digest $raw;
+
+        echo $digest;
+    }
+</geshi>
+
+Then request <code>GET /test</code> will yield the following output
+
+<geshi lang="text">
+aaf4c61ddcc5e8a2dabede0f3b482cd9aea9434d
+</geshi>
+
+Please note that we're using [[NginxHttpEchoModule]]'s [[NginxHttpEchoModule#echo|echo directive]] here to output values of nginx variables directly.
+
+When taking a single argument, this directive will do in-place modification of the argument variable. For example,
+
+<geshi lang="nginx">
+    location /test {
+        set $value "hello";
+        set_sha1 $value;
+
+        echo $value;
+    }
+</geshi>
+
+then request <code>GET /test</code> will give exactly the same output as the previous example.
+
+This directive can be invoked by [[NginxHttpLuaModule]]'s [[NginxHttpLuaModule#ndk.set_var.DIRECTIVE|ndk.set_var.DIRECTIVE]] interface and [[NginxHttpArrayVarModule]]'s [[NginxHttpArrayVarModule#array_map_op|array_map_op]] directive.
 
 == set_md5 ==
+'''syntax:''' ''set_md5 $dst <src>''
 
-== set_local_today ==
+'''syntax:''' ''set_md5 $dst''
+
+'''default:''' ''no''
+
+'''context:''' ''location, location if''
+
+'''phase:''' ''rewrite''
+
+'''category:''' ''ndk_set_var_value''
+
+When taking two arguments, this directive will encode the value of the second argument <code><src></code> to its [http://en.wikipedia.org/wiki/MD5 MD5] digest and assign the result into the first argument, variable <code>$dst</code>. The hexadecimal form of the <code>MD5</code> digest will be generated automatically, use [[#set_decode_hex|set_decode_hex]] to decode the result if you want the binary form of the <code>MD5</code> digest.
+
+For example,
+
+<geshi lang="nginx">
+    location /test {
+        set $raw "hello";
+        set_md5 $digest $raw;
+
+        echo $digest;
+    }
+</geshi>
+
+Then request <code>GET /test</code> will yield the following output
+
+<geshi lang="text">
+5d41402abc4b2a76b9719d911017c592
+</geshi>
+
+Please note that we're using [[NginxHttpEchoModule]]'s [[NginxHttpEchoModule#echo|echo directive]] here to output values of nginx variables directly.
+
+When taking a single argument, this directive will do in-place modification of the argument variable. For example,
+
+<geshi lang="nginx">
+    location /test {
+        set $value "hello";
+        set_md5 $value;
+
+        echo $value;
+    }
+</geshi>
+
+then request <code>GET /test</code> will give exactly the same output as the previous example.
+
+This directive can be invoked by [[NginxHttpLuaModule]]'s [[NginxHttpLuaModule#ndk.set_var.DIRECTIVE|ndk.set_var.DIRECTIVE]] interface and [[NginxHttpArrayVarModule]]'s [[NginxHttpArrayVarModule#array_map_op|array_map_op]] directive.
 
 == set_hmac_sha1 ==
+'''syntax:''' ''set_hmac_sha1 $dst <secret_key> <src>''
+
+'''syntax:''' ''set_hmac_sha1 $dst''
+
+'''default:''' ''no''
+
+'''context:''' ''location, location if''
+
+'''phase:''' ''rewrite''
+
+Computes the [http://en.wikipedia.org/wiki/HMAC HMAC-SHA1] digest of the argument <code><src></code> and assigns the result into the argument variable <code>$dst</code> with the secret key <code><secret_key></code>.
+
+The raw binary form of the <code>HMAC-SHA1</code> digest will be generated, use [[#set_encode_base64|set_encode_base64]], for example, to encode the result to a textual representation if desired.
+
+For example,
+
+<geshi lang="nginx">
+    location /test {
+        set $secret 'thisisverysecretstuff';
+        set $string_to_sign 'some string we want to sign';
+        set_hmac_sha1 $signature $secret $string_to_sign;
+        set_encode_base64 $signature $signature;
+        echo $signature;
+    }
+</geshi>
+
+Then request <code>GET /test</code> will yield the following output
+
+<geshi lang="text">
+R/pvxzHC4NLtj7S+kXFg/NePTmk=
+</geshi>
+
+Please note that we're using [[NginxHttpEchoModule]]'s [[NginxHttpEchoModule#echo|echo directive]] here to output values of nginx variables directly.
+
+This directive requires the OpenSSL library enabled in your Nignx build.
 
 == set_random ==
 '''syntax:''' ''set_random $res <from> <to>''
 
-Note that only non-negative numbers in the "from" to "to" argument are allowed. A (psuedo) random number in the range <code>[<from>, <to>]</code> (inclusive) will be assigned to <code>$res</code>. For now, there's no way to configure a custom random generator seed.
+'''default:''' ''no''
+
+'''context:''' ''location, location if''
+
+'''phase:''' ''rewrite''
+
+Generates a (pseudo) random number (in textual form) within the range <code>[<$from>, <$to>]</code> (inclusive).
+
+Only non-negative numbers are allowed for the <code><from></code> and <code><to></code> arguments.
+
+When <code><$from></code> is greater than <code><$to></code>, their values will be exchanged accordingly.
+
+For instance,
+
+<geshi lang="nginx">
+    location /test {
+        set $from 5;                              
+        set $to 7;                                
+        set_random $res $from $to;                
+                                                  
+        echo $res;                                
+    }
+</geshi>
+
+then request <code>GET /test</code> will output a number between 5 and 7 (i.e., among 5, 6, 7).
+
+For now, there's no way to configure a custom random generator seed.
 
 Behind the scene, it makes use of the standard C function <code>rand()</code>.
+
+== set_local_today ==
+'''syntax:''' ''set_local_today $dst''
+
+'''default:''' ''no''
+
+'''context:''' ''location, location if''
+
+'''phase:''' ''rewrite''
+
+Set today's date ("yyyy-mm-dd") in localtime to the argument variable <code>$dst</code>.
+
+Here's an example,
+
+<geshi lang="nginx">
+    location /today {
+        set_local_today $today;
+        echo $today;
+    }
+</geshi>
+
+then request <code>GET /today</code> will output something like
+
+<geshi lang="text">
+2011-08-16
+</geshi>
+
+and year, the actual date you get here will vary every day ;)
+
+Behind the scene, this directive utilizes the <code>ngx_time</code> API in the Nginx core, so usually no syscall is involved due to the time caching mechanism in the Nginx core.
 
 = Caveats =
 

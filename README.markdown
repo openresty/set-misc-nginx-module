@@ -158,6 +158,8 @@ set_if_empty
 
 **context:** *location, location if*
 
+**phase:** *rewrite*
+
 Assign the value of the argument `<src>` if and only if variable `$dst` is empty (i.e., not found or has an empty string value).
 
 In the following example,
@@ -187,6 +189,8 @@ set_quote_sql_str
 
 **context:** *location, location if*
 
+**phase:** *rewrite*
+
 **category:** *ndk_set_var_value*
 
 When taking two arguments, this directive will quote the value of the second argument `<src>` by MySQL's string value quoting rule and assign the result into the first argument, variable `$dst`. For example,
@@ -208,7 +212,7 @@ Then request `GET /test` will yield the following output
 
 Please note that we're using [NginxHttpEchoModule](http://wiki.nginx.org/NginxHttpEchoModule)'s [echo directive](http://wiki.nginx.org/NginxHttpEchoModule#echo) here to output values of nginx variables directly.
 
-When taking a single argument, this directive will does in-place modification of the argument variable. For example,
+When taking a single argument, this directive will do in-place modification of the argument variable. For example,
 
 
     location /test {
@@ -235,6 +239,8 @@ set_quote_pgsql_str
 
 **context:** *location, location if*
 
+**phase:** *rewrite*
+
 **category:** *ndk_set_var_value*
 
 Very much like [set_quote_sql_str](http://wiki.nginx.org/NginxHttpSetMiscModule#set_quote_sql_str), but with PostgreSQL quoting rules for SQL string literals.
@@ -248,6 +254,8 @@ set_quote_json_str
 **default:** *no*
 
 **context:** *location, location if*
+
+**phase:** *rewrite*
 
 **category:** *ndk_set_var_value*
 
@@ -270,7 +278,7 @@ Then request `GET /test` will yield the following output
 
 Please note that we're using [NginxHttpEchoModule](http://wiki.nginx.org/NginxHttpEchoModule)'s [echo directive](http://wiki.nginx.org/NginxHttpEchoModule#echo) here to output values of nginx variables directly.
 
-When taking a single argument, this directive will does in-place modification of the argument variable. For example,
+When taking a single argument, this directive will do in-place modification of the argument variable. For example,
 
 
     location /test {
@@ -295,6 +303,8 @@ set_unescape_uri
 
 **context:** *location, location if*
 
+**phase:** *rewrite*
+
 **category:** *ndk_set_var_value*
 
 When taking two arguments, this directive will unescape the value of the second argument `<src>` as a URI component and assign the result into the first argument, variable `$dst`. For example,
@@ -316,14 +326,14 @@ The nginx standard [$arg_PARAMETER](http://wiki.nginx.org/NginxHttpCoreModule#.2
 
 Please note that we're using [NginxHttpEchoModule](http://wiki.nginx.org/NginxHttpEchoModule)'s [echo directive](http://wiki.nginx.org/NginxHttpEchoModule#echo) here to output values of nginx variables directly.
 
-When taking a single argument, this directive will does in-place modification of the argument variable. For example,
+When taking a single argument, this directive will do in-place modification of the argument variable. For example,
 
 
     location /test {
         set $key $arg_key;
         set_unescape_uri $key;
 
-        echo $value;
+        echo $key;
     }
 
 
@@ -341,19 +351,97 @@ set_escape_uri
 
 **context:** *location, location if*
 
+**phase:** *rewrite*
+
 **category:** *ndk_set_var_value*
 
 Very much like the [set_unescape_uri](http://wiki.nginx.org/NginxHttpSetMiscModule#set_unescape_uri) directive, but does the conversion the other way around, i.e., URL component escaping.
 
 set_hashed_upstream
 -------------------
+**syntax:** *set_hashed_upstream $dst <upstream_list_name> <src>*
+
+**default:** *no*
+
+**context:** *location, location if*
+
+**phase:** *rewrite*
+
+Hashes the string argument `<src>` into one of the upstream name included in the upstream list named `<upstream_list_name>`. The hash function being used is simple modulo.
+
+Here's an example,
+
+
+    upstream moon { ... }
+    upstream sun { ... }
+    upstream earth { ... }
+
+    upstream_list universe moon sun earth;
+
+    location /test {
+        set_unescape_uri $key $arg_key;
+        set $list_name universe;
+        set_hashed_upstream $backend $list_name $key;
+
+        echo $backend;        
+    }
+
+
+Then `GET /test?key=blah` will output either "moon", "sun", or "earth", depending on the actual value of the `key` query argument.
+
+This directive is usually used to compute an nginx variable to be passed to [NginxHttpMemcModule](http://wiki.nginx.org/NginxHttpMemcModule)'s [memc_pass](http://wiki.nginx.org/NginxHttpMemcModule#memc_pass) directive, [NginxHttpRedis2Module](http://wiki.nginx.org/NginxHttpRedis2Module)'s [[NginxHttpRedis2Module#redis2_pass]] directive, and [NginxHttpProxyModule](http://wiki.nginx.org/NginxHttpProxyModule)'s [proxy_pass](http://wiki.nginx.org/NginxHttpProxyModule#proxy_pass) directive, among others.
 
 set_encode_base32
 -----------------
+**syntax:** *set_encode_base32 $dst <src>*
 
-RFC forces the [A-Z2-7] RFC-3548 compliant encoding, but we're using the "base32hex" encoding [0-9a-v].
+**syntax:** *set_encode_base32 $dst*
 
-By default, the "=" character is used to pad the left-over bytes due to alignment. But the padding behavior can be completely disabled by setting set_misc_base32_padding off.
+**default:** *no*
+
+**context:** *location, location if*
+
+**phase:** *rewrite*
+
+**category:** *ndk_set_var_value*
+
+When taking two arguments, this directive will encode the value of the second argument `<src>` to its base32(hex) digest and assign the result into the first argument, variable `$dst`. For example,
+
+
+    location /test {
+        set $raw "abcde";
+        set_encode_base32 $digest $raw;
+
+        echo $digest;
+    }
+
+
+Then request `GET /test` will yield the following output
+
+
+    c5h66p35
+
+
+Please note that we're using [NginxHttpEchoModule](http://wiki.nginx.org/NginxHttpEchoModule)'s [echo directive](http://wiki.nginx.org/NginxHttpEchoModule#echo) here to output values of nginx variables directly.
+
+RFC forces the `[A-Z2-7]` RFC-3548 compliant encoding, but we're using the "base32hex" encoding (`[0-9a-v]`).
+
+By default, the `=` character is used to pad the left-over bytes due to alignment. But the padding behavior can be completely disabled by setting [set_misc_base32_padding](http://wiki.nginx.org/NginxHttpSetMiscModule#set_misc_base32_padding) `off`.
+
+When taking a single argument, this directive will do in-place modification of the argument variable. For example,
+
+
+    location /test {
+        set $value "abcde";
+        set_encode_base32 $value;
+
+        echo $value;
+    }
+
+
+then request `GET /test` will give exactly the same output as the previous example.
+
+This directive can be invoked by [NginxHttpLuaModule](http://wiki.nginx.org/NginxHttpLuaModule)'s [ndk.set_var.DIRECTIVE](http://wiki.nginx.org/NginxHttpLuaModule#ndk.set_var.DIRECTIVE) interface and [NginxHttpArrayVarModule](http://wiki.nginx.org/NginxHttpArrayVarModule)'s [array_map_op](http://wiki.nginx.org/NginxHttpArrayVarModule#array_map_op) directive.
 
 set_misc_base32_padding
 -----------------------
@@ -363,44 +451,356 @@ set_misc_base32_padding
 
 **context:** *http, server, server if, location, location if*
 
+**phase:** *no*
+
 This directive can control whether to pad left-over bytes with the "=" character when encoding a base32 digest by the [set_encode_base32](http://wiki.nginx.org/NginxHttpSetMiscModule#set_encode_base32) directive.
 
 set_decode_base32
 -----------------
+**syntax:** *set_decode_base32 $dst <src>*
 
-RFC forces the [A-Z2-7] RFC-3548 compliant encoding, but we're using the "base32hex" encoding [0-9a-v].
+**syntax:** *set_decode_base32 $dst*
+
+**default:** *no*
+
+**context:** *location, location if*
+
+**phase:** *rewrite*
+
+**category:** *ndk_set_var_value*
+
+Similar to the [set_encode_base32](http://wiki.nginx.org/NginxHttpSetMiscModule#set_encode_base32) directive, but does exactly the the opposite operation, .i.e, decoding a base32(hex) digest into its original form.
 
 set_encode_base64
 -----------------
+**syntax:** *set_encode_base64 $dst <src>*
+
+**syntax:** *set_encode_base64 $dst*
+
+**default:** *no*
+
+**context:** *location, location if*
+
+**phase:** *rewrite*
+
+**category:** *ndk_set_var_value*
+
+When taking two arguments, this directive will encode the value of the second argument `<src>` to its base64 digest and assign the result into the first argument, variable `$dst`. For example,
+
+
+    location /test {
+        set $raw "abcde";
+        set_encode_base64 $digest $raw;
+
+        echo $digest;
+    }
+
+
+Then request `GET /test` will yield the following output
+
+
+    YWJjZGU=
+
+
+Please note that we're using [NginxHttpEchoModule](http://wiki.nginx.org/NginxHttpEchoModule)'s [echo directive](http://wiki.nginx.org/NginxHttpEchoModule#echo) here to output values of nginx variables directly.
+
+When taking a single argument, this directive will do in-place modification of the argument variable. For example,
+
+
+    location /test {
+        set $value "abcde";
+        set_encode_base64 $value;
+
+        echo $value;
+    }
+
+
+then request `GET /test` will give exactly the same output as the previous example.
+
+This directive can be invoked by [NginxHttpLuaModule](http://wiki.nginx.org/NginxHttpLuaModule)'s [ndk.set_var.DIRECTIVE](http://wiki.nginx.org/NginxHttpLuaModule#ndk.set_var.DIRECTIVE) interface and [NginxHttpArrayVarModule](http://wiki.nginx.org/NginxHttpArrayVarModule)'s [array_map_op](http://wiki.nginx.org/NginxHttpArrayVarModule#array_map_op) directive.
 
 set_decode_base64
 -----------------
+**syntax:** *set_decode_base64 $dst <src>*
+
+**syntax:** *set_decode_base64 $dst*
+
+**default:** *no*
+
+**context:** *location, location if*
+
+**phase:** *rewrite*
+
+**category:** *ndk_set_var_value*
+
+Similar to the [set_encode_base64](http://wiki.nginx.org/NginxHttpSetMiscModule#set_encode_base64) directive, but does exactly the the opposite operation, .i.e, decoding a base64 digest into its original form.
 
 set_encode_hex
 --------------
+**syntax:** *set_encode_hex $dst <src>*
+
+**syntax:** *set_encode_hex $dst*
+
+**default:** *no*
+
+**context:** *location, location if*
+
+**phase:** *rewrite*
+
+**category:** *ndk_set_var_value*
+
+When taking two arguments, this directive will encode the value of the second argument `<src>` to its hexadecimal digest and assign the result into the first argument, variable `$dst`. For example,
+
+
+    location /test {
+        set $raw "章亦春";
+        set_encode_hex $digest $raw;
+
+        echo $digest;
+    }
+
+
+Then request `GET /test` will yield the following output
+
+
+    e7aba0e4baa6e698a5
+
+
+Please note that we're using [NginxHttpEchoModule](http://wiki.nginx.org/NginxHttpEchoModule)'s [echo directive](http://wiki.nginx.org/NginxHttpEchoModule#echo) here to output values of nginx variables directly.
+
+When taking a single argument, this directive will do in-place modification of the argument variable. For example,
+
+
+    location /test {
+        set $value "章亦春";
+        set_encode_hex $value;
+
+        echo $value;
+    }
+
+
+then request `GET /test` will give exactly the same output as the previous example.
+
+This directive can be invoked by [NginxHttpLuaModule](http://wiki.nginx.org/NginxHttpLuaModule)'s [ndk.set_var.DIRECTIVE](http://wiki.nginx.org/NginxHttpLuaModule#ndk.set_var.DIRECTIVE) interface and [NginxHttpArrayVarModule](http://wiki.nginx.org/NginxHttpArrayVarModule)'s [array_map_op](http://wiki.nginx.org/NginxHttpArrayVarModule#array_map_op) directive.
 
 set_decode_hex
 --------------
+**syntax:** *set_decode_hex $dst <src>*
+
+**syntax:** *set_decode_hex $dst*
+
+**default:** *no*
+
+**context:** *location, location if*
+
+**phase:** *rewrite*
+
+**category:** *ndk_set_var_value*
+
+Similar to the [set_encode_hex](http://wiki.nginx.org/NginxHttpSetMiscModule#set_encode_hex) directive, but does exactly the the opposite operation, .i.e, decoding a hexadecimal digest into its original form.
 
 set_sha1
 --------
+**syntax:** *set_sha1 $dst <src>*
+
+**syntax:** *set_sha1 $dst*
+
+**default:** *no*
+
+**context:** *location, location if*
+
+**phase:** *rewrite*
+
+**category:** *ndk_set_var_value*
+
+When taking two arguments, this directive will encode the value of the second argument `<src>` to its [SHA-1](http://en.wikipedia.org/wiki/SHA-1) digest and assign the result into the first argument, variable `$dst`. The hexadecimal form of the `SHA-1` digest will be generated automatically, use [set_decode_hex](http://wiki.nginx.org/NginxHttpSetMiscModule#set_decode_hex) to decode the result if you want the binary form of the `SHA-1` digest.
+
+For example,
+
+
+    location /test {
+        set $raw "hello";
+        set_sha1 $digest $raw;
+
+        echo $digest;
+    }
+
+
+Then request `GET /test` will yield the following output
+
+
+    aaf4c61ddcc5e8a2dabede0f3b482cd9aea9434d
+
+
+Please note that we're using [NginxHttpEchoModule](http://wiki.nginx.org/NginxHttpEchoModule)'s [echo directive](http://wiki.nginx.org/NginxHttpEchoModule#echo) here to output values of nginx variables directly.
+
+When taking a single argument, this directive will do in-place modification of the argument variable. For example,
+
+
+    location /test {
+        set $value "hello";
+        set_sha1 $value;
+
+        echo $value;
+    }
+
+
+then request `GET /test` will give exactly the same output as the previous example.
+
+This directive can be invoked by [NginxHttpLuaModule](http://wiki.nginx.org/NginxHttpLuaModule)'s [ndk.set_var.DIRECTIVE](http://wiki.nginx.org/NginxHttpLuaModule#ndk.set_var.DIRECTIVE) interface and [NginxHttpArrayVarModule](http://wiki.nginx.org/NginxHttpArrayVarModule)'s [array_map_op](http://wiki.nginx.org/NginxHttpArrayVarModule#array_map_op) directive.
 
 set_md5
 -------
+**syntax:** *set_md5 $dst <src>*
 
-set_local_today
----------------
+**syntax:** *set_md5 $dst*
+
+**default:** *no*
+
+**context:** *location, location if*
+
+**phase:** *rewrite*
+
+**category:** *ndk_set_var_value*
+
+When taking two arguments, this directive will encode the value of the second argument `<src>` to its [MD5](http://en.wikipedia.org/wiki/MD5) digest and assign the result into the first argument, variable `$dst`. The hexadecimal form of the `MD5` digest will be generated automatically, use [set_decode_hex](http://wiki.nginx.org/NginxHttpSetMiscModule#set_decode_hex) to decode the result if you want the binary form of the `MD5` digest.
+
+For example,
+
+
+    location /test {
+        set $raw "hello";
+        set_md5 $digest $raw;
+
+        echo $digest;
+    }
+
+
+Then request `GET /test` will yield the following output
+
+
+    5d41402abc4b2a76b9719d911017c592
+
+
+Please note that we're using [NginxHttpEchoModule](http://wiki.nginx.org/NginxHttpEchoModule)'s [echo directive](http://wiki.nginx.org/NginxHttpEchoModule#echo) here to output values of nginx variables directly.
+
+When taking a single argument, this directive will do in-place modification of the argument variable. For example,
+
+
+    location /test {
+        set $value "hello";
+        set_md5 $value;
+
+        echo $value;
+    }
+
+
+then request `GET /test` will give exactly the same output as the previous example.
+
+This directive can be invoked by [NginxHttpLuaModule](http://wiki.nginx.org/NginxHttpLuaModule)'s [ndk.set_var.DIRECTIVE](http://wiki.nginx.org/NginxHttpLuaModule#ndk.set_var.DIRECTIVE) interface and [NginxHttpArrayVarModule](http://wiki.nginx.org/NginxHttpArrayVarModule)'s [array_map_op](http://wiki.nginx.org/NginxHttpArrayVarModule#array_map_op) directive.
 
 set_hmac_sha1
 -------------
+**syntax:** *set_hmac_sha1 $dst <secret_key> <src>*
+
+**syntax:** *set_hmac_sha1 $dst*
+
+**default:** *no*
+
+**context:** *location, location if*
+
+**phase:** *rewrite*
+
+Computes the [HMAC-SHA1](http://en.wikipedia.org/wiki/HMAC) digest of the argument `<src>` and assigns the result into the argument variable `$dst` with the secret key `<secret_key>`.
+
+The raw binary form of the `HMAC-SHA1` digest will be generated, use [set_encode_base64](http://wiki.nginx.org/NginxHttpSetMiscModule#set_encode_base64), for example, to encode the result to a textual representation if desired.
+
+For example,
+
+
+    location /test {
+        set $secret 'thisisverysecretstuff';
+        set $string_to_sign 'some string we want to sign';
+        set_hmac_sha1 $signature $secret $string_to_sign;
+        set_encode_base64 $signature $signature;
+        echo $signature;
+    }
+
+
+Then request `GET /test` will yield the following output
+
+
+    R/pvxzHC4NLtj7S+kXFg/NePTmk=
+
+
+Please note that we're using [NginxHttpEchoModule](http://wiki.nginx.org/NginxHttpEchoModule)'s [echo directive](http://wiki.nginx.org/NginxHttpEchoModule#echo) here to output values of nginx variables directly.
+
+This directive requires the OpenSSL library enabled in your Nignx build.
 
 set_random
 ----------
 **syntax:** *set_random $res <from> <to>*
 
-Note that only non-negative numbers in the "from" to "to" argument are allowed. A (psuedo) random number in the range `[<from>, <to>]` (inclusive) will be assigned to `$res`. For now, there's no way to configure a custom random generator seed.
+**default:** *no*
+
+**context:** *location, location if*
+
+**phase:** *rewrite*
+
+Generates a (pseudo) random number (in textual form) within the range `[<$from>, <$to>]` (inclusive).
+
+Only non-negative numbers are allowed for the `<from>` and `<to>` arguments.
+
+When `<$from>` is greater than `<$to>`, their values will be exchanged accordingly.
+
+For instance,
+
+
+    location /test {
+        set $from 5;                              
+        set $to 7;                                
+        set_random $res $from $to;                
+                                                  
+        echo $res;                                
+    }
+
+
+then request `GET /test` will output a number between 5 and 7 (i.e., among 5, 6, 7).
+
+For now, there's no way to configure a custom random generator seed.
 
 Behind the scene, it makes use of the standard C function `rand()`.
+
+set_local_today
+---------------
+**syntax:** *set_local_today $dst*
+
+**default:** *no*
+
+**context:** *location, location if*
+
+**phase:** *rewrite*
+
+Set today's date ("yyyy-mm-dd") in localtime to the argument variable `$dst`.
+
+Here's an example,
+
+
+    location /today {
+        set_local_today $today;
+        echo $today;
+    }
+
+
+then request `GET /today` will output something like
+
+
+    2011-08-16
+
+
+and year, the actual date you get here will vary every day ;)
+
+Behind the scene, this directive utilizes the `ngx_time` API in the Nginx core, so usually no syscall is involved due to the time caching mechanism in the Nginx core.
 
 Caveats
 =======
