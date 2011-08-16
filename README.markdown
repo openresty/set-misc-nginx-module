@@ -826,6 +826,7 @@ the version 1.0.5 (see [nginx compatibility](http://wiki.nginx.org/NginxHttpSetM
     
     # Here we assume you would install you nginx under /opt/nginx/.
     $ ./configure --prefix=/opt/nginx \
+        --with-http_ssl_module \
         --add-module=/path/to/ngx_devel_kit \
         --add-module=/path/to/set-misc-nginx-module
      
