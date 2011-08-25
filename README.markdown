@@ -152,7 +152,7 @@ Directives
 
 set_if_empty
 ------------
-**syntax:** *set_if_empty $dst <src>*
+**syntax:** *set_if_empty $dst &lt;src&gt;*
 
 **default:** *no*
 
@@ -181,7 +181,7 @@ the variable `$dst` will take the value 32 at last. But in the sample
 
 set_quote_sql_str
 -----------------
-**syntax:** *set_quote_sql_str $dst <src>*
+**syntax:** *set_quote_sql_str $dst &lt;src&gt;*
 
 **syntax:** *set_quote_sql_str $dst*
 
@@ -231,7 +231,7 @@ This directive can be invoked by [HttpLuaModule](http://wiki.nginx.org/HttpLuaMo
 
 set_quote_pgsql_str
 -------------------
-**syntax:** *set_quote_pgsql_str $dst <src>*
+**syntax:** *set_quote_pgsql_str $dst &lt;src&gt;*
 
 **syntax:** *set_quote_pgsql_str $dst*
 
@@ -247,7 +247,7 @@ Very much like [set_quote_sql_str](http://wiki.nginx.org/HttpSetMiscModule#set_q
 
 set_quote_json_str
 ------------------
-**syntax:** *set_quote_json_str $dst <src>*
+**syntax:** *set_quote_json_str $dst &lt;src&gt;*
 
 **syntax:** *set_quote_json_str $dst*
 
@@ -295,7 +295,7 @@ This directive can be invoked by [HttpLuaModule](http://wiki.nginx.org/HttpLuaMo
 
 set_unescape_uri
 ----------------
-**syntax:** *set_unescape_uri $dst <src>*
+**syntax:** *set_unescape_uri $dst &lt;src&gt;*
 
 **syntax:** *set_unescape_uri $dst*
 
@@ -343,7 +343,7 @@ This directive can be invoked by [HttpLuaModule](http://wiki.nginx.org/HttpLuaMo
 
 set_escape_uri
 --------------
-**syntax:** *set_escape_uri $dst <src>*
+**syntax:** *set_escape_uri $dst &lt;src&gt;*
 
 **syntax:** *set_escape_uri $dst*
 
@@ -359,7 +359,7 @@ Very much like the [set_unescape_uri](http://wiki.nginx.org/HttpSetMiscModule#se
 
 set_hashed_upstream
 -------------------
-**syntax:** *set_hashed_upstream $dst <upstream_list_name> <src>*
+**syntax:** *set_hashed_upstream $dst &lt;upstream_list_name&gt; &lt;src&gt;*
 
 **default:** *no*
 
@@ -393,7 +393,7 @@ This directive is usually used to compute an nginx variable to be passed to [Htt
 
 set_encode_base32
 -----------------
-**syntax:** *set_encode_base32 $dst <src>*
+**syntax:** *set_encode_base32 $dst &lt;src&gt;*
 
 **syntax:** *set_encode_base32 $dst*
 
@@ -457,7 +457,7 @@ This directive can control whether to pad left-over bytes with the "=" character
 
 set_decode_base32
 -----------------
-**syntax:** *set_decode_base32 $dst <src>*
+**syntax:** *set_decode_base32 $dst &lt;src&gt;*
 
 **syntax:** *set_decode_base32 $dst*
 
@@ -473,7 +473,7 @@ Similar to the [set_encode_base32](http://wiki.nginx.org/HttpSetMiscModule#set_e
 
 set_encode_base64
 -----------------
-**syntax:** *set_encode_base64 $dst <src>*
+**syntax:** *set_encode_base64 $dst &lt;src&gt;*
 
 **syntax:** *set_encode_base64 $dst*
 
@@ -521,7 +521,7 @@ This directive can be invoked by [HttpLuaModule](http://wiki.nginx.org/HttpLuaMo
 
 set_decode_base64
 -----------------
-**syntax:** *set_decode_base64 $dst <src>*
+**syntax:** *set_decode_base64 $dst &lt;src&gt;*
 
 **syntax:** *set_decode_base64 $dst*
 
@@ -537,7 +537,7 @@ Similar to the [set_encode_base64](http://wiki.nginx.org/HttpSetMiscModule#set_e
 
 set_encode_hex
 --------------
-**syntax:** *set_encode_hex $dst <src>*
+**syntax:** *set_encode_hex $dst &lt;src&gt;*
 
 **syntax:** *set_encode_hex $dst*
 
@@ -585,7 +585,7 @@ This directive can be invoked by [HttpLuaModule](http://wiki.nginx.org/HttpLuaMo
 
 set_decode_hex
 --------------
-**syntax:** *set_decode_hex $dst <src>*
+**syntax:** *set_decode_hex $dst &lt;src&gt;*
 
 **syntax:** *set_decode_hex $dst*
 
@@ -601,7 +601,7 @@ Similar to the [set_encode_hex](http://wiki.nginx.org/HttpSetMiscModule#set_enco
 
 set_sha1
 --------
-**syntax:** *set_sha1 $dst <src>*
+**syntax:** *set_sha1 $dst &lt;src&gt;*
 
 **syntax:** *set_sha1 $dst*
 
@@ -651,7 +651,7 @@ This directive can be invoked by [HttpLuaModule](http://wiki.nginx.org/HttpLuaMo
 
 set_md5
 -------
-**syntax:** *set_md5 $dst <src>*
+**syntax:** *set_md5 $dst &lt;src&gt;*
 
 **syntax:** *set_md5 $dst*
 
@@ -701,7 +701,7 @@ This directive can be invoked by [HttpLuaModule](http://wiki.nginx.org/HttpLuaMo
 
 set_hmac_sha1
 -------------
-**syntax:** *set_hmac_sha1 $dst <secret_key> <src>*
+**syntax:** *set_hmac_sha1 $dst &lt;secret_key&gt; &lt;src&gt;*
 
 **syntax:** *set_hmac_sha1 $dst*
 
@@ -739,7 +739,7 @@ This directive requires the OpenSSL library enabled in your Nignx build.
 
 set_random
 ----------
-**syntax:** *set_random $res <from> <to>*
+**syntax:** *set_random $res &lt;from&gt; &lt;to&gt;*
 
 **default:** *no*
 
@@ -890,7 +890,7 @@ You'll be very welcomed to submit patches to the [author](http://wiki.nginx.org/
 Author
 ======
 
-agentzh (章亦春) *<agentzh@gmail.com>*
+agentzh (章亦春) *&lt;agentzh@gmail.com&gt;*
 
 This wiki page is also maintained by the author himself, and everybody is encouraged to improve this page as well.
 
