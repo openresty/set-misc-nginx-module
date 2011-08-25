@@ -137,13 +137,13 @@ Synopsis
         }
 
 Description
-    This module extends the standard NginxHttpRewriteModule's directive set
-    to provide more functionalities like URI escaping and unescaping, JSON
+    This module extends the standard HttpRewriteModule's directive set to
+    provide more functionalities like URI escaping and unescaping, JSON
     quoting, Hexadecimal/MD5/SHA1/Base32/Base64 digest encoding and
     decoding, random number generator, and more!
 
     Every directive provided by this module can be mixed freely with other
-    [[NginxHttpRewriteModule]]'s directives, like if and set. (Thanks to the
+    [[HttpRewriteModule]]'s directives, like if and set. (Thanks to the
     Nginx Devel Kit (<https://github.com/simpl/ngx_devel_kit>)!)
 
 Directives
@@ -200,8 +200,9 @@ Directives
 
     'hello\n\r\'\"\\'
 
-    Please note that we're using [[NginxHttpEchoModule]]'s echo directive
-    here to output values of nginx variables directly.
+    Please note that we're using [[HttpEchoModule]]'s [directive
+    (HttpEchoModule#echo)] here to output values of nginx variables
+    directly.
 
     When taking a single argument, this directive will do in-place
     modification of the argument variable. For example,
@@ -218,8 +219,8 @@ Directives
 
     This directive is usually used to prevent SQL injection.
 
-    This directive can be invoked by [[NginxHttpLuaModule]]'s
-    ndk.set_var.DIRECTIVE interface and [[NginxHttpArrayVarModule]]'s
+    This directive can be invoked by [[HttpLuaModule]]'s
+    ndk.set_var.DIRECTIVE interface and [[HttpArrayVarModule]]'s
     array_map_op directive.
 
   set_quote_pgsql_str
@@ -266,8 +267,9 @@ Directives
 
     "hello\n\r'\"\\"
 
-    Please note that we're using [[NginxHttpEchoModule]]'s echo directive
-    here to output values of nginx variables directly.
+    Please note that we're using [[HttpEchoModule]]'s [directive
+    (HttpEchoModule#echo)] here to output values of nginx variables
+    directly.
 
     When taking a single argument, this directive will do in-place
     modification of the argument variable. For example,
@@ -282,8 +284,8 @@ Directives
     then request "GET /test" will give exactly the same output as the
     previous example.
 
-    This directive can be invoked by [[NginxHttpLuaModule]]'s
-    ndk.set_var.DIRECTIVE interface and [[NginxHttpArrayVarModule]]'s
+    This directive can be invoked by [[HttpLuaModule]]'s
+    ndk.set_var.DIRECTIVE interface and [[HttpArrayVarModule]]'s
     array_map_op directive.
 
   set_unescape_uri
@@ -317,8 +319,9 @@ Directives
     of the URI parameter. So we need the "set_unescape_uri" directive to
     unescape it first.
 
-    Please note that we're using [[NginxHttpEchoModule]]'s echo directive
-    here to output values of nginx variables directly.
+    Please note that we're using [[HttpEchoModule]]'s [directive
+    (HttpEchoModule#echo)] here to output values of nginx variables
+    directly.
 
     When taking a single argument, this directive will do in-place
     modification of the argument variable. For example,
@@ -333,8 +336,8 @@ Directives
     then request "GET /test?key=hello+world%21" will give exactly the same
     output as the previous example.
 
-    This directive can be invoked by [[NginxHttpLuaModule]]'s
-    ndk.set_var.DIRECTIVE interface and [[NginxHttpArrayVarModule]]'s
+    This directive can be invoked by [[HttpLuaModule]]'s
+    ndk.set_var.DIRECTIVE interface and [[HttpArrayVarModule]]'s
     array_map_op directive.
 
   set_escape_uri
@@ -386,10 +389,9 @@ Directives
     depending on the actual value of the "key" query argument.
 
     This directive is usually used to compute an nginx variable to be passed
-    to [[NginxHttpMemcModule]]'s memc_pass directive,
-    [[NginxHttpRedis2Module]]'s [[NginxHttpRedis2Module#redis2_pass]]
-    directive, and [[NginxHttpProxyModule]]'s proxy_pass directive, among
-    others.
+    to [[HttpMemcModule]]'s memc_pass directive, [[HttpRedis2Module]]'s
+    [[HttpRedis2Module#redis2_pass]] directive, and [[HttpProxyModule]]'s
+    proxy_pass directive, among others.
 
   set_encode_base32
     syntax: *set_encode_base32 $dst <src>*
@@ -419,8 +421,9 @@ Directives
 
     c5h66p35
 
-    Please note that we're using [[NginxHttpEchoModule]]'s echo directive
-    here to output values of nginx variables directly.
+    Please note that we're using [[HttpEchoModule]]'s [directive
+    (HttpEchoModule#echo)] here to output values of nginx variables
+    directly.
 
     RFC forces the "[A-Z2-7]" RFC-3548 compliant encoding, but we're using
     the "base32hex" encoding ("[0-9a-v]").
@@ -442,8 +445,8 @@ Directives
     then request "GET /test" will give exactly the same output as the
     previous example.
 
-    This directive can be invoked by [[NginxHttpLuaModule]]'s
-    ndk.set_var.DIRECTIVE interface and [[NginxHttpArrayVarModule]]'s
+    This directive can be invoked by [[HttpLuaModule]]'s
+    ndk.set_var.DIRECTIVE interface and [[HttpArrayVarModule]]'s
     array_map_op directive.
 
   set_misc_base32_padding
@@ -504,8 +507,9 @@ Directives
 
     YWJjZGU=
 
-    Please note that we're using [[NginxHttpEchoModule]]'s echo directive
-    here to output values of nginx variables directly.
+    Please note that we're using [[HttpEchoModule]]'s [directive
+    (HttpEchoModule#echo)] here to output values of nginx variables
+    directly.
 
     When taking a single argument, this directive will do in-place
     modification of the argument variable. For example,
@@ -520,8 +524,8 @@ Directives
     then request "GET /test" will give exactly the same output as the
     previous example.
 
-    This directive can be invoked by [[NginxHttpLuaModule]]'s
-    ndk.set_var.DIRECTIVE interface and [[NginxHttpArrayVarModule]]'s
+    This directive can be invoked by [[HttpLuaModule]]'s
+    ndk.set_var.DIRECTIVE interface and [[HttpArrayVarModule]]'s
     array_map_op directive.
 
   set_decode_base64
@@ -569,8 +573,9 @@ Directives
 
     e7aba0e4baa6e698a5
 
-    Please note that we're using [[NginxHttpEchoModule]]'s echo directive
-    here to output values of nginx variables directly.
+    Please note that we're using [[HttpEchoModule]]'s [directive
+    (HttpEchoModule#echo)] here to output values of nginx variables
+    directly.
 
     When taking a single argument, this directive will do in-place
     modification of the argument variable. For example,
@@ -585,8 +590,8 @@ Directives
     then request "GET /test" will give exactly the same output as the
     previous example.
 
-    This directive can be invoked by [[NginxHttpLuaModule]]'s
-    ndk.set_var.DIRECTIVE interface and [[NginxHttpArrayVarModule]]'s
+    This directive can be invoked by [[HttpLuaModule]]'s
+    ndk.set_var.DIRECTIVE interface and [[HttpArrayVarModule]]'s
     array_map_op directive.
 
   set_decode_hex
@@ -639,8 +644,9 @@ Directives
 
     aaf4c61ddcc5e8a2dabede0f3b482cd9aea9434d
 
-    Please note that we're using [[NginxHttpEchoModule]]'s echo directive
-    here to output values of nginx variables directly.
+    Please note that we're using [[HttpEchoModule]]'s [directive
+    (HttpEchoModule#echo)] here to output values of nginx variables
+    directly.
 
     When taking a single argument, this directive will do in-place
     modification of the argument variable. For example,
@@ -655,8 +661,8 @@ Directives
     then request "GET /test" will give exactly the same output as the
     previous example.
 
-    This directive can be invoked by [[NginxHttpLuaModule]]'s
-    ndk.set_var.DIRECTIVE interface and [[NginxHttpArrayVarModule]]'s
+    This directive can be invoked by [[HttpLuaModule]]'s
+    ndk.set_var.DIRECTIVE interface and [[HttpArrayVarModule]]'s
     array_map_op directive.
 
   set_md5
@@ -692,8 +698,9 @@ Directives
 
     5d41402abc4b2a76b9719d911017c592
 
-    Please note that we're using [[NginxHttpEchoModule]]'s echo directive
-    here to output values of nginx variables directly.
+    Please note that we're using [[HttpEchoModule]]'s [directive
+    (HttpEchoModule#echo)] here to output values of nginx variables
+    directly.
 
     When taking a single argument, this directive will do in-place
     modification of the argument variable. For example,
@@ -708,8 +715,8 @@ Directives
     then request "GET /test" will give exactly the same output as the
     previous example.
 
-    This directive can be invoked by [[NginxHttpLuaModule]]'s
-    ndk.set_var.DIRECTIVE interface and [[NginxHttpArrayVarModule]]'s
+    This directive can be invoked by [[HttpLuaModule]]'s
+    ndk.set_var.DIRECTIVE interface and [[HttpArrayVarModule]]'s
     array_map_op directive.
 
   set_hmac_sha1
@@ -745,8 +752,9 @@ Directives
 
     R/pvxzHC4NLtj7S+kXFg/NePTmk=
 
-    Please note that we're using [[NginxHttpEchoModule]]'s echo directive
-    here to output values of nginx variables directly.
+    Please note that we're using [[HttpEchoModule]]'s [directive
+    (HttpEchoModule#echo)] here to output values of nginx variables
+    directly.
 
     This directive requires the OpenSSL library enabled in your Nignx build.
 

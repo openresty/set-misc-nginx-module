@@ -3,7 +3,7 @@ Name
 
 **ngx_set_misc** - Various set_xxx directives added to nginx's rewrite module (md5/sha1, sql/json quoting, and many more)
 
-*This module is not distributed with the Nginx source.* See [the installation instructions](http://wiki.nginx.org/NginxHttpSetMiscModule#Installation).
+*This module is not distributed with the Nginx source.* See [the installation instructions](http://wiki.nginx.org/HttpSetMiscModule#Installation).
 
 Version
 =======
@@ -143,9 +143,9 @@ Synopsis
 Description
 ===========
 
-This module extends the standard NginxHttpRewriteModule's directive set to provide more functionalities like URI escaping and unescaping, JSON quoting, Hexadecimal/MD5/SHA1/Base32/Base64 digest encoding and decoding, random number generator, and more!
+This module extends the standard HttpRewriteModule's directive set to provide more functionalities like URI escaping and unescaping, JSON quoting, Hexadecimal/MD5/SHA1/Base32/Base64 digest encoding and decoding, random number generator, and more!
 
-Every directive provided by this module can be mixed freely with other [NginxHttpRewriteModule](http://wiki.nginx.org/NginxHttpRewriteModule)'s directives, like [if](http://wiki.nginx.org/NginxHttpRewriteModule#if) and [set](http://wiki.nginx.org/NginxHttpRewriteModule#set). (Thanks to the [Nginx Devel Kit](https://github.com/simpl/ngx_devel_kit)!)
+Every directive provided by this module can be mixed freely with other [HttpRewriteModule](http://wiki.nginx.org/HttpRewriteModule)'s directives, like [if](http://wiki.nginx.org/HttpRewriteModule#if) and [set](http://wiki.nginx.org/HttpRewriteModule#set). (Thanks to the [Nginx Devel Kit](https://github.com/simpl/ngx_devel_kit)!)
 
 Directives
 ==========
@@ -210,7 +210,7 @@ Then request `GET /test` will yield the following output
     'hello\n\r\'\"\\'
 
 
-Please note that we're using [NginxHttpEchoModule](http://wiki.nginx.org/NginxHttpEchoModule)'s [echo directive](http://wiki.nginx.org/NginxHttpEchoModule#echo) here to output values of nginx variables directly.
+Please note that we're using [HttpEchoModule](http://wiki.nginx.org/HttpEchoModule)'s [echo directive](http://wiki.nginx.org/HttpEchoModule#echo) here to output values of nginx variables directly.
 
 When taking a single argument, this directive will do in-place modification of the argument variable. For example,
 
@@ -227,7 +227,7 @@ then request `GET /test` will give exactly the same output as the previous examp
 
 This directive is usually used to prevent SQL injection.
 
-This directive can be invoked by [NginxHttpLuaModule](http://wiki.nginx.org/NginxHttpLuaModule)'s [ndk.set_var.DIRECTIVE](http://wiki.nginx.org/NginxHttpLuaModule#ndk.set_var.DIRECTIVE) interface and [NginxHttpArrayVarModule](http://wiki.nginx.org/NginxHttpArrayVarModule)'s [array_map_op](http://wiki.nginx.org/NginxHttpArrayVarModule#array_map_op) directive.
+This directive can be invoked by [HttpLuaModule](http://wiki.nginx.org/HttpLuaModule)'s [ndk.set_var.DIRECTIVE](http://wiki.nginx.org/HttpLuaModule#ndk.set_var.DIRECTIVE) interface and [HttpArrayVarModule](http://wiki.nginx.org/HttpArrayVarModule)'s [array_map_op](http://wiki.nginx.org/HttpArrayVarModule#array_map_op) directive.
 
 set_quote_pgsql_str
 -------------------
@@ -243,7 +243,7 @@ set_quote_pgsql_str
 
 **category:** *ndk_set_var_value*
 
-Very much like [set_quote_sql_str](http://wiki.nginx.org/NginxHttpSetMiscModule#set_quote_sql_str), but with PostgreSQL quoting rules for SQL string literals.
+Very much like [set_quote_sql_str](http://wiki.nginx.org/HttpSetMiscModule#set_quote_sql_str), but with PostgreSQL quoting rules for SQL string literals.
 
 set_quote_json_str
 ------------------
@@ -276,7 +276,7 @@ Then request `GET /test` will yield the following output
     "hello\n\r'\"\\"
 
 
-Please note that we're using [NginxHttpEchoModule](http://wiki.nginx.org/NginxHttpEchoModule)'s [echo directive](http://wiki.nginx.org/NginxHttpEchoModule#echo) here to output values of nginx variables directly.
+Please note that we're using [HttpEchoModule](http://wiki.nginx.org/HttpEchoModule)'s [echo directive](http://wiki.nginx.org/HttpEchoModule#echo) here to output values of nginx variables directly.
 
 When taking a single argument, this directive will do in-place modification of the argument variable. For example,
 
@@ -291,7 +291,7 @@ When taking a single argument, this directive will do in-place modification of t
 
 then request `GET /test` will give exactly the same output as the previous example.
 
-This directive can be invoked by [NginxHttpLuaModule](http://wiki.nginx.org/NginxHttpLuaModule)'s [ndk.set_var.DIRECTIVE](http://wiki.nginx.org/NginxHttpLuaModule#ndk.set_var.DIRECTIVE) interface and [NginxHttpArrayVarModule](http://wiki.nginx.org/NginxHttpArrayVarModule)'s [array_map_op](http://wiki.nginx.org/NginxHttpArrayVarModule#array_map_op) directive.
+This directive can be invoked by [HttpLuaModule](http://wiki.nginx.org/HttpLuaModule)'s [ndk.set_var.DIRECTIVE](http://wiki.nginx.org/HttpLuaModule#ndk.set_var.DIRECTIVE) interface and [HttpArrayVarModule](http://wiki.nginx.org/HttpArrayVarModule)'s [array_map_op](http://wiki.nginx.org/HttpArrayVarModule#array_map_op) directive.
 
 set_unescape_uri
 ----------------
@@ -322,9 +322,9 @@ Then request `GET /test?key=hello+world%21` will yield the following output
     hello world!
 
 
-The nginx standard [$arg_PARAMETER](http://wiki.nginx.org/NginxHttpCoreModule#.24arg_PARAMETER) variable holds the raw (escaped) value of the URI parameter. So we need the `set_unescape_uri` directive to unescape it first.
+The nginx standard [$arg_PARAMETER](http://wiki.nginx.org/HttpCoreModule#.24arg_PARAMETER) variable holds the raw (escaped) value of the URI parameter. So we need the `set_unescape_uri` directive to unescape it first.
 
-Please note that we're using [NginxHttpEchoModule](http://wiki.nginx.org/NginxHttpEchoModule)'s [echo directive](http://wiki.nginx.org/NginxHttpEchoModule#echo) here to output values of nginx variables directly.
+Please note that we're using [HttpEchoModule](http://wiki.nginx.org/HttpEchoModule)'s [echo directive](http://wiki.nginx.org/HttpEchoModule#echo) here to output values of nginx variables directly.
 
 When taking a single argument, this directive will do in-place modification of the argument variable. For example,
 
@@ -339,7 +339,7 @@ When taking a single argument, this directive will do in-place modification of t
 
 then request `GET /test?key=hello+world%21` will give exactly the same output as the previous example.
 
-This directive can be invoked by [NginxHttpLuaModule](http://wiki.nginx.org/NginxHttpLuaModule)'s [ndk.set_var.DIRECTIVE](http://wiki.nginx.org/NginxHttpLuaModule#ndk.set_var.DIRECTIVE) interface and [NginxHttpArrayVarModule](http://wiki.nginx.org/NginxHttpArrayVarModule)'s [array_map_op](http://wiki.nginx.org/NginxHttpArrayVarModule#array_map_op) directive.
+This directive can be invoked by [HttpLuaModule](http://wiki.nginx.org/HttpLuaModule)'s [ndk.set_var.DIRECTIVE](http://wiki.nginx.org/HttpLuaModule#ndk.set_var.DIRECTIVE) interface and [HttpArrayVarModule](http://wiki.nginx.org/HttpArrayVarModule)'s [array_map_op](http://wiki.nginx.org/HttpArrayVarModule#array_map_op) directive.
 
 set_escape_uri
 --------------
@@ -355,7 +355,7 @@ set_escape_uri
 
 **category:** *ndk_set_var_value*
 
-Very much like the [set_unescape_uri](http://wiki.nginx.org/NginxHttpSetMiscModule#set_unescape_uri) directive, but does the conversion the other way around, i.e., URL component escaping.
+Very much like the [set_unescape_uri](http://wiki.nginx.org/HttpSetMiscModule#set_unescape_uri) directive, but does the conversion the other way around, i.e., URL component escaping.
 
 set_hashed_upstream
 -------------------
@@ -389,7 +389,7 @@ Here's an example,
 
 Then `GET /test?key=blah` will output either "moon", "sun", or "earth", depending on the actual value of the `key` query argument.
 
-This directive is usually used to compute an nginx variable to be passed to [NginxHttpMemcModule](http://wiki.nginx.org/NginxHttpMemcModule)'s [memc_pass](http://wiki.nginx.org/NginxHttpMemcModule#memc_pass) directive, [NginxHttpRedis2Module](http://wiki.nginx.org/NginxHttpRedis2Module)'s [[NginxHttpRedis2Module#redis2_pass]] directive, and [NginxHttpProxyModule](http://wiki.nginx.org/NginxHttpProxyModule)'s [proxy_pass](http://wiki.nginx.org/NginxHttpProxyModule#proxy_pass) directive, among others.
+This directive is usually used to compute an nginx variable to be passed to [HttpMemcModule](http://wiki.nginx.org/HttpMemcModule)'s [memc_pass](http://wiki.nginx.org/HttpMemcModule#memc_pass) directive, [HttpRedis2Module](http://wiki.nginx.org/HttpRedis2Module)'s [[HttpRedis2Module#redis2_pass]] directive, and [HttpProxyModule](http://wiki.nginx.org/HttpProxyModule)'s [proxy_pass](http://wiki.nginx.org/HttpProxyModule#proxy_pass) directive, among others.
 
 set_encode_base32
 -----------------
@@ -422,11 +422,11 @@ Then request `GET /test` will yield the following output
     c5h66p35
 
 
-Please note that we're using [NginxHttpEchoModule](http://wiki.nginx.org/NginxHttpEchoModule)'s [echo directive](http://wiki.nginx.org/NginxHttpEchoModule#echo) here to output values of nginx variables directly.
+Please note that we're using [HttpEchoModule](http://wiki.nginx.org/HttpEchoModule)'s [echo directive](http://wiki.nginx.org/HttpEchoModule#echo) here to output values of nginx variables directly.
 
 RFC forces the `[A-Z2-7]` RFC-3548 compliant encoding, but we're using the "base32hex" encoding (`[0-9a-v]`).
 
-By default, the `=` character is used to pad the left-over bytes due to alignment. But the padding behavior can be completely disabled by setting [set_misc_base32_padding](http://wiki.nginx.org/NginxHttpSetMiscModule#set_misc_base32_padding) `off`.
+By default, the `=` character is used to pad the left-over bytes due to alignment. But the padding behavior can be completely disabled by setting [set_misc_base32_padding](http://wiki.nginx.org/HttpSetMiscModule#set_misc_base32_padding) `off`.
 
 When taking a single argument, this directive will do in-place modification of the argument variable. For example,
 
@@ -441,7 +441,7 @@ When taking a single argument, this directive will do in-place modification of t
 
 then request `GET /test` will give exactly the same output as the previous example.
 
-This directive can be invoked by [NginxHttpLuaModule](http://wiki.nginx.org/NginxHttpLuaModule)'s [ndk.set_var.DIRECTIVE](http://wiki.nginx.org/NginxHttpLuaModule#ndk.set_var.DIRECTIVE) interface and [NginxHttpArrayVarModule](http://wiki.nginx.org/NginxHttpArrayVarModule)'s [array_map_op](http://wiki.nginx.org/NginxHttpArrayVarModule#array_map_op) directive.
+This directive can be invoked by [HttpLuaModule](http://wiki.nginx.org/HttpLuaModule)'s [ndk.set_var.DIRECTIVE](http://wiki.nginx.org/HttpLuaModule#ndk.set_var.DIRECTIVE) interface and [HttpArrayVarModule](http://wiki.nginx.org/HttpArrayVarModule)'s [array_map_op](http://wiki.nginx.org/HttpArrayVarModule#array_map_op) directive.
 
 set_misc_base32_padding
 -----------------------
@@ -453,7 +453,7 @@ set_misc_base32_padding
 
 **phase:** *no*
 
-This directive can control whether to pad left-over bytes with the "=" character when encoding a base32 digest by the [set_encode_base32](http://wiki.nginx.org/NginxHttpSetMiscModule#set_encode_base32) directive.
+This directive can control whether to pad left-over bytes with the "=" character when encoding a base32 digest by the [set_encode_base32](http://wiki.nginx.org/HttpSetMiscModule#set_encode_base32) directive.
 
 set_decode_base32
 -----------------
@@ -469,7 +469,7 @@ set_decode_base32
 
 **category:** *ndk_set_var_value*
 
-Similar to the [set_encode_base32](http://wiki.nginx.org/NginxHttpSetMiscModule#set_encode_base32) directive, but does exactly the the opposite operation, .i.e, decoding a base32(hex) digest into its original form.
+Similar to the [set_encode_base32](http://wiki.nginx.org/HttpSetMiscModule#set_encode_base32) directive, but does exactly the the opposite operation, .i.e, decoding a base32(hex) digest into its original form.
 
 set_encode_base64
 -----------------
@@ -502,7 +502,7 @@ Then request `GET /test` will yield the following output
     YWJjZGU=
 
 
-Please note that we're using [NginxHttpEchoModule](http://wiki.nginx.org/NginxHttpEchoModule)'s [echo directive](http://wiki.nginx.org/NginxHttpEchoModule#echo) here to output values of nginx variables directly.
+Please note that we're using [HttpEchoModule](http://wiki.nginx.org/HttpEchoModule)'s [echo directive](http://wiki.nginx.org/HttpEchoModule#echo) here to output values of nginx variables directly.
 
 When taking a single argument, this directive will do in-place modification of the argument variable. For example,
 
@@ -517,7 +517,7 @@ When taking a single argument, this directive will do in-place modification of t
 
 then request `GET /test` will give exactly the same output as the previous example.
 
-This directive can be invoked by [NginxHttpLuaModule](http://wiki.nginx.org/NginxHttpLuaModule)'s [ndk.set_var.DIRECTIVE](http://wiki.nginx.org/NginxHttpLuaModule#ndk.set_var.DIRECTIVE) interface and [NginxHttpArrayVarModule](http://wiki.nginx.org/NginxHttpArrayVarModule)'s [array_map_op](http://wiki.nginx.org/NginxHttpArrayVarModule#array_map_op) directive.
+This directive can be invoked by [HttpLuaModule](http://wiki.nginx.org/HttpLuaModule)'s [ndk.set_var.DIRECTIVE](http://wiki.nginx.org/HttpLuaModule#ndk.set_var.DIRECTIVE) interface and [HttpArrayVarModule](http://wiki.nginx.org/HttpArrayVarModule)'s [array_map_op](http://wiki.nginx.org/HttpArrayVarModule#array_map_op) directive.
 
 set_decode_base64
 -----------------
@@ -533,7 +533,7 @@ set_decode_base64
 
 **category:** *ndk_set_var_value*
 
-Similar to the [set_encode_base64](http://wiki.nginx.org/NginxHttpSetMiscModule#set_encode_base64) directive, but does exactly the the opposite operation, .i.e, decoding a base64 digest into its original form.
+Similar to the [set_encode_base64](http://wiki.nginx.org/HttpSetMiscModule#set_encode_base64) directive, but does exactly the the opposite operation, .i.e, decoding a base64 digest into its original form.
 
 set_encode_hex
 --------------
@@ -566,7 +566,7 @@ Then request `GET /test` will yield the following output
     e7aba0e4baa6e698a5
 
 
-Please note that we're using [NginxHttpEchoModule](http://wiki.nginx.org/NginxHttpEchoModule)'s [echo directive](http://wiki.nginx.org/NginxHttpEchoModule#echo) here to output values of nginx variables directly.
+Please note that we're using [HttpEchoModule](http://wiki.nginx.org/HttpEchoModule)'s [echo directive](http://wiki.nginx.org/HttpEchoModule#echo) here to output values of nginx variables directly.
 
 When taking a single argument, this directive will do in-place modification of the argument variable. For example,
 
@@ -581,7 +581,7 @@ When taking a single argument, this directive will do in-place modification of t
 
 then request `GET /test` will give exactly the same output as the previous example.
 
-This directive can be invoked by [NginxHttpLuaModule](http://wiki.nginx.org/NginxHttpLuaModule)'s [ndk.set_var.DIRECTIVE](http://wiki.nginx.org/NginxHttpLuaModule#ndk.set_var.DIRECTIVE) interface and [NginxHttpArrayVarModule](http://wiki.nginx.org/NginxHttpArrayVarModule)'s [array_map_op](http://wiki.nginx.org/NginxHttpArrayVarModule#array_map_op) directive.
+This directive can be invoked by [HttpLuaModule](http://wiki.nginx.org/HttpLuaModule)'s [ndk.set_var.DIRECTIVE](http://wiki.nginx.org/HttpLuaModule#ndk.set_var.DIRECTIVE) interface and [HttpArrayVarModule](http://wiki.nginx.org/HttpArrayVarModule)'s [array_map_op](http://wiki.nginx.org/HttpArrayVarModule#array_map_op) directive.
 
 set_decode_hex
 --------------
@@ -597,7 +597,7 @@ set_decode_hex
 
 **category:** *ndk_set_var_value*
 
-Similar to the [set_encode_hex](http://wiki.nginx.org/NginxHttpSetMiscModule#set_encode_hex) directive, but does exactly the the opposite operation, .i.e, decoding a hexadecimal digest into its original form.
+Similar to the [set_encode_hex](http://wiki.nginx.org/HttpSetMiscModule#set_encode_hex) directive, but does exactly the the opposite operation, .i.e, decoding a hexadecimal digest into its original form.
 
 set_sha1
 --------
@@ -613,7 +613,7 @@ set_sha1
 
 **category:** *ndk_set_var_value*
 
-When taking two arguments, this directive will encode the value of the second argument `<src>` to its [SHA-1](http://en.wikipedia.org/wiki/SHA-1) digest and assign the result into the first argument, variable `$dst`. The hexadecimal form of the `SHA-1` digest will be generated automatically, use [set_decode_hex](http://wiki.nginx.org/NginxHttpSetMiscModule#set_decode_hex) to decode the result if you want the binary form of the `SHA-1` digest.
+When taking two arguments, this directive will encode the value of the second argument `<src>` to its [SHA-1](http://en.wikipedia.org/wiki/SHA-1) digest and assign the result into the first argument, variable `$dst`. The hexadecimal form of the `SHA-1` digest will be generated automatically, use [set_decode_hex](http://wiki.nginx.org/HttpSetMiscModule#set_decode_hex) to decode the result if you want the binary form of the `SHA-1` digest.
 
 For example,
 
@@ -632,7 +632,7 @@ Then request `GET /test` will yield the following output
     aaf4c61ddcc5e8a2dabede0f3b482cd9aea9434d
 
 
-Please note that we're using [NginxHttpEchoModule](http://wiki.nginx.org/NginxHttpEchoModule)'s [echo directive](http://wiki.nginx.org/NginxHttpEchoModule#echo) here to output values of nginx variables directly.
+Please note that we're using [HttpEchoModule](http://wiki.nginx.org/HttpEchoModule)'s [echo directive](http://wiki.nginx.org/HttpEchoModule#echo) here to output values of nginx variables directly.
 
 When taking a single argument, this directive will do in-place modification of the argument variable. For example,
 
@@ -647,7 +647,7 @@ When taking a single argument, this directive will do in-place modification of t
 
 then request `GET /test` will give exactly the same output as the previous example.
 
-This directive can be invoked by [NginxHttpLuaModule](http://wiki.nginx.org/NginxHttpLuaModule)'s [ndk.set_var.DIRECTIVE](http://wiki.nginx.org/NginxHttpLuaModule#ndk.set_var.DIRECTIVE) interface and [NginxHttpArrayVarModule](http://wiki.nginx.org/NginxHttpArrayVarModule)'s [array_map_op](http://wiki.nginx.org/NginxHttpArrayVarModule#array_map_op) directive.
+This directive can be invoked by [HttpLuaModule](http://wiki.nginx.org/HttpLuaModule)'s [ndk.set_var.DIRECTIVE](http://wiki.nginx.org/HttpLuaModule#ndk.set_var.DIRECTIVE) interface and [HttpArrayVarModule](http://wiki.nginx.org/HttpArrayVarModule)'s [array_map_op](http://wiki.nginx.org/HttpArrayVarModule#array_map_op) directive.
 
 set_md5
 -------
@@ -663,7 +663,7 @@ set_md5
 
 **category:** *ndk_set_var_value*
 
-When taking two arguments, this directive will encode the value of the second argument `<src>` to its [MD5](http://en.wikipedia.org/wiki/MD5) digest and assign the result into the first argument, variable `$dst`. The hexadecimal form of the `MD5` digest will be generated automatically, use [set_decode_hex](http://wiki.nginx.org/NginxHttpSetMiscModule#set_decode_hex) to decode the result if you want the binary form of the `MD5` digest.
+When taking two arguments, this directive will encode the value of the second argument `<src>` to its [MD5](http://en.wikipedia.org/wiki/MD5) digest and assign the result into the first argument, variable `$dst`. The hexadecimal form of the `MD5` digest will be generated automatically, use [set_decode_hex](http://wiki.nginx.org/HttpSetMiscModule#set_decode_hex) to decode the result if you want the binary form of the `MD5` digest.
 
 For example,
 
@@ -682,7 +682,7 @@ Then request `GET /test` will yield the following output
     5d41402abc4b2a76b9719d911017c592
 
 
-Please note that we're using [NginxHttpEchoModule](http://wiki.nginx.org/NginxHttpEchoModule)'s [echo directive](http://wiki.nginx.org/NginxHttpEchoModule#echo) here to output values of nginx variables directly.
+Please note that we're using [HttpEchoModule](http://wiki.nginx.org/HttpEchoModule)'s [echo directive](http://wiki.nginx.org/HttpEchoModule#echo) here to output values of nginx variables directly.
 
 When taking a single argument, this directive will do in-place modification of the argument variable. For example,
 
@@ -697,7 +697,7 @@ When taking a single argument, this directive will do in-place modification of t
 
 then request `GET /test` will give exactly the same output as the previous example.
 
-This directive can be invoked by [NginxHttpLuaModule](http://wiki.nginx.org/NginxHttpLuaModule)'s [ndk.set_var.DIRECTIVE](http://wiki.nginx.org/NginxHttpLuaModule#ndk.set_var.DIRECTIVE) interface and [NginxHttpArrayVarModule](http://wiki.nginx.org/NginxHttpArrayVarModule)'s [array_map_op](http://wiki.nginx.org/NginxHttpArrayVarModule#array_map_op) directive.
+This directive can be invoked by [HttpLuaModule](http://wiki.nginx.org/HttpLuaModule)'s [ndk.set_var.DIRECTIVE](http://wiki.nginx.org/HttpLuaModule#ndk.set_var.DIRECTIVE) interface and [HttpArrayVarModule](http://wiki.nginx.org/HttpArrayVarModule)'s [array_map_op](http://wiki.nginx.org/HttpArrayVarModule#array_map_op) directive.
 
 set_hmac_sha1
 -------------
@@ -713,7 +713,7 @@ set_hmac_sha1
 
 Computes the [HMAC-SHA1](http://en.wikipedia.org/wiki/HMAC) digest of the argument `<src>` and assigns the result into the argument variable `$dst` with the secret key `<secret_key>`.
 
-The raw binary form of the `HMAC-SHA1` digest will be generated, use [set_encode_base64](http://wiki.nginx.org/NginxHttpSetMiscModule#set_encode_base64), for example, to encode the result to a textual representation if desired.
+The raw binary form of the `HMAC-SHA1` digest will be generated, use [set_encode_base64](http://wiki.nginx.org/HttpSetMiscModule#set_encode_base64), for example, to encode the result to a textual representation if desired.
 
 For example,
 
@@ -733,7 +733,7 @@ Then request `GET /test` will yield the following output
     R/pvxzHC4NLtj7S+kXFg/NePTmk=
 
 
-Please note that we're using [NginxHttpEchoModule](http://wiki.nginx.org/NginxHttpEchoModule)'s [echo directive](http://wiki.nginx.org/NginxHttpEchoModule#echo) here to output values of nginx variables directly.
+Please note that we're using [HttpEchoModule](http://wiki.nginx.org/HttpEchoModule)'s [echo directive](http://wiki.nginx.org/HttpEchoModule#echo) here to output values of nginx variables directly.
 
 This directive requires the OpenSSL library enabled in your Nignx build.
 
@@ -805,7 +805,7 @@ Behind the scene, this directive utilizes the `ngx_time` API in the Nginx core, 
 Caveats
 =======
 
-Do not use [$arg_PARAMETER](http://wiki.nginx.org/NginxHttpCoreModule#.24arg_PARAMETER) or [$http_HEADER](http://wiki.nginx.org/NginxHttpCoreModule#.24http_HEADER) or other special variables defined in the nginx core module as the target variable in this module's directives. For instance,
+Do not use [$arg_PARAMETER](http://wiki.nginx.org/HttpCoreModule#.24arg_PARAMETER) or [$http_HEADER](http://wiki.nginx.org/HttpCoreModule#.24http_HEADER) or other special variables defined in the nginx core module as the target variable in this module's directives. For instance,
 
 
     set_if_empty $arg_user 'foo';  # DO NOT USE THIS!
@@ -817,7 +817,7 @@ Installation
 ============
 
 Grab the nginx source code from [nginx.org](http://nginx.org/), for example,
-the version 1.0.5 (see [nginx compatibility](http://wiki.nginx.org/NginxHttpSetMiscModule#Compatibility)), and then build the source with this module:
+the version 1.0.5 (see [nginx compatibility](http://wiki.nginx.org/HttpSetMiscModule#Compatibility)), and then build the source with this module:
 
 
     $ wget 'http://sysoev.ru/nginx/nginx-1.0.5.tar.gz'
@@ -848,7 +848,7 @@ The following versions of Nginx should work with this module:
 * **0.8.x**                       (last tested: 0.8.54)
 * **0.7.x >= 0.7.46**             (last tested: 0.7.68)
 
-If you find that any particular version of Nginx above 0.7.46 does not work with this module, please consider [reporting a bug](http://wiki.nginx.org/NginxHttpSetMiscModule#Report_Bugs).
+If you find that any particular version of Nginx above 0.7.46 does not work with this module, please consider [reporting a bug](http://wiki.nginx.org/HttpSetMiscModule#Report_Bugs).
 
 Report Bugs
 ===========
@@ -885,7 +885,7 @@ Because a single nginx server (by default, `localhost:1984`) is used across all 
 Getting involved
 ================
 
-You'll be very welcomed to submit patches to the [author](http://wiki.nginx.org/NginxHttpSetMiscModule#Author) or just ask for a commit bit to the [source repository](http://wiki.nginx.org/NginxHttpSetMiscModule#Source_Repository) on GitHub.
+You'll be very welcomed to submit patches to the [author](http://wiki.nginx.org/HttpSetMiscModule#Author) or just ask for a commit bit to the [source repository](http://wiki.nginx.org/HttpSetMiscModule#Source_Repository) on GitHub.
 
 Author
 ======
