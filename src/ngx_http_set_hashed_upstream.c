@@ -1,8 +1,9 @@
+#ifndef DDEBUG
 #define DDEBUG 0
+#endif
 #include "ddebug.h"
 
 #include "ngx_http_set_hashed_upstream.h"
-
 
 
 ngx_uint_t
@@ -34,14 +35,14 @@ ngx_http_set_misc_set_hashed_upstream(ngx_http_request_t *r,
     ngx_str_t                    ulname;
     ngx_uint_t                   hash, index;
     ngx_http_variable_value_t   *key;
-    
+
     if (ul == NULL) {
         ulname.data = v->data;
         ulname.len = v->len;
 
         dd("ulname: %.*s", ulname.len, ulname.data);
-       
-        ul = ndk_get_upstream_list(ndk_http_get_main_conf(r), 
+
+        ul = ndk_get_upstream_list(ndk_http_get_main_conf(r),
                                             ulname.data, ulname.len);
 
         if (ul == NULL) {
@@ -137,3 +138,4 @@ ngx_http_set_hashed_upstream(ngx_conf_t *cf, ngx_command_t *cmd, void *conf)
 
     return  ndk_set_var_value_core(cf, var, v, &filter);
 }
+
