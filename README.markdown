@@ -8,7 +8,7 @@ Name
 Version
 =======
 
-This document describes set-misc-nginx-module [v0.22rc2](https://github.com/agentzh/set-misc-nginx-module/downloads) released on 27 July 2011.
+This document describes set-misc-nginx-module [v0.22rc3](https://github.com/agentzh/set-misc-nginx-module/downloads) released on 10 October 2011.
 
 Synopsis
 ========
@@ -817,21 +817,21 @@ Installation
 ============
 
 Grab the nginx source code from [nginx.org](http://nginx.org/), for example,
-the version 1.0.5 (see [nginx compatibility](http://wiki.nginx.org/HttpSetMiscModule#Compatibility)), and then build the source with this module:
+the version 1.0.8 (see [nginx compatibility](http://wiki.nginx.org/HttpSetMiscModule#Compatibility)), and then build the source with this module:
 
 
-    $ wget 'http://sysoev.ru/nginx/nginx-1.0.5.tar.gz'
-    $ tar -xzvf nginx-1.0.5.tar.gz
-    $ cd nginx-1.0.5/
+    wget 'http://nginx.org/download/nginx-1.0.8.tar.gz'
+    tar -xzvf nginx-1.0.8.tar.gz
+    cd nginx-1.0.8/
     
     # Here we assume you would install you nginx under /opt/nginx/.
-    $ ./configure --prefix=/opt/nginx \
+    ./configure --prefix=/opt/nginx \
         --with-http_ssl_module \
         --add-module=/path/to/ngx_devel_kit \
         --add-module=/path/to/set-misc-nginx-module
      
-    $ make -j2
-    $ make install
+    make -j2
+    make install
 
 
 Download the latest version of the release tarball of this module from [set-misc-nginx-module file list](http://github.com/agentzh/set-misc-nginx-module/downloads), and the latest tarball for [ngx_devel_kit](https://github.com/simpl/ngx_devel_kit) from its [file list](https://github.com/simpl/ngx_devel_kit/downloads).
@@ -843,7 +843,8 @@ Compatibility
 
 The following versions of Nginx should work with this module:
 
-* **1.0.x**                       (last tested: 1.0.5)
+* **1.1.x**                       (last tested: 1.1.5)
+* **1.0.x**                       (last tested: 1.0.8)
 * **0.9.x**                       (last tested: 0.9.4)
 * **0.8.x**                       (last tested: 0.8.54)
 * **0.7.x >= 0.7.46**             (last tested: 0.7.68)
