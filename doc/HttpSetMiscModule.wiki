@@ -6,7 +6,7 @@
 
 = Version =
 
-This document describes set-misc-nginx-module [https://github.com/agentzh/set-misc-nginx-module/downloads v0.22rc3] released on 10 October 2011.
+This document describes set-misc-nginx-module [https://github.com/agentzh/set-misc-nginx-module/tags v0.22rc3] released on 10 October 2011.
 
 = Synopsis =
 
@@ -803,12 +803,12 @@ the version 1.0.8 (see [[#Compatibility|nginx compatibility]]), and then build t
         --with-http_ssl_module \
         --add-module=/path/to/ngx_devel_kit \
         --add-module=/path/to/set-misc-nginx-module
-     
+    
     make -j2
     make install
 </geshi>
 
-Download the latest version of the release tarball of this module from [http://github.com/agentzh/set-misc-nginx-module/downloads set-misc-nginx-module file list], and the latest tarball for [https://github.com/simpl/ngx_devel_kit ngx_devel_kit] from its [https://github.com/simpl/ngx_devel_kit/downloads file list].
+Download the latest version of the release tarball of this module from [http://github.com/agentzh/set-misc-nginx-module/tags set-misc-nginx-module file list], and the latest tarball for [https://github.com/simpl/ngx_devel_kit ngx_devel_kit] from its [https://github.com/simpl/ngx_devel_kit/tags file list].
 
 Also, this module is included and enabled by default in the [http://openresty.org/ ngx_openresty bundle].
 
