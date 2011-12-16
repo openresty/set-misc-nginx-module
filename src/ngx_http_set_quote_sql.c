@@ -20,7 +20,12 @@ ngx_http_set_misc_quote_pgsql_str(ngx_http_request_t *r,
 
     ngx_http_set_misc_quote_sql_str(r, res, v);
     length  = res->len;
+
     pstr    = ngx_palloc(r->pool, length + 1);
+    if (pstr == NULL) {
+        return NGX_ERROR;
+    }
+
     *pstr   = 'E';
     memcpy(pstr + 1, res->data, length);
     res->data   = pstr;
