@@ -40,7 +40,7 @@ ngx_http_set_misc_set_hashed_upstream(ngx_http_request_t *r,
         ulname.data = v->data;
         ulname.len = v->len;
 
-        dd("ulname: %.*s", ulname.len, ulname.data);
+        dd("ulname: %.*s", (int) ulname.len, ulname.data);
 
         ul = ndk_get_upstream_list(ndk_http_get_main_conf(r),
                                             ulname.data, ulname.len);
@@ -66,7 +66,7 @@ ngx_http_set_misc_set_hashed_upstream(ngx_http_request_t *r,
 
     u = ul->elts;
 
-    dd("upstream list: %d upstreams found", ul->nelts);
+    dd("upstream list: %d upstreams found", (int) ul->nelts);
 
     if (ul->nelts == 1) {
         dd("only one upstream found in the list");

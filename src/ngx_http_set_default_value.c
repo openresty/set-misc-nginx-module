@@ -1,5 +1,8 @@
+#ifndef DDEBUG
 #define DDEBUG 0
+#endif
 #include "ddebug.h"
+
 #include <ndk.h>
 #include "ngx_http_set_default_value.h"
 

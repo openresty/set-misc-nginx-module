@@ -1,5 +1,8 @@
+#ifndef DDEBUG
 #define DDEBUG 0
+#endif
 #include "ddebug.h"
+
 #include <ndk.h>
 #include "ngx_http_set_escape_uri.h"
 #include "ngx_string.h"
@@ -48,7 +51,7 @@ ngx_http_set_misc_escape_uri(ngx_http_request_t *r,
     res->data = dst;
     res->len = len;
 
-    dd("after eacape:%.*s", res->len, res->data);
+    dd("after eacape:%.*s", (int) res->len, res->data);
 
     return NGX_OK;
 }

@@ -1,4 +1,6 @@
+#ifndef DDEBUG
 #define DDEBUG 0
+#endif
 #include "ddebug.h"
 
 #include <ndk.h>
@@ -30,7 +32,7 @@ ngx_http_set_misc_encode_base32(ngx_http_request_t *r,
 
     len = base32_encoded_length(v->len);
 
-    dd("estimated dst len: %d", len);
+    dd("estimated dst len: %d", (int) len);
 
     p = ngx_palloc(r->pool, len);
     if (p == NULL) {
@@ -44,7 +46,7 @@ ngx_http_set_misc_encode_base32(ngx_http_request_t *r,
     res->data = p;
     res->len = len;
 
-    dd("res (len %d): %.*s", res->len, res->len, res->data);
+    dd("res (len %d): %.*s", (int) res->len, (int) res->len, res->data);
 
     return NGX_OK;
 }
@@ -61,7 +63,7 @@ ngx_http_set_misc_decode_base32(ngx_http_request_t *r,
 
     len = base32_decoded_length(v->len);
 
-    dd("estimated dst len: %d", len);
+    dd("estimated dst len: %d", (int) len);
 
     p = ngx_palloc(r->pool, len);
     if (p == NULL) {
