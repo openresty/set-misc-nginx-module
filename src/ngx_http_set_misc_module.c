@@ -76,6 +76,8 @@ static  ndk_set_var_t  ngx_http_set_misc_set_md5_filter = {
     NULL
 };
 
+
+#if NGX_HAVE_SHA1
 static  ndk_set_var_t  ngx_http_set_misc_set_sha1_filter = {
     NDK_SET_VAR_VALUE,
     ngx_http_set_misc_set_sha1,
@@ -83,6 +85,8 @@ static  ndk_set_var_t  ngx_http_set_misc_set_sha1_filter = {
     NULL
 };
 #endif
+#endif
+
 
 static  ndk_set_var_t  ngx_http_set_misc_unescape_uri_filter = {
     NDK_SET_VAR_VALUE,
@@ -200,6 +204,7 @@ static ngx_command_t  ngx_http_set_misc_commands[] = {
         0,
         &ngx_http_set_misc_set_md5_filter
     },
+#if NGX_HAVE_SHA1
     {
         ngx_string ("set_sha1"),
         NGX_HTTP_MAIN_CONF|NGX_HTTP_SRV_CONF|NGX_HTTP_SIF_CONF
@@ -209,6 +214,7 @@ static ngx_command_t  ngx_http_set_misc_commands[] = {
         0,
         &ngx_http_set_misc_set_sha1_filter
     },
+#endif
 #endif
     {
         ngx_string ("set_unescape_uri"),

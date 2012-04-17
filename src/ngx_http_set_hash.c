@@ -4,24 +4,32 @@
 #include "ddebug.h"
 
 #include "ngx_http_set_hash.h"
-#include "ngx_sha1.h"
-#include "ngx_md5.h"
 
+#if NGX_HAVE_SHA1
+#include "ngx_sha1.h"
 
 #ifndef SHA_DIGEST_LENGTH
 #define SHA_DIGEST_LENGTH 20
 #endif
+
+#endif
+
+#include "ngx_md5.h"
+
 
 #ifndef MD5_DIGEST_LENGTH
 #define MD5_DIGEST_LENGTH 16
 #endif
 
 enum {
+#if NGX_HAVE_SHA1
     SHA_HEX_LENGTH = SHA_DIGEST_LENGTH * 2,
+#endif
     MD5_HEX_LENGTH = MD5_DIGEST_LENGTH * 2
 };
 
 
+#if NGX_HAVE_SHA1
 ngx_int_t
 ngx_http_set_misc_set_sha1(ngx_http_request_t *r,
         ngx_str_t *res, ngx_http_variable_value_t *v)
@@ -46,6 +54,7 @@ ngx_http_set_misc_set_sha1(ngx_http_request_t *r,
 
     return NGX_OK;
 }
+#endif
 
 
 ngx_int_t
