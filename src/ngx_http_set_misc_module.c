@@ -20,6 +20,7 @@
 #include "ngx_http_set_hmac.h"
 #endif
 #include "ngx_http_set_random.h"
+#include "ngx_http_set_rotate.h"
 
 #define NGX_UNESCAPE_URI_COMPONENT  0
 
@@ -150,7 +151,14 @@ static  ndk_set_var_t  ngx_http_set_misc_set_random_filter = {
     2,
     NULL
 };
-
+/*
+static  ndk_set_var_t  ngx_http_set_misc_set_rotate_filter = {
+    NDK_SET_VAR_VALUE,
+    ngx_http_set_misc_set_rotate,
+    2,
+    NULL
+};
+*/
 static ngx_command_t  ngx_http_set_misc_commands[] = {
     {   ngx_string ("set_encode_base64"),
         NGX_HTTP_MAIN_CONF|NGX_HTTP_SRV_CONF|NGX_HTTP_SIF_CONF
@@ -321,6 +329,14 @@ static ngx_command_t  ngx_http_set_misc_commands[] = {
         0,
         0,
         &ngx_http_set_misc_set_random_filter
+    },
+    {   ngx_string ("set_rotate"),
+        NGX_HTTP_MAIN_CONF|NGX_HTTP_SRV_CONF|NGX_HTTP_SIF_CONF
+            |NGX_HTTP_LOC_CONF|NGX_HTTP_LIF_CONF|NGX_CONF_TAKE3,
+        ngx_http_set_rotate,
+        0,
+        0,
+        NULL
     },
 
     ngx_null_command
