@@ -6,7 +6,7 @@
 
 = Version =
 
-This document describes set-misc-nginx-module [https://github.com/agentzh/set-misc-nginx-module/tags v0.22rc3] released on 10 October 2011.
+This document describes set-misc-nginx-module [https://github.com/agentzh/set-misc-nginx-module/tags v0.22rc7] released on 17 April 2012.
 
 = Synopsis =
 
@@ -713,7 +713,7 @@ R/pvxzHC4NLtj7S+kXFg/NePTmk=
 
 Please note that we're using [[HttpEchoModule]]'s [[HttpEchoModule#echo|echo directive]] here to output values of nginx variables directly.
 
-This directive requires the OpenSSL library enabled in your Nignx build.
+This directive requires the OpenSSL library enabled in your Nignx build (usually by passing the <code>--with-http_ssl_module</code> option to the <code>./configure</code> script).
 
 == set_random ==
 '''syntax:''' ''set_random $res <from> <to>''
@@ -728,7 +728,7 @@ Generates a (pseudo) random number (in textual form) within the range <code>[<$f
 
 Only non-negative numbers are allowed for the <code><from></code> and <code><to></code> arguments.
 
-When <code><$from></code> is greater than <code><$to></code>, their values will be exchanged accordingly.
+When <code><from></code> is greater than <code><to></code>, their values will be exchanged accordingly.
 
 For instance,
 
@@ -757,28 +757,44 @@ Behind the scene, it makes use of the standard C function <code>rand()</code>.
 
 '''phase:''' ''rewrite''
 
-Increments <code>$value</code> but keeps it in range from <code>$from</code> to <code>$to</code>. 
-If <code>$value</code> is greater than <code>$to</code> or less than <code>$from</code> is will be 
-set to <code>$from</code> value.
+Increments <code>$value</code> but keeps it in range from <code><from></code> to <code><to></code>. 
+If <code>$value</code> is greater than <code><to></code> or less than <code><from></code> is will be 
+set to <code><from></code> value.
+
+The current value after running this directive will always be saved on a per-location basis. And the this saved value will be used for incrementation when the <code>$value</code> is not initialized or has a bad value.
 
 Only non-negative numbers are allowed for the <code><from></code> and <code><to></code> arguments.
 
-When <code><$from></code> is greater than <code><$to></code>, their values will be exchanged accordingly.
+When <code><from></code> is greater than <code><to></code>, their values will be exchanged accordingly.
 
 For instance,
 
 <geshi lang="nginx">
-	location /rotate {
-	    default_type text/plain;
-	    set $counter $cookie_counter;
-	    set_rotate $counter 1 5;
-	    echo $counter;
-	    add_header Set-Cookie counter=$counter;
-	}
+    location /rotate {
+        default_type text/plain;
+        set $counter $cookie_counter;
+        set_rotate $counter 1 5;
+        echo $counter;
+        add_header Set-Cookie counter=$counter;
+    }
 </geshi>
 
 then request <code>GET /rotate</code> will output next number between 1 and 5 (i.e., 1, 2, 3, 4, 5) on each
 refresh of the page. This directive may be userful for banner rotation purposes.
+
+Another example is to use server-side value persistence to do simple round-robin:
+
+<geshi lang="nginx">
+    location /rotate {
+        default_type text/plain;
+        set_rotate $counter 0 3;
+        echo $counter;
+    }
+</geshi>
+
+And accessing <code>/rotate</code> will also output integer sequence 0, 1, 2, 3, 0, 1, 2, 3, and so on.
+
+This directive was first introduced in the <code>v0.22rc7</code> release.
 
 == set_local_today ==
 '''syntax:''' ''set_local_today $dst''
@@ -812,23 +828,23 @@ Behind the scene, this directive utilizes the <code>ngx_time</code> API in the N
 
 = Caveats =
 
-Do not use [[HttpCoreModule#$arg_PARAMETER|$arg_PARAMETER]] or [[HttpCoreModule#$http_HEADER|$http_HEADER]] or other special variables defined in the nginx core module as the target variable in this module's directives. For instance,
+Do not use [[HttpCoreModule#$arg_PARAMETER|$arg_PARAMETER]], [[HttpCoreModule#$cookie_COOKIE|$cookie_COOKIE]], [[HttpCoreModule#$http_HEADER|$http_HEADER]] or other special variables defined in the Nginx core module as the target variable in this module's directives. For instance,
 
 <geshi lang="nginx">
     set_if_empty $arg_user 'foo';  # DO NOT USE THIS!
 </geshi>
 
-may lead to data corruption.
+may lead to segmentation faults.
 
 = Installation =
 
 Grab the nginx source code from [http://nginx.org/ nginx.org], for example,
-the version 1.0.8 (see [[#Compatibility|nginx compatibility]]), and then build the source with this module:
+the version 1.0.15 (see [[#Compatibility|nginx compatibility]]), and then build the source with this module:
 
 <geshi lang="bash">
-    wget 'http://nginx.org/download/nginx-1.0.8.tar.gz'
-    tar -xzvf nginx-1.0.8.tar.gz
-    cd nginx-1.0.8/
+    wget 'http://nginx.org/download/nginx-1.0.15.tar.gz'
+    tar -xzvf nginx-1.0.15.tar.gz
+    cd nginx-1.0.15/
     
     # Here we assume you would install you nginx under /opt/nginx/.
     ./configure --prefix=/opt/nginx \
@@ -849,7 +865,7 @@ Also, this module is included and enabled by default in the [http://openresty.or
 The following versions of Nginx should work with this module:
 
 * '''1.1.x'''                       (last tested: 1.1.5)
-* '''1.0.x'''                       (last tested: 1.0.8)
+* '''1.0.x'''                       (last tested: 1.0.15)
 * '''0.9.x'''                       (last tested: 0.9.4)
 * '''0.8.x'''                       (last tested: 0.8.54)
 * '''0.7.x >= 0.7.46'''             (last tested: 0.7.68)
