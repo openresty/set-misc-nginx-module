@@ -22,7 +22,9 @@
 #endif
 
 enum {
+#if NGX_HAVE_SHA1
     SHA_HEX_LENGTH = SHA_DIGEST_LENGTH * 2,
+#endif
     MD5_HEX_LENGTH = MD5_DIGEST_LENGTH * 2
 };
 
