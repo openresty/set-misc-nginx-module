@@ -771,6 +771,62 @@ For now, there's no way to configure a custom random generator seed.
 
 Behind the scene, it makes use of the standard C function `rand()`.
 
+set_secure_random_alphanum
+--------------------------
+**syntax:** *set_secure_random_alphanum $res &lt;length&gt;*
+
+**default:** *no*
+
+**context:** *location, location if*
+
+**phase:** *rewrite*
+
+Generates a cryptographically-strong random string `<length>` characters long with the alphabet [a-zA-Z0-9].
+
+`<length>` may be between 1 and 64, inclusive.
+
+For instance,
+
+
+    location /test {
+        set_secure_random_alphanum $res 32;
+
+        echo $res;
+    }
+
+
+then request `GET /test` will output a string like "ivVVRP2DGaAqDmdf3Rv4ZDJ7k0gOfASz".
+
+This function depends on the presence of the "/dev/urandom" device, available on most UNIX-like systems.
+
+set_secure_random_lcalpha
+-------------------------
+**syntax:** *set_secure_random_lcalpha $res &lt;length&gt;*
+
+**default:** *no*
+
+**context:** *location, location if*
+
+**phase:** *rewrite*
+
+Generates a cryptographically-strong random string `<length>` characters long with the alphabet [a-z].
+
+`<length>` may be between 1 and 64, inclusive.
+
+For instance,
+
+
+    location /test {
+        set_secure_random_lcalpha $res 32;
+
+        echo $res;
+    }
+
+
+then request `GET /test` will output a string like "kcuxcddktffsippuekhshdaclaquiusj".
+
+This function depends on the presence of the "/dev/urandom" device, available on most UNIX-like systems.
+
 set_local_today
 ---------------
 **syntax:** *set_local_today $dst*

@@ -20,6 +20,7 @@
 #include "ngx_http_set_hmac.h"
 #endif
 #include "ngx_http_set_random.h"
+#include "ngx_http_set_secure_random.h"
 
 #define NGX_UNESCAPE_URI_COMPONENT  0
 
@@ -148,6 +149,20 @@ static  ndk_set_var_t  ngx_http_set_misc_set_random_filter = {
     NDK_SET_VAR_MULTI_VALUE,
     ngx_http_set_misc_set_random,
     2,
+    NULL
+};
+
+static  ndk_set_var_t  ngx_http_set_misc_set_secure_random_alphanum_filter = {
+    NDK_SET_VAR_VALUE,
+    ngx_http_set_misc_set_secure_random_alphanum,
+    1,
+    NULL
+};
+
+static  ndk_set_var_t  ngx_http_set_misc_set_secure_random_lcalpha_filter = {
+    NDK_SET_VAR_VALUE,
+    ngx_http_set_misc_set_secure_random_lcalpha,
+    1,
     NULL
 };
 
@@ -321,6 +336,22 @@ static ngx_command_t  ngx_http_set_misc_commands[] = {
         0,
         0,
         &ngx_http_set_misc_set_random_filter
+    },
+    {   ngx_string ("set_secure_random_alphanum"),
+        NGX_HTTP_MAIN_CONF|NGX_HTTP_SRV_CONF|NGX_HTTP_SIF_CONF
+            |NGX_HTTP_LOC_CONF|NGX_HTTP_LIF_CONF|NGX_CONF_TAKE12,
+        ndk_set_var_value,
+        0,
+        0,
+        &ngx_http_set_misc_set_secure_random_alphanum_filter
+    },
+    {   ngx_string ("set_secure_random_lcalpha"),
+        NGX_HTTP_MAIN_CONF|NGX_HTTP_SRV_CONF|NGX_HTTP_SIF_CONF
+            |NGX_HTTP_LOC_CONF|NGX_HTTP_LIF_CONF|NGX_CONF_TAKE12,
+        ndk_set_var_value,
+        0,
+        0,
+        &ngx_http_set_misc_set_secure_random_lcalpha_filter
     },
 
     ngx_null_command
