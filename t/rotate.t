@@ -221,3 +221,51 @@ a = 2
 --- no_error_log
 [error]
 
+
+
+=== TEST 9: value persistence is per-location
+--- config
+    location /incr {
+        set_rotate $a 0 2;
+
+        echo "a = $a";
+    }
+
+    location /incr2 {
+        set_rotate $a 0 2;
+
+        echo "a = $a";
+    }
+
+    location /t {
+        echo_location /incr;
+        echo_location /incr2;
+        echo_location /incr;
+        echo_location /incr2;
+        echo_location /incr;
+        echo_location /incr2;
+        echo_location /incr;
+        echo_location /incr2;
+        echo_location /incr;
+        echo_location /incr2;
+        echo_location /incr;
+        echo_location /incr2;
+    }
+--- request
+    GET /t
+--- response_body
+a = 0
+a = 0
+a = 1
+a = 1
+a = 2
+a = 2
+a = 0
+a = 0
+a = 1
+a = 1
+a = 2
+a = 2
+--- no_error_log
+[error]
+
