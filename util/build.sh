@@ -7,6 +7,8 @@ home=~
 version=$1
 force=$2
 
+    #--with-cc="gcc46" \
+
 ngx-build $force $version \
     --with-http_ssl_module \
     --without-mail_pop3_module \

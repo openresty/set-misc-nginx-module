@@ -61,8 +61,7 @@ e = 3
     }
 --- request
     GET /bar
---- response_body
-a = 2
+--- response_body_like: ^a = [12]$
 --- error_log
 set_rotate: bad current value: "abc"
 
@@ -99,4 +98,126 @@ set_rotate: bad "from" argument value: "abc"
 --- error_code: 500
 --- error_log
 set_rotate: bad "to" argument value: "abc"
+
+
+
+=== TEST 5: when no current value is given
+--- config
+    location /incr {
+        set_rotate $a 1 3;
+
+        echo "a = $a";
+    }
+
+    location /t {
+        echo_location /incr;
+        echo_location /incr;
+        echo_location /incr;
+        echo_location /incr;
+        echo_location /incr;
+        echo_location /incr;
+    }
+--- request
+    GET /t
+--- response_body
+a = 1
+a = 2
+a = 3
+a = 1
+a = 2
+a = 3
+--- no_error_log
+[error]
+
+
+
+=== TEST 6: when no current value is given (starting from 0)
+--- config
+    location /incr {
+        set_rotate $a 0 2;
+
+        echo "a = $a";
+    }
+
+    location /t {
+        echo_location /incr;
+        echo_location /incr;
+        echo_location /incr;
+        echo_location /incr;
+        echo_location /incr;
+        echo_location /incr;
+    }
+--- request
+    GET /t
+--- response_body
+a = 0
+a = 1
+a = 2
+a = 0
+a = 1
+a = 2
+--- no_error_log
+[error]
+
+
+
+=== TEST 7: when a non-integer string value is given
+--- config
+    location /incr {
+        set $a "hello";
+        set_rotate $a 0 2;
+
+        echo "a = $a";
+    }
+
+    location /t {
+        echo_location /incr;
+        echo_location /incr;
+        echo_location /incr;
+        echo_location /incr;
+        echo_location /incr;
+        echo_location /incr;
+    }
+--- request
+    GET /t
+--- response_body
+a = 0
+a = 1
+a = 2
+a = 0
+a = 1
+a = 2
+--- error_log
+set_rotate: bad current value: "hello"
+
+
+
+=== TEST 8: when an empty string value is given
+--- config
+    location /incr {
+        set $a "";
+        set_rotate $a 0 2;
+
+        echo "a = $a";
+    }
+
+    location /t {
+        echo_location /incr;
+        echo_location /incr;
+        echo_location /incr;
+        echo_location /incr;
+        echo_location /incr;
+        echo_location /incr;
+    }
+--- request
+    GET /t
+--- response_body
+a = 0
+a = 1
+a = 2
+a = 0
+a = 1
+a = 2
+--- no_error_log
+[error]
 
