@@ -771,6 +771,39 @@ For now, there's no way to configure a custom random generator seed.
 
 Behind the scene, it makes use of the standard C function `rand()`.
 
+set_rotate
+----------
+**syntax:** *set_random $value &lt;from&gt; &lt;to&gt;*
+
+**default:** *no*
+
+**context:** *location, location if*
+
+**phase:** *rewrite*
+
+Increments `$value` but keeps it in range from `$from` to `$to`. 
+If `$value` is greater than `$to` or less than `$from` is will be 
+set to `$from` value.
+
+Only non-negative numbers are allowed for the `<from>` and `<to>` arguments.
+
+When `<$from>` is greater than `<$to>`, their values will be exchanged accordingly.
+
+For instance,
+
+
+	location /rotate {
+	    default_type text/plain;
+	    set $counter $cookie_counter;
+	    set_rotate $counter 1 5;
+	    echo $counter;
+	    add_header Set-Cookie counter=$counter;
+	}
+
+
+then request `GET /rotate` will output next number between 1 and 5 (i.e., 1, 2, 3, 4, 5) on each
+refresh of the page. This directive may be userful for banner rotation purposes.
+
 set_local_today
 ---------------
 **syntax:** *set_local_today $dst*

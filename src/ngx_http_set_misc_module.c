@@ -147,14 +147,7 @@ static  ndk_set_var_t  ngx_http_set_misc_set_random_filter = {
     2,
     NULL
 };
-/*
-static  ndk_set_var_t  ngx_http_set_misc_set_rotate_filter = {
-    NDK_SET_VAR_VALUE,
-    ngx_http_set_misc_set_rotate,
-    2,
-    NULL
-};
-*/
+
 static ngx_command_t  ngx_http_set_misc_commands[] = {
     {   ngx_string ("set_encode_base64"),
         NGX_HTTP_MAIN_CONF|NGX_HTTP_SRV_CONF|NGX_HTTP_SIF_CONF
