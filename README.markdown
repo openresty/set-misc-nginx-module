@@ -8,7 +8,7 @@ Name
 Version
 =======
 
-This document describes set-misc-nginx-module [v0.22rc7](https://github.com/agentzh/set-misc-nginx-module/tags) released on 17 April 2012.
+This document describes set-misc-nginx-module [v0.22rc8](https://github.com/agentzh/set-misc-nginx-module/tags) released on 10 May 2012.
 
 Synopsis
 ========
@@ -771,6 +771,10 @@ For now, there's no way to configure a custom random generator seed.
 
 Behind the scene, it makes use of the standard C function `rand()`.
 
+This directive was first introduced in the `v0.22rc1` release.
+
+See also [set_secure_random_alphanum](http://wiki.nginx.org/HttpSetMiscModule#set_secure_random_alphanum) and [set_secure_random_lcalpha](http://wiki.nginx.org/HttpSetMiscModule#set_secure_random_lcalpha).
+
 set_secure_random_alphanum
 --------------------------
 **syntax:** *set_secure_random_alphanum $res &lt;length&gt;*
@@ -781,7 +785,7 @@ set_secure_random_alphanum
 
 **phase:** *rewrite*
 
-Generates a cryptographically-strong random string `<length>` characters long with the alphabet [a-zA-Z0-9].
+Generates a cryptographically-strong random string `<length>` characters long with the alphabet `[a-zA-Z0-9]`.
 
 `<length>` may be between 1 and 64, inclusive.
 
@@ -795,9 +799,13 @@ For instance,
     }
 
 
-then request `GET /test` will output a string like "ivVVRP2DGaAqDmdf3Rv4ZDJ7k0gOfASz".
+then request `GET /test` will output a string like `ivVVRP2DGaAqDmdf3Rv4ZDJ7k0gOfASz`.
 
-This function depends on the presence of the "/dev/urandom" device, available on most UNIX-like systems.
+This function depends on the presence of the `/dev/urandom` device, available on most UNIX-like systems.
+
+See also [set_secure_random_lcalpha](http://wiki.nginx.org/HttpSetMiscModule#set_secure_random_lcalpha) and [set_random](http://wiki.nginx.org/HttpSetMiscModule#set_random).
+
+This directive was first introduced in the `v0.22rc8` release.
 
 set_secure_random_lcalpha
 -------------------------
@@ -809,7 +817,7 @@ set_secure_random_lcalpha
 
 **phase:** *rewrite*
 
-Generates a cryptographically-strong random string `<length>` characters long with the alphabet [a-z].
+Generates a cryptographically-strong random string `<length>` characters long with the alphabet `[a-z]`.
 
 `<length>` may be between 1 and 64, inclusive.
 
@@ -823,9 +831,13 @@ For instance,
     }
 
 
-then request `GET /test` will output a string like "kcuxcddktffsippuekhshdaclaquiusj".
+then request `GET /test` will output a string like `kcuxcddktffsippuekhshdaclaquiusj`.
 
-This function depends on the presence of the "/dev/urandom" device, available on most UNIX-like systems.
+This function depends on the presence of the `/dev/urandom` device, available on most UNIX-like systems.
+
+This directive was first introduced in the `v0.22rc8` release.
+
+See also [set_secure_random_alphanum](http://wiki.nginx.org/HttpSetMiscModule#set_secure_random_alphanum) and [set_random](http://wiki.nginx.org/HttpSetMiscModule#set_random).
 
 set_rotate
 ----------

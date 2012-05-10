@@ -6,9 +6,9 @@ Name
     installation instructions.
 
 Version
-    This document describes set-misc-nginx-module v0.22rc7
-    (<https://github.com/agentzh/set-misc-nginx-module/tags>) released on 17
-    April 2012.
+    This document describes set-misc-nginx-module v0.22rc8
+    (<https://github.com/agentzh/set-misc-nginx-module/tags>) released on 10
+    May 2012.
 
 Synopsis
         location /foo {
@@ -795,8 +795,76 @@ Directives
 
     Behind the scene, it makes use of the standard C function "rand()".
 
+    This directive was first introduced in the "v0.22rc1" release.
+
+    See also set_secure_random_alphanum and set_secure_random_lcalpha.
+
+  set_secure_random_alphanum
+    syntax: *set_secure_random_alphanum $res <length>*
+
+    default: *no*
+
+    context: *location, location if*
+
+    phase: *rewrite*
+
+    Generates a cryptographically-strong random string "<length>" characters
+    long with the alphabet "[a-zA-Z0-9]".
+
+    "<length>" may be between 1 and 64, inclusive.
+
+    For instance,
+
+        location /test {
+            set_secure_random_alphanum $res 32;
+
+            echo $res;
+        }
+
+    then request "GET /test" will output a string like
+    "ivVVRP2DGaAqDmdf3Rv4ZDJ7k0gOfASz".
+
+    This function depends on the presence of the "/dev/urandom" device,
+    available on most UNIX-like systems.
+
+    See also set_secure_random_lcalpha and set_random.
+
+    This directive was first introduced in the "v0.22rc8" release.
+
+  set_secure_random_lcalpha
+    syntax: *set_secure_random_lcalpha $res <length>*
+
+    default: *no*
+
+    context: *location, location if*
+
+    phase: *rewrite*
+
+    Generates a cryptographically-strong random string "<length>" characters
+    long with the alphabet "[a-z]".
+
+    "<length>" may be between 1 and 64, inclusive.
+
+    For instance,
+
+        location /test {
+            set_secure_random_lcalpha $res 32;
+
+            echo $res;
+        }
+
+    then request "GET /test" will output a string like
+    "kcuxcddktffsippuekhshdaclaquiusj".
+
+    This function depends on the presence of the "/dev/urandom" device,
+    available on most UNIX-like systems.
+
+    This directive was first introduced in the "v0.22rc8" release.
+
+    See also set_secure_random_alphanum and set_random.
+
   set_rotate
-    syntax: *set_random $value <from> <to>*
+    syntax: *set_rotate $value <from> <to>*
 
     default: *no*
 
