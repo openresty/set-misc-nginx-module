@@ -15,3 +15,4 @@ ngx_int_t ngx_http_set_misc_decode_base32(ngx_http_request_t *r,
 
 
 #endif /* NGX_HTTP_SET_BASE32 */
+

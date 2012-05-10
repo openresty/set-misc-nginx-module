@@ -8,7 +8,7 @@ Name
 Version
 =======
 
-This document describes set-misc-nginx-module [v0.22rc3](https://github.com/agentzh/set-misc-nginx-module/tags) released on 10 October 2011.
+This document describes set-misc-nginx-module [v0.22rc7](https://github.com/agentzh/set-misc-nginx-module/tags) released on 17 April 2012.
 
 Synopsis
 ========
@@ -735,7 +735,7 @@ Then request `GET /test` will yield the following output
 
 Please note that we're using [HttpEchoModule](http://wiki.nginx.org/HttpEchoModule)'s [echo directive](http://wiki.nginx.org/HttpEchoModule#echo) here to output values of nginx variables directly.
 
-This directive requires the OpenSSL library enabled in your Nignx build.
+This directive requires the OpenSSL library enabled in your Nignx build (usually by passing the `--with-http_ssl_module` option to the `./configure` script).
 
 set_random
 ----------
@@ -751,7 +751,7 @@ Generates a (pseudo) random number (in textual form) within the range `[<$from>,
 
 Only non-negative numbers are allowed for the `<from>` and `<to>` arguments.
 
-When `<$from>` is greater than `<$to>`, their values will be exchanged accordingly.
+When `<from>` is greater than `<to>`, their values will be exchanged accordingly.
 
 For instance,
 
@@ -827,6 +827,55 @@ then request `GET /test` will output a string like "kcuxcddktffsippuekhshdaclaqu
 
 This function depends on the presence of the "/dev/urandom" device, available on most UNIX-like systems.
 
+set_rotate
+----------
+**syntax:** *set_rotate $value &lt;from&gt; &lt;to&gt;*
+
+**default:** *no*
+
+**context:** *location, location if*
+
+**phase:** *rewrite*
+
+Increments `$value` but keeps it in range from `<from>` to `<to>`. 
+If `$value` is greater than `<to>` or less than `<from>` is will be 
+set to `<from>` value.
+
+The current value after running this directive will always be saved on a per-location basis. And the this saved value will be used for incrementation when the `$value` is not initialized or has a bad value.
+
+Only non-negative numbers are allowed for the `<from>` and `<to>` arguments.
+
+When `<from>` is greater than `<to>`, their values will be exchanged accordingly.
+
+For instance,
+
+
+    location /rotate {
+        default_type text/plain;
+        set $counter $cookie_counter;
+        set_rotate $counter 1 5;
+        echo $counter;
+        add_header Set-Cookie counter=$counter;
+    }
+
+
+then request `GET /rotate` will output next number between 1 and 5 (i.e., 1, 2, 3, 4, 5) on each
+refresh of the page. This directive may be userful for banner rotation purposes.
+
+Another example is to use server-side value persistence to do simple round-robin:
+
+
+    location /rotate {
+        default_type text/plain;
+        set_rotate $counter 0 3;
+        echo $counter;
+    }
+
+
+And accessing `/rotate` will also output integer sequence 0, 1, 2, 3, 0, 1, 2, 3, and so on.
+
+This directive was first introduced in the `v0.22rc7` release.
+
 set_local_today
 ---------------
 **syntax:** *set_local_today $dst*
@@ -861,24 +910,24 @@ Behind the scene, this directive utilizes the `ngx_time` API in the Nginx core, 
 Caveats
 =======
 
-Do not use [$arg_PARAMETER](http://wiki.nginx.org/HttpCoreModule#.24arg_PARAMETER) or [$http_HEADER](http://wiki.nginx.org/HttpCoreModule#.24http_HEADER) or other special variables defined in the nginx core module as the target variable in this module's directives. For instance,
+Do not use [$arg_PARAMETER](http://wiki.nginx.org/HttpCoreModule#.24arg_PARAMETER), [$cookie_COOKIE](http://wiki.nginx.org/HttpCoreModule#.24cookie_COOKIE), [$http_HEADER](http://wiki.nginx.org/HttpCoreModule#.24http_HEADER) or other special variables defined in the Nginx core module as the target variable in this module's directives. For instance,
 
 
     set_if_empty $arg_user 'foo';  # DO NOT USE THIS!
 
 
-may lead to data corruption.
+may lead to segmentation faults.
 
 Installation
 ============
 
 Grab the nginx source code from [nginx.org](http://nginx.org/), for example,
-the version 1.0.8 (see [nginx compatibility](http://wiki.nginx.org/HttpSetMiscModule#Compatibility)), and then build the source with this module:
+the version 1.0.15 (see [nginx compatibility](http://wiki.nginx.org/HttpSetMiscModule#Compatibility)), and then build the source with this module:
 
 
-    wget 'http://nginx.org/download/nginx-1.0.8.tar.gz'
-    tar -xzvf nginx-1.0.8.tar.gz
-    cd nginx-1.0.8/
+    wget 'http://nginx.org/download/nginx-1.0.15.tar.gz'
+    tar -xzvf nginx-1.0.15.tar.gz
+    cd nginx-1.0.15/
     
     # Here we assume you would install you nginx under /opt/nginx/.
     ./configure --prefix=/opt/nginx \
@@ -900,7 +949,7 @@ Compatibility
 The following versions of Nginx should work with this module:
 
 * **1.1.x**                       (last tested: 1.1.5)
-* **1.0.x**                       (last tested: 1.0.8)
+* **1.0.x**                       (last tested: 1.0.15)
 * **0.9.x**                       (last tested: 0.9.4)
 * **0.8.x**                       (last tested: 0.8.54)
 * **0.7.x >= 0.7.46**             (last tested: 0.7.68)

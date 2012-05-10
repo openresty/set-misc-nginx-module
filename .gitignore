@@ -56,6 +56,8 @@ src/hex.c
 src/hex.h
 src/hmac.c
 src/hmac.h
+src/rotate.[ch]
+analyze
 buildroot/
 src/module.h
 work/

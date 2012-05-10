@@ -21,6 +21,8 @@
 #endif
 #include "ngx_http_set_random.h"
 #include "ngx_http_set_secure_random.h"
+#include "ngx_http_set_rotate.h"
+
 
 #define NGX_UNESCAPE_URI_COMPONENT  0
 
@@ -366,6 +368,14 @@ static ngx_command_t  ngx_http_set_misc_commands[] = {
         0,
         &ngx_http_set_misc_set_secure_random_lcalpha_filter
     },
+    {   ngx_string ("set_rotate"),
+        NGX_HTTP_MAIN_CONF|NGX_HTTP_SRV_CONF|NGX_HTTP_SIF_CONF
+            |NGX_HTTP_LOC_CONF|NGX_HTTP_LIF_CONF|NGX_CONF_TAKE3,
+        ngx_http_set_rotate,
+        0,
+        0,
+        NULL
+    },
 
     ngx_null_command
 };
@@ -413,6 +423,7 @@ ngx_http_set_misc_create_loc_conf(ngx_conf_t *cf)
     }
 
     conf->base32_padding = NGX_CONF_UNSET;
+    conf->current = NGX_CONF_UNSET;
 
     return conf;
 }
@@ -425,6 +436,8 @@ ngx_http_set_misc_merge_loc_conf(ngx_conf_t *cf, void *parent, void *child)
     ngx_http_set_misc_loc_conf_t *conf = child;
 
     ngx_conf_merge_value(conf->base32_padding, prev->base32_padding, 1);
+
+    ngx_conf_merge_value(conf->current, prev->current, NGX_CONF_UNSET);
 
     return NGX_CONF_OK;
 }
