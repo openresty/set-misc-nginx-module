@@ -61,3 +61,5 @@ src/module.h
 work/
 src/random.[ch]
 build1[01]
+analyze
+src/rotate.[ch]

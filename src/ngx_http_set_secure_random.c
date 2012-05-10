@@ -7,14 +7,18 @@
 #include "ngx_http_set_secure_random.h"
 #include <stdlib.h>
 
-const int MAX_RANDOM_STRING = 64;
 
-const int ALPHANUM = 1;
-const int LCALPHA  = 2;
+enum {
+    MAX_RANDOM_STRING = 64,
+    ALPHANUM = 1,
+    LCALPHA  = 2
+};
+
 
 ngx_int_t
-ngx_http_set_misc_set_secure_random_common(int alphabet_type, ngx_http_request_t *r,
-                                            ngx_str_t *res, ngx_http_variable_value_t *v);
+ngx_http_set_misc_set_secure_random_common(int alphabet_type,
+        ngx_http_request_t *r, ngx_str_t *res, ngx_http_variable_value_t *v);
+
 
 ngx_int_t
 ngx_http_set_misc_set_secure_random_alphanum(ngx_http_request_t *r,
@@ -23,6 +27,7 @@ ngx_http_set_misc_set_secure_random_alphanum(ngx_http_request_t *r,
     return ngx_http_set_misc_set_secure_random_common(ALPHANUM, r, res, v);
 }
 
+
 ngx_int_t
 ngx_http_set_misc_set_secure_random_lcalpha(ngx_http_request_t *r,
                                 ngx_str_t *res, ngx_http_variable_value_t *v)
@@ -30,18 +35,22 @@ ngx_http_set_misc_set_secure_random_lcalpha(ngx_http_request_t *r,
     return ngx_http_set_misc_set_secure_random_common(LCALPHA, r, res, v);
 }
 
+
 ngx_int_t
-ngx_http_set_misc_set_secure_random_common(int alphabet_type, ngx_http_request_t *r,
-                                           ngx_str_t *res, ngx_http_variable_value_t *v)
+ngx_http_set_misc_set_secure_random_common(int alphabet_type,
+        ngx_http_request_t *r, ngx_str_t *res, ngx_http_variable_value_t *v)
 {
-    static u_char  alphabet[] = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+    static u_char  alphabet[] = "abcdefghijklmnopqrstuvwxyz"
+                                "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+
     u_char         entropy[MAX_RANDOM_STRING];
     u_char         output[MAX_RANDOM_STRING];
-    ngx_int_t      length, fd, i;
+    ngx_int_t      length, i;
+    ngx_fd_t       fd;
     ssize_t        n;
-    
 
     length = ngx_atoi(v->data, v->len);
+
     if (length == NGX_ERROR || length < 1 || length > MAX_RANDOM_STRING) {
         ngx_log_error(NGX_LOG_ERR, r->connection->log, 0,
                 "set_random: bad \"length\" argument: %v", v);
@@ -49,24 +58,26 @@ ngx_http_set_misc_set_secure_random_common(int alphabet_type, ngx_http_request_t
     }
 
     fd = ngx_open_file("/dev/urandom", NGX_FILE_RDONLY, NGX_FILE_OPEN, 0);
-    if (fd == -1) {
+    if (fd == NGX_INVALID_FILE) {
         ngx_log_error(NGX_LOG_ERR, r->connection->log, 0,
-                "set_secure_random: could not open /dev/urandom");
+                      "set_secure_random: could not open /dev/urandom");
         return NGX_ERROR;
     }
-    
+
     n = ngx_read_fd(fd, entropy, length);
     if (n != length) {
         ngx_log_error(NGX_LOG_ERR, r->connection->log, 0,
-                "set_secure_random: could not read all %d byte(s) from /dev/urandom", length);
+                      "set_secure_random: could not read all %i byte(s) from "
+                      "/dev/urandom", length);
         return NGX_ERROR;
     }
-    
+
     ngx_close_file(fd);
-    
+
     for (i = 0; i < length; i++) {
         if (alphabet_type == LCALPHA) {
             output[i] = entropy[i] % 26 + 'a';
+
         } else {
             output[i] = alphabet[ entropy[i] % (sizeof alphabet - 1) ];
         }
@@ -78,13 +89,14 @@ ngx_http_set_misc_set_secure_random_common(int alphabet_type, ngx_http_request_t
     }
 
     ngx_memcpy(res->data, output, length);
-    
+
     res->len = length;
 
-    /* Set all required params */
+    /* set all required params */
     v->valid = 1;
     v->no_cacheable = 0;
     v->not_found = 0;
 
     return NGX_OK;
 }
+

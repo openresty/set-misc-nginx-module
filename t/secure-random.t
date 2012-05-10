@@ -1,8 +1,8 @@
-# vi:filetype=perl
+# vi:filetype=
 
 use Test::Nginx::Socket;
 
-repeat_each(100);
+repeat_each(2);
 
 plan tests => repeat_each() * 2 * blocks();
 
@@ -25,6 +25,8 @@ __DATA__
     GET /alphanum
 --- response_body_like: ^[a-zA-Z0-9]{32}$
 
+
+
 === TEST 2: a 16-character alphanum
 --- config
     location /alphanum {
@@ -36,6 +38,8 @@ __DATA__
     GET /alphanum
 --- response_body_like: ^[a-zA-Z0-9]{16}$
 
+
+
 === TEST 3: a 1-character alphanum
 --- config
     location /alphanum {
@@ -46,6 +50,8 @@ __DATA__
 --- request
     GET /alphanum
 --- response_body_like: ^[a-zA-Z0-9]{1}$
+
+
 
 === TEST 4: length less than <= 0 should fail
 --- config
@@ -59,6 +65,8 @@ __DATA__
 --- response_body_like: 500 Internal Server Error
 --- error_code: 500
 
+
+
 === TEST 5: length less than <= 0 should fail
 --- config
     location /alphanum {
@@ -70,6 +78,8 @@ __DATA__
     GET /alphanum
 --- response_body_like: 500 Internal Server Error
 --- error_code: 500
+
+
 
 === TEST 6: non-numeric length should fail
 --- config
@@ -83,6 +93,8 @@ __DATA__
 --- response_body_like: 500 Internal Server Error
 --- error_code: 500
 
+
+
 === TEST 7: a 16-character lcalpha
 --- config
     location /lcalpha {
@@ -93,3 +105,4 @@ __DATA__
 --- request
     GET /lcalpha
 --- response_body_like: ^[a-z]{16}$
+

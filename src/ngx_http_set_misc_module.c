@@ -52,12 +52,14 @@ static  ndk_set_var_t  ngx_http_set_misc_set_decode_hex_filter = {
     NULL
 };
 
+
 static  ndk_set_var_t  ngx_http_set_misc_set_encode_hex_filter = {
     NDK_SET_VAR_VALUE,
     ngx_http_set_misc_set_encode_hex,
     1,
     NULL
 };
+
 
 #if NGX_OPENSSL
 static  ndk_set_var_t  ngx_http_set_misc_set_hmac_sha1_filter = {
@@ -67,6 +69,7 @@ static  ndk_set_var_t  ngx_http_set_misc_set_hmac_sha1_filter = {
     NULL
 };
 #endif
+
 
 #ifndef NGX_HTTP_SET_HASH
 static  ndk_set_var_t  ngx_http_set_misc_set_md5_filter = {
@@ -95,12 +98,14 @@ static  ndk_set_var_t  ngx_http_set_misc_unescape_uri_filter = {
     NULL
 };
 
+
 static ndk_set_var_t ngx_http_set_misc_escape_uri_filter = {
     NDK_SET_VAR_VALUE,
     ngx_http_set_misc_escape_uri,
     1,
     NULL
 };
+
 
 static  ndk_set_var_t  ngx_http_set_misc_decode_base32_filter = {
     NDK_SET_VAR_VALUE,
@@ -109,12 +114,14 @@ static  ndk_set_var_t  ngx_http_set_misc_decode_base32_filter = {
     NULL
 };
 
+
 static  ndk_set_var_t  ngx_http_set_misc_quote_sql_str_filter = {
     NDK_SET_VAR_VALUE,
     ngx_http_set_misc_quote_sql_str,
     1,
     NULL
 };
+
 
 static  ndk_set_var_t  ngx_http_set_misc_quote_pgsql_str_filter = {
     NDK_SET_VAR_VALUE,
@@ -123,12 +130,14 @@ static  ndk_set_var_t  ngx_http_set_misc_quote_pgsql_str_filter = {
     NULL
 };
 
+
 static  ndk_set_var_t  ngx_http_set_misc_quote_json_str_filter = {
     NDK_SET_VAR_VALUE,
     ngx_http_set_misc_quote_json_str,
     1,
     NULL
 };
+
 
 static  ndk_set_var_t  ngx_http_set_misc_encode_base32_filter = {
     NDK_SET_VAR_VALUE,
@@ -145,12 +154,14 @@ static ndk_set_var_t ngx_http_set_misc_local_today_filter = {
     NULL
 };
 
+
 static  ndk_set_var_t  ngx_http_set_misc_set_random_filter = {
     NDK_SET_VAR_MULTI_VALUE,
     ngx_http_set_misc_set_random,
     2,
     NULL
 };
+
 
 static  ndk_set_var_t  ngx_http_set_misc_set_secure_random_alphanum_filter = {
     NDK_SET_VAR_VALUE,
@@ -159,12 +170,14 @@ static  ndk_set_var_t  ngx_http_set_misc_set_secure_random_alphanum_filter = {
     NULL
 };
 
+
 static  ndk_set_var_t  ngx_http_set_misc_set_secure_random_lcalpha_filter = {
     NDK_SET_VAR_VALUE,
     ngx_http_set_misc_set_secure_random_lcalpha,
     1,
     NULL
 };
+
 
 static ngx_command_t  ngx_http_set_misc_commands[] = {
     {   ngx_string ("set_encode_base64"),
