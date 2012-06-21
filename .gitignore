@@ -62,6 +62,7 @@ buildroot/
 src/module.h
 work/
 src/random.[ch]
-build1[01]
+build1[012]
+nginx
 analyze
 src/rotate.[ch]
