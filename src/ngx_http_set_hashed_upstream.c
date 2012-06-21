@@ -125,8 +125,8 @@ ngx_http_set_hashed_upstream(ngx_conf_t *cf, ngx_command_t *cmd, void *conf)
                                             ulname->data, ulname->len);
     if (ul == NULL) {
         ngx_log_error(NGX_LOG_ERR, cf->log, 0,
-                "set_hashed_upstream: upstream list \"%V\" "
-                "not defined yet", ulname);
+                      "set_hashed_upstream: upstream list \"%V\" "
+                      "not defined yet", ulname);
         return NGX_CONF_ERROR;
     }
 
@@ -136,6 +136,6 @@ ngx_http_set_hashed_upstream(ngx_conf_t *cf, ngx_command_t *cmd, void *conf)
     filter.data = ul;
     filter.type = NDK_SET_VAR_VALUE_DATA;
 
-    return  ndk_set_var_value_core(cf, var, v, &filter);
+    return ndk_set_var_value_core(cf, var, v, &filter);
 }
 

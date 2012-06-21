@@ -108,6 +108,6 @@ ngx_http_set_rotate(ngx_conf_t *cf, ngx_command_t *cmd, void *conf)
     filter.size = 3;
     filter.data = NULL;
 
-    return  ndk_set_var_multi_value_core(cf, &value[1], &value[1], &filter);
+    return ndk_set_var_multi_value_core(cf, &value[1], &value[1], &filter);
 }
 

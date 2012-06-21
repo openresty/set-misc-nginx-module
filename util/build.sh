@@ -8,6 +8,7 @@ version=$1
 force=$2
 
     #--with-cc="gcc46" \
+    #--with-ld-opt="-rdynamic" \
 
 ngx-build $force $version \
     --with-http_ssl_module \
