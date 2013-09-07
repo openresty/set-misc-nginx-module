@@ -62,7 +62,9 @@ buildroot/
 src/module.h
 work/
 src/random.[ch]
-build1[012]
+build1[0-9]
 nginx
 analyze
 src/rotate.[ch]
+*.plist
+Makefile
