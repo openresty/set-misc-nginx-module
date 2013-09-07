@@ -8,8 +8,8 @@
 
 
 ngx_int_t
-ngx_http_set_misc_quote_pgsql_str(ngx_http_request_t *r,
-        ngx_str_t *res, ngx_http_variable_value_t *v)
+ngx_http_set_misc_quote_pgsql_str(ngx_http_request_t *r, ngx_str_t *res,
+    ngx_http_variable_value_t *v)
 {
     u_char                   *pstr;
     ngx_int_t               length;
@@ -185,8 +185,8 @@ ngx_http_pg_utf_escape(ngx_http_request_t *r, ngx_str_t *res)
 
 
 ngx_int_t
-ngx_http_set_misc_quote_sql_str(ngx_http_request_t *r,
-        ngx_str_t *res, ngx_http_variable_value_t *v)
+ngx_http_set_misc_quote_sql_str(ngx_http_request_t *r, ngx_str_t *res,
+    ngx_http_variable_value_t *v)
 {
     size_t                   len;
     u_char                  *p;
@@ -231,8 +231,7 @@ ngx_http_set_misc_quote_sql_str(ngx_http_request_t *r,
 
 
 uintptr_t
-ngx_http_set_misc_escape_sql_str(u_char *dst, u_char *src,
-        size_t size)
+ngx_http_set_misc_escape_sql_str(u_char *dst, u_char *src, size_t size)
 {
     ngx_uint_t               n;
 

@@ -13,8 +13,8 @@
 /* this function's implementation is partly borrowed from
  * https://github.com/anomalizer/ngx_aws_auth */
 ngx_int_t
-ngx_http_set_misc_set_hmac_sha1(ngx_http_request_t *r,
-                                ngx_str_t *res, ngx_http_variable_value_t *v)
+ngx_http_set_misc_set_hmac_sha1(ngx_http_request_t *r, ngx_str_t *res,
+    ngx_http_variable_value_t *v)
 {
     ngx_http_variable_value_t   *secret, *string_to_sign;
     unsigned int                 md_len;

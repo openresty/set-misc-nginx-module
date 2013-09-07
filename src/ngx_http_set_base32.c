@@ -19,8 +19,8 @@ static int decode_base32(size_t slen, u_char *src, size_t *dlen, u_char *dst);
 
 
 ngx_int_t
-ngx_http_set_misc_encode_base32(ngx_http_request_t *r,
-        ngx_str_t *res, ngx_http_variable_value_t *v)
+ngx_http_set_misc_encode_base32(ngx_http_request_t *r, ngx_str_t *res,
+    ngx_http_variable_value_t *v)
 {
     size_t                   len;
     u_char                  *p;
@@ -53,8 +53,8 @@ ngx_http_set_misc_encode_base32(ngx_http_request_t *r,
 
 
 ngx_int_t
-ngx_http_set_misc_decode_base32(ngx_http_request_t *r,
-        ngx_str_t *res, ngx_http_variable_value_t *v)
+ngx_http_set_misc_decode_base32(ngx_http_request_t *r, ngx_str_t *res,
+    ngx_http_variable_value_t *v)
 {
     size_t                   len;
     u_char                  *p;
@@ -113,7 +113,7 @@ ngx_http_set_misc_decode_base32(ngx_http_request_t *r,
  * */
 static void
 encode_base32(size_t slen, u_char *src, size_t *dlen, u_char *dst,
-        ngx_flag_t padding)
+    ngx_flag_t padding)
 {
     static unsigned char basis32[] = "0123456789abcdefghijklmnopqrstuv";
 

@@ -22,7 +22,7 @@ ngx_http_set_misc_set_secure_random_common(int alphabet_type,
 
 ngx_int_t
 ngx_http_set_misc_set_secure_random_alphanum(ngx_http_request_t *r,
-                                ngx_str_t *res, ngx_http_variable_value_t *v)
+    ngx_str_t *res, ngx_http_variable_value_t *v)
 {
     return ngx_http_set_misc_set_secure_random_common(ALPHANUM, r, res, v);
 }
@@ -30,7 +30,7 @@ ngx_http_set_misc_set_secure_random_alphanum(ngx_http_request_t *r,
 
 ngx_int_t
 ngx_http_set_misc_set_secure_random_lcalpha(ngx_http_request_t *r,
-                                ngx_str_t *res, ngx_http_variable_value_t *v)
+    ngx_str_t *res, ngx_http_variable_value_t *v)
 {
     return ngx_http_set_misc_set_secure_random_common(LCALPHA, r, res, v);
 }
@@ -38,7 +38,7 @@ ngx_http_set_misc_set_secure_random_lcalpha(ngx_http_request_t *r,
 
 ngx_int_t
 ngx_http_set_misc_set_secure_random_common(int alphabet_type,
-        ngx_http_request_t *r, ngx_str_t *res, ngx_http_variable_value_t *v)
+    ngx_http_request_t *r, ngx_str_t *res, ngx_http_variable_value_t *v)
 {
     static u_char  alphabet[] = "abcdefghijklmnopqrstuvwxyz"
                                 "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";

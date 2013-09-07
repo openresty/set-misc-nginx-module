@@ -8,13 +8,13 @@
 #include "ngx_string.h"
 
 
-static uintptr_t ngx_escape_uri_patched(u_char *dst, u_char *src,
-        size_t size, ngx_uint_t type);
+static uintptr_t ngx_escape_uri_patched(u_char *dst, u_char *src, size_t size,
+    ngx_uint_t type);
 
 
 ngx_int_t
-ngx_http_set_misc_escape_uri(ngx_http_request_t *r,
-        ngx_str_t *res, ngx_http_variable_value_t *v)
+ngx_http_set_misc_escape_uri(ngx_http_request_t *r, ngx_str_t *res,
+    ngx_http_variable_value_t *v)
 {
     size_t           len;
     uintptr_t        escape;

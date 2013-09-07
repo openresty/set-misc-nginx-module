@@ -31,8 +31,8 @@ enum {
 
 #if NGX_HAVE_SHA1
 ngx_int_t
-ngx_http_set_misc_set_sha1(ngx_http_request_t *r,
-        ngx_str_t *res, ngx_http_variable_value_t *v)
+ngx_http_set_misc_set_sha1(ngx_http_request_t *r, ngx_str_t *res,
+    ngx_http_variable_value_t *v)
 {
     u_char                  *p;
     ngx_sha1_t               sha;
@@ -58,8 +58,8 @@ ngx_http_set_misc_set_sha1(ngx_http_request_t *r,
 
 
 ngx_int_t
-ngx_http_set_misc_set_md5(ngx_http_request_t *r,
-        ngx_str_t *res, ngx_http_variable_value_t *v)
+ngx_http_set_misc_set_md5(ngx_http_request_t *r, ngx_str_t *res,
+    ngx_http_variable_value_t *v)
 {
     u_char                  *p;
     ngx_md5_t                md5;

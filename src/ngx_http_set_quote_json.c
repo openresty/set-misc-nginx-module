@@ -7,8 +7,8 @@
 #include "ngx_http_set_quote_json.h"
 
 ngx_int_t
-ngx_http_set_misc_quote_json_str(ngx_http_request_t *r,
-        ngx_str_t *res, ngx_http_variable_value_t *v)
+ngx_http_set_misc_quote_json_str(ngx_http_request_t *r, ngx_str_t *res,
+    ngx_http_variable_value_t *v)
 {
     size_t                   len;
     u_char                  *p;

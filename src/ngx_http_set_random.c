@@ -9,8 +9,8 @@
 
 
 ngx_int_t
-ngx_http_set_misc_set_random(ngx_http_request_t *r,
-                                ngx_str_t *res, ngx_http_variable_value_t *v)
+ngx_http_set_misc_set_random(ngx_http_request_t *r, ngx_str_t *res,
+    ngx_http_variable_value_t *v)
 {
     ngx_http_variable_value_t   *rand_from, *rand_to;
     ngx_int_t                    int_from, int_to, tmp, random;
