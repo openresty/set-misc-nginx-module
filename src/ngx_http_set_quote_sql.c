@@ -7,6 +7,11 @@
 #include "ngx_http_set_quote_sql.h"
 
 
+static ngx_int_t ngx_http_pg_utf_escape(ngx_http_request_t *r, ngx_str_t *res);
+static ngx_int_t ngx_http_pg_utf_islegal(const unsigned char *s, ngx_int_t len);
+static ngx_int_t ngx_http_pg_utf_mblen(const unsigned char *s);
+
+
 ngx_int_t
 ngx_http_set_misc_quote_pgsql_str(ngx_http_request_t *r, ngx_str_t *res,
     ngx_http_variable_value_t *v)
@@ -37,12 +42,15 @@ ngx_http_set_misc_quote_pgsql_str(ngx_http_request_t *r, ngx_str_t *res,
        return NGX_OK;
     }
 
-    res = ngx_http_pg_utf_escape(r, res);
+    if (ngx_http_pg_utf_escape(r, res) != NGX_OK) {
+        return NGX_ERROR;
+    }
+
     return NGX_OK;
 }
 
 
-ngx_int_t
+static ngx_int_t
 ngx_http_pg_utf_mblen(const unsigned char *s)
 {
     int len;
@@ -67,7 +75,7 @@ ngx_http_pg_utf_mblen(const unsigned char *s)
 }
 
 
-ngx_int_t
+static ngx_int_t
 ngx_http_pg_utf_islegal(const unsigned char *s, ngx_int_t len)
 {
     ngx_int_t               mblen;
@@ -135,17 +143,17 @@ ngx_http_pg_utf_islegal(const unsigned char *s, ngx_int_t len)
 }
 
 
-ngx_str_t *
+static ngx_int_t
 ngx_http_pg_utf_escape(ngx_http_request_t *r, ngx_str_t *res)
 {
     ngx_str_t               *result;
     ngx_int_t                l, count;
     u_char                  *d, *p, *p1;
 
-    l           = res->len;
-    d           = res->data;
-    result      = res;
-    count       = 0;
+    l      = res->len;
+    d      = res->data;
+    result = res;
+    count  = 0;
 
     while (l-- > 0) {
         if (*d & 0x80) {
@@ -155,12 +163,12 @@ ngx_http_pg_utf_escape(ngx_http_request_t *r, ngx_str_t *res)
         count++;
     }
 
-    d   = res->data;
-    l   = res->len;
+    d = res->data;
+    l = res->len;
 
-    p   = ngx_palloc(r->pool, count);
+    p = ngx_palloc(r->pool, count);
     if (p == NULL) {
-        return result;
+        return NGX_ERROR;
     }
 
     p1  = p;
@@ -177,10 +185,10 @@ ngx_http_pg_utf_escape(ngx_http_request_t *r, ngx_str_t *res)
         d++;
     }
 
-    result->len     = count;
-    result->data    = p1;
+    result->len  = count;
+    result->data = p1;
 
-    return result;
+    return NGX_OK;
 }
 
 
