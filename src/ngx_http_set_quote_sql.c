@@ -244,12 +244,15 @@ ngx_http_set_misc_escape_sql_str(u_char *dst, u_char *src,
              * is always 1 */
             if ((*src & 0x80) == 0) {
                 switch (*src) {
-                    case '\r':
+                    case '\0':
+                    case '\b':
                     case '\n':
+                    case '\r':
+                    case '\t':
                     case '\\':
                     case '\'':
                     case '"':
-                    case '\032':
+                    case 26: /* \z */
                         n++;
                         break;
                     default:
@@ -266,14 +269,29 @@ ngx_http_set_misc_escape_sql_str(u_char *dst, u_char *src,
     while (size) {
         if ((*src & 0x80) == 0) {
             switch (*src) {
-                case '\r':
+                case '\0':
                     *dst++ = '\\';
-                    *dst++ = 'r';
+                    *dst++ = '0';
+                    break;
+
+                case '\b':
+                    *dst++ = '\\';
+                    *dst++ = 'b';
                     break;
 
                 case '\n':
                     *dst++ = '\\';
                     *dst++ = 'n';
+                    break;
+
+                case '\r':
+                    *dst++ = '\\';
+                    *dst++ = 'r';
+                    break;
+
+                case '\t':
+                    *dst++ = '\\';
+                    *dst++ = 't';
                     break;
 
                 case '\\':
@@ -291,9 +309,9 @@ ngx_http_set_misc_escape_sql_str(u_char *dst, u_char *src,
                     *dst++ = '"';
                     break;
 
-                case '\032':
+                case 26:
                     *dst++ = '\\';
-                    *dst++ = *src;
+                    *dst++ = 'z';
                     break;
 
                 default:

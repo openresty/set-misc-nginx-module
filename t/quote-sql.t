@@ -123,3 +123,59 @@ E'你好'
 GET /foo
 --- response_body
 E'\\304\\343\\272\\303'
+
+
+
+=== TEST 9: \0 for mysql
+--- config
+    location /foo {
+        set_unescape_uri $foo $arg_a;
+        set_quote_sql_str $foo $foo;
+        echo $foo;
+    }
+--- request
+GET /foo?a=a%00b%00
+--- response_body
+'a\0b\0'
+
+
+
+=== TEST 10: \b for mysql
+--- config
+    location /foo {
+        set_unescape_uri $foo $arg_a;
+        set_quote_sql_str $foo $foo;
+        echo $foo;
+    }
+--- request
+GET /foo?a=a%08b%08
+--- response_body
+'a\bb\b'
+
+
+
+=== TEST 11: \t for mysql
+--- config
+    location /foo {
+        set_unescape_uri $foo $arg_a;
+        set_quote_sql_str $foo $foo;
+        echo $foo;
+    }
+--- request
+GET /foo?a=a%09b%09
+--- response_body
+'a\tb\t'
+
+
+
+=== TEST 12: \z for mysql
+--- config
+    location /foo {
+        set_unescape_uri $foo $arg_a;
+        set_quote_sql_str $foo $foo;
+        echo $foo;
+    }
+--- request
+GET /foo?a=a%1ab%1a
+--- response_body
+'a\zb\z'
