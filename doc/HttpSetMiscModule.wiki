@@ -6,7 +6,7 @@
 
 = Version =
 
-This document describes set-misc-nginx-module [https://github.com/agentzh/set-misc-nginx-module/tags v0.22rc8] released on 10 May 2012.
+This document describes ngx_set_misc [https://github.com/agentzh/set-misc-nginx-module/tags v0.22] released on 8 September 2013.
 
 = Synopsis =
 
@@ -904,13 +904,15 @@ may lead to segmentation faults.
 
 = Installation =
 
+This module is included and enabled by default in the [http://openresty.org ngx_openresty bundle]. If you want to install this module manually with your own Nginx source tarball, then follow the steps below:
+
 Grab the nginx source code from [http://nginx.org/ nginx.org], for example,
-the version 1.0.15 (see [[#Compatibility|nginx compatibility]]), and then build the source with this module:
+the version 1.4.2 (see [[#Compatibility|nginx compatibility]]), and then build the source with this module:
 
 <geshi lang="bash">
-    wget 'http://nginx.org/download/nginx-1.0.15.tar.gz'
-    tar -xzvf nginx-1.0.15.tar.gz
-    cd nginx-1.0.15/
+    wget 'http://nginx.org/download/nginx-1.4.2.tar.gz'
+    tar -xzvf nginx-1.4.2.tar.gz
+    cd nginx-1.4.2/
     
     # Here we assume you would install you nginx under /opt/nginx/.
     ./configure --prefix=/opt/nginx \
@@ -930,6 +932,8 @@ Also, this module is included and enabled by default in the [http://openresty.or
 
 The following versions of Nginx should work with this module:
 
+* '''1.4.x'''                       (last tested: 1.4.2)
+* '''1.2.x'''                       (last tested: 1.2.9)
 * '''1.1.x'''                       (last tested: 1.1.5)
 * '''1.0.x'''                       (last tested: 1.0.15)
 * '''0.9.x'''                       (last tested: 0.9.4)
@@ -942,14 +946,18 @@ If you find that any particular version of Nginx above 0.7.46 does not work with
 
 Although a lot of effort has been put into testing and code tuning, there must be some serious bugs lurking somewhere in this module. So whenever you are bitten by any quirks, please don't hesitate to
 
-# send a bug report or even patches to <agentzh@gmail.com>,
+# send a bug report or even patches to the [https://groups.google.com/group/openresty-en openresty-en mailing list],
 # or create a ticket on the [http://github.com/agentzh/set-misc-nginx-module/issues issue tracking interface] provided by GitHub.
 
 = Source Repository =
 
 Available on github at [http://github.com/agentzh/set-misc-nginx-module agentzh/set-misc-nginx-module].
 
-= ChangeLog =
+= Changes =
+
+The change logs for every release of this module can be obtained from the ngx_openresty bundle's change logs:
+
+http://openresty.org/#Changes
 
 = Test Suite =
 
@@ -972,15 +980,13 @@ You'll be very welcomed to submit patches to the [[#Author|author]] or just ask 
 
 = Author =
 
-agentzh (章亦春) ''<agentzh@gmail.com>''
+Yichun Zhang (agentzh) ''<agentzh@gmail.com>'', CloudFlare Inc.
 
 This wiki page is also maintained by the author himself, and everybody is encouraged to improve this page as well.
 
 = Copyright & License =
 
-Copyright (c) 2009, 2010, 2011, Taobao Inc., Alibaba Group ( http://www.taobao.com ).
-
-Copyright (c) 2009, 2010, 2011, Zhang "agentzh" Yichun (章亦春) <agentzh@gmail.com>.
+Copyright (C) 2009-2013, Yichun Zhang (章亦春) <agentzh@gmail.com>.
 
 This module is licensed under the terms of the BSD license.
 
