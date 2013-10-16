@@ -8,7 +8,7 @@ Name
 
 **ngx_set_misc** - Various set_xxx directives added to nginx's rewrite module (md5/sha1, sql/json quoting, and many more)
 
-*This module is not distributed with the Nginx source.* See [the installation instructions](http://wiki.nginx.org/HttpSetMiscModule#Installation).
+*This module is not distributed with the Nginx source.* See [the installation instructions](#installation).
 
 Version
 =======
@@ -248,7 +248,7 @@ set_quote_pgsql_str
 
 **category:** *ndk_set_var_value*
 
-Very much like [set_quote_sql_str](http://wiki.nginx.org/HttpSetMiscModule#set_quote_sql_str), but with PostgreSQL quoting rules for SQL string literals.
+Very much like [set_quote_sql_str](#set_quote_sql_str), but with PostgreSQL quoting rules for SQL string literals.
 
 set_quote_json_str
 ------------------
@@ -360,7 +360,7 @@ set_escape_uri
 
 **category:** *ndk_set_var_value*
 
-Very much like the [set_unescape_uri](http://wiki.nginx.org/HttpSetMiscModule#set_unescape_uri) directive, but does the conversion the other way around, i.e., URL component escaping.
+Very much like the [set_unescape_uri](#set_unescape_uri) directive, but does the conversion the other way around, i.e., URL component escaping.
 
 set_hashed_upstream
 -------------------
@@ -431,7 +431,7 @@ Please note that we're using [HttpEchoModule](http://wiki.nginx.org/HttpEchoModu
 
 RFC forces the `[A-Z2-7]` RFC-3548 compliant encoding, but we're using the "base32hex" encoding (`[0-9a-v]`).
 
-By default, the `=` character is used to pad the left-over bytes due to alignment. But the padding behavior can be completely disabled by setting [set_misc_base32_padding](http://wiki.nginx.org/HttpSetMiscModule#set_misc_base32_padding) `off`.
+By default, the `=` character is used to pad the left-over bytes due to alignment. But the padding behavior can be completely disabled by setting [set_misc_base32_padding](#set_misc_base32_padding) `off`.
 
 When taking a single argument, this directive will do in-place modification of the argument variable. For example,
 
@@ -458,7 +458,7 @@ set_misc_base32_padding
 
 **phase:** *no*
 
-This directive can control whether to pad left-over bytes with the "=" character when encoding a base32 digest by the [set_encode_base32](http://wiki.nginx.org/HttpSetMiscModule#set_encode_base32) directive.
+This directive can control whether to pad left-over bytes with the "=" character when encoding a base32 digest by the [set_encode_base32](#set_encode_base32) directive.
 
 set_decode_base32
 -----------------
@@ -474,7 +474,7 @@ set_decode_base32
 
 **category:** *ndk_set_var_value*
 
-Similar to the [set_encode_base32](http://wiki.nginx.org/HttpSetMiscModule#set_encode_base32) directive, but does exactly the the opposite operation, .i.e, decoding a base32(hex) digest into its original form.
+Similar to the [set_encode_base32](#set_encode_base32) directive, but does exactly the the opposite operation, .i.e, decoding a base32(hex) digest into its original form.
 
 set_encode_base64
 -----------------
@@ -538,7 +538,7 @@ set_decode_base64
 
 **category:** *ndk_set_var_value*
 
-Similar to the [set_encode_base64](http://wiki.nginx.org/HttpSetMiscModule#set_encode_base64) directive, but does exactly the the opposite operation, .i.e, decoding a base64 digest into its original form.
+Similar to the [set_encode_base64](#set_encode_base64) directive, but does exactly the the opposite operation, .i.e, decoding a base64 digest into its original form.
 
 set_encode_hex
 --------------
@@ -602,7 +602,7 @@ set_decode_hex
 
 **category:** *ndk_set_var_value*
 
-Similar to the [set_encode_hex](http://wiki.nginx.org/HttpSetMiscModule#set_encode_hex) directive, but does exactly the the opposite operation, .i.e, decoding a hexadecimal digest into its original form.
+Similar to the [set_encode_hex](#set_encode_hex) directive, but does exactly the the opposite operation, .i.e, decoding a hexadecimal digest into its original form.
 
 set_sha1
 --------
@@ -618,7 +618,7 @@ set_sha1
 
 **category:** *ndk_set_var_value*
 
-When taking two arguments, this directive will encode the value of the second argument `<src>` to its [SHA-1](http://en.wikipedia.org/wiki/SHA-1) digest and assign the result into the first argument, variable `$dst`. The hexadecimal form of the `SHA-1` digest will be generated automatically, use [set_decode_hex](http://wiki.nginx.org/HttpSetMiscModule#set_decode_hex) to decode the result if you want the binary form of the `SHA-1` digest.
+When taking two arguments, this directive will encode the value of the second argument `<src>` to its [SHA-1](http://en.wikipedia.org/wiki/SHA-1) digest and assign the result into the first argument, variable `$dst`. The hexadecimal form of the `SHA-1` digest will be generated automatically, use [set_decode_hex](#set_decode_hex) to decode the result if you want the binary form of the `SHA-1` digest.
 
 For example,
 
@@ -668,7 +668,7 @@ set_md5
 
 **category:** *ndk_set_var_value*
 
-When taking two arguments, this directive will encode the value of the second argument `<src>` to its [MD5](http://en.wikipedia.org/wiki/MD5) digest and assign the result into the first argument, variable `$dst`. The hexadecimal form of the `MD5` digest will be generated automatically, use [set_decode_hex](http://wiki.nginx.org/HttpSetMiscModule#set_decode_hex) to decode the result if you want the binary form of the `MD5` digest.
+When taking two arguments, this directive will encode the value of the second argument `<src>` to its [MD5](http://en.wikipedia.org/wiki/MD5) digest and assign the result into the first argument, variable `$dst`. The hexadecimal form of the `MD5` digest will be generated automatically, use [set_decode_hex](#set_decode_hex) to decode the result if you want the binary form of the `MD5` digest.
 
 For example,
 
@@ -718,7 +718,7 @@ set_hmac_sha1
 
 Computes the [HMAC-SHA1](http://en.wikipedia.org/wiki/HMAC) digest of the argument `<src>` and assigns the result into the argument variable `$dst` with the secret key `<secret_key>`.
 
-The raw binary form of the `HMAC-SHA1` digest will be generated, use [set_encode_base64](http://wiki.nginx.org/HttpSetMiscModule#set_encode_base64), for example, to encode the result to a textual representation if desired.
+The raw binary form of the `HMAC-SHA1` digest will be generated, use [set_encode_base64](#set_encode_base64), for example, to encode the result to a textual representation if desired.
 
 For example,
 
@@ -778,7 +778,7 @@ Behind the scene, it makes use of the standard C function `rand()`.
 
 This directive was first introduced in the `v0.22rc1` release.
 
-See also [set_secure_random_alphanum](http://wiki.nginx.org/HttpSetMiscModule#set_secure_random_alphanum) and [set_secure_random_lcalpha](http://wiki.nginx.org/HttpSetMiscModule#set_secure_random_lcalpha).
+See also [set_secure_random_alphanum](#set_secure_random_alphanum) and [set_secure_random_lcalpha](#set_secure_random_lcalpha).
 
 set_secure_random_alphanum
 --------------------------
@@ -808,7 +808,7 @@ then request `GET /test` will output a string like `ivVVRP2DGaAqDmdf3Rv4ZDJ7k0gO
 
 This function depends on the presence of the `/dev/urandom` device, available on most UNIX-like systems.
 
-See also [set_secure_random_lcalpha](http://wiki.nginx.org/HttpSetMiscModule#set_secure_random_lcalpha) and [set_random](http://wiki.nginx.org/HttpSetMiscModule#set_random).
+See also [set_secure_random_lcalpha](#set_secure_random_lcalpha) and [set_random](#set_random).
 
 This directive was first introduced in the `v0.22rc8` release.
 
@@ -842,7 +842,7 @@ This function depends on the presence of the `/dev/urandom` device, available on
 
 This directive was first introduced in the `v0.22rc8` release.
 
-See also [set_secure_random_alphanum](http://wiki.nginx.org/HttpSetMiscModule#set_secure_random_alphanum) and [set_random](http://wiki.nginx.org/HttpSetMiscModule#set_random).
+See also [set_secure_random_alphanum](#set_secure_random_alphanum) and [set_random](#set_random).
 
 set_rotate
 ----------
@@ -941,7 +941,7 @@ Installation
 This module is included and enabled by default in the [ngx_openresty bundle](http://openresty.org). If you want to install this module manually with your own Nginx source tarball, then follow the steps below:
 
 Grab the nginx source code from [nginx.org](http://nginx.org/), for example,
-the version 1.4.2 (see [nginx compatibility](http://wiki.nginx.org/HttpSetMiscModule#Compatibility)), and then build the source with this module:
+the version 1.4.2 (see [nginx compatibility](#compatibility)), and then build the source with this module:
 
 
     wget 'http://nginx.org/download/nginx-1.4.2.tar.gz'
@@ -975,7 +975,7 @@ The following versions of Nginx should work with this module:
 * **0.8.x**                       (last tested: 0.8.54)
 * **0.7.x >= 0.7.46**             (last tested: 0.7.68)
 
-If you find that any particular version of Nginx above 0.7.46 does not work with this module, please consider [reporting a bug](http://wiki.nginx.org/HttpSetMiscModule#Report_Bugs).
+If you find that any particular version of Nginx above 0.7.46 does not work with this module, please consider [reporting a bug](#report-bugs).
 
 Report Bugs
 ===========
@@ -1016,7 +1016,7 @@ Because a single nginx server (by default, `localhost:1984`) is used across all 
 Getting involved
 ================
 
-You'll be very welcomed to submit patches to the [author](http://wiki.nginx.org/HttpSetMiscModule#Author) or just ask for a commit bit to the [source repository](http://wiki.nginx.org/HttpSetMiscModule#Source_Repository) on GitHub.
+You'll be very welcomed to submit patches to the [author](#author) or just ask for a commit bit to the [source repository](#source-repository) on GitHub.
 
 Author
 ======
