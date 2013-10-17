@@ -10,6 +10,47 @@ Name
 
 *This module is not distributed with the Nginx source.* See [the installation instructions](#installation).
 
+Table of Contents
+=================
+
+* [Version](#version)
+* [Synopsis](#synopsis)
+* [Description](#description)
+* [Directives](#directives)
+    * [set_if_empty](#set_if_empty)
+    * [set_quote_sql_str](#set_quote_sql_str)
+    * [set_quote_pgsql_str](#set_quote_pgsql_str)
+    * [set_quote_json_str](#set_quote_json_str)
+    * [set_unescape_uri](#set_unescape_uri)
+    * [set_escape_uri](#set_escape_uri)
+    * [set_hashed_upstream](#set_hashed_upstream)
+    * [set_encode_base32](#set_encode_base32)
+    * [set_misc_base32_padding](#set_misc_base32_padding)
+    * [set_decode_base32](#set_decode_base32)
+    * [set_encode_base64](#set_encode_base64)
+    * [set_decode_base64](#set_decode_base64)
+    * [set_encode_hex](#set_encode_hex)
+    * [set_decode_hex](#set_decode_hex)
+    * [set_sha1](#set_sha1)
+    * [set_md5](#set_md5)
+    * [set_hmac_sha1](#set_hmac_sha1)
+    * [set_random](#set_random)
+    * [set_secure_random_alphanum](#set_secure_random_alphanum)
+    * [set_secure_random_lcalpha](#set_secure_random_lcalpha)
+    * [set_rotate](#set_rotate)
+    * [set_local_today](#set_local_today)
+* [Caveats](#caveats)
+* [Installation](#installation)
+* [Compatibility](#compatibility)
+* [Report Bugs](#report-bugs)
+* [Source Repository](#source-repository)
+* [Changes](#changes)
+* [Test Suite](#test-suite)
+* [Getting involved](#getting-involved)
+* [Author](#author)
+* [Copyright & License](#copyright--license)
+* [See Also](#see-also)
+
 Version
 =======
 
@@ -152,8 +193,12 @@ This module extends the standard HttpRewriteModule's directive set to provide mo
 
 Every directive provided by this module can be mixed freely with other [ngx_http_rewrite_module](http://nginx.org/en/docs/http/ngx_http_rewrite_module.html)'s directives, like [if](http://nginx.org/en/docs/http/ngx_http_rewrite_module.html#if) and [set](http://nginx.org/en/docs/http/ngx_http_rewrite_module.html#set). (Thanks to the [Nginx Devel Kit](https://github.com/simpl/ngx_devel_kit)!)
 
+[Back to TOC](#table-of-contents)
+
 Directives
 ==========
+
+[Back to TOC](#table-of-contents)
 
 set_if_empty
 ------------
@@ -183,6 +228,8 @@ the variable `$dst` will take the value 32 at last. But in the sample
 
 
 `$a` will take the value `"hello, world"` at last.
+
+[Back to TOC](#table-of-contents)
 
 set_quote_sql_str
 -----------------
@@ -234,6 +281,8 @@ This directive is usually used to prevent SQL injection.
 
 This directive can be invoked by [lua-nginx-module](http://github.com/chaoslawful/lua-nginx-module)'s [ndk.set_var.DIRECTIVE](http://github.com/chaoslawful/lua-nginx-module#ndkset_vardirective) interface and [array-var-nginx-module](http://github.com/agentzh/array-var-nginx-module)'s [array_map_op](http://github.com/agentzh/array-var-nginx-module#array_map_op) directive.
 
+[Back to TOC](#table-of-contents)
+
 set_quote_pgsql_str
 -------------------
 **syntax:** *set_quote_pgsql_str $dst &lt;src&gt;*
@@ -249,6 +298,8 @@ set_quote_pgsql_str
 **category:** *ndk_set_var_value*
 
 Very much like [set_quote_sql_str](#set_quote_sql_str), but with PostgreSQL quoting rules for SQL string literals.
+
+[Back to TOC](#table-of-contents)
 
 set_quote_json_str
 ------------------
@@ -298,6 +349,8 @@ then request `GET /test` will give exactly the same output as the previous examp
 
 This directive can be invoked by [lua-nginx-module](http://github.com/chaoslawful/lua-nginx-module)'s [ndk.set_var.DIRECTIVE](http://github.com/chaoslawful/lua-nginx-module#ndkset_vardirective) interface and [array-var-nginx-module](http://github.com/agentzh/array-var-nginx-module)'s [array_map_op](http://github.com/agentzh/array-var-nginx-module#array_map_op) directive.
 
+[Back to TOC](#table-of-contents)
+
 set_unescape_uri
 ----------------
 **syntax:** *set_unescape_uri $dst &lt;src&gt;*
@@ -346,6 +399,8 @@ then request `GET /test?key=hello+world%21` will give exactly the same output as
 
 This directive can be invoked by [lua-nginx-module](http://github.com/chaoslawful/lua-nginx-module)'s [ndk.set_var.DIRECTIVE](http://github.com/chaoslawful/lua-nginx-module#ndkset_vardirective) interface and [array-var-nginx-module](http://github.com/agentzh/array-var-nginx-module)'s [array_map_op](http://github.com/agentzh/array-var-nginx-module#array_map_op) directive.
 
+[Back to TOC](#table-of-contents)
+
 set_escape_uri
 --------------
 **syntax:** *set_escape_uri $dst &lt;src&gt;*
@@ -361,6 +416,8 @@ set_escape_uri
 **category:** *ndk_set_var_value*
 
 Very much like the [set_unescape_uri](#set_unescape_uri) directive, but does the conversion the other way around, i.e., URL component escaping.
+
+[Back to TOC](#table-of-contents)
 
 set_hashed_upstream
 -------------------
@@ -395,6 +452,8 @@ Here's an example,
 Then `GET /test?key=blah` will output either "moon", "sun", or "earth", depending on the actual value of the `key` query argument.
 
 This directive is usually used to compute an nginx variable to be passed to [memc-nginx-module](http://github.com/agentzh/memc-nginx-module)'s [memc_pass](http://github.com/agentzh/memc-nginx-module#memc_pass) directive, [redis2-nginx-module](http://github.com/agentzh/redis2-nginx-module)'s [[HttpRedis2Module#redis2_pass]] directive, and [ngx_http_proxy_module](http://nginx.org/en/docs/http/ngx_http_proxy_module.html)'s [proxy_pass](http://nginx.org/en/docs/http/ngx_http_proxy_module.html#proxy_pass) directive, among others.
+
+[Back to TOC](#table-of-contents)
 
 set_encode_base32
 -----------------
@@ -448,6 +507,8 @@ then request `GET /test` will give exactly the same output as the previous examp
 
 This directive can be invoked by [lua-nginx-module](http://github.com/chaoslawful/lua-nginx-module)'s [ndk.set_var.DIRECTIVE](http://github.com/chaoslawful/lua-nginx-module#ndkset_vardirective) interface and [array-var-nginx-module](http://github.com/agentzh/array-var-nginx-module)'s [array_map_op](http://github.com/agentzh/array-var-nginx-module#array_map_op) directive.
 
+[Back to TOC](#table-of-contents)
+
 set_misc_base32_padding
 -----------------------
 **syntax:** *set_misc_base32_padding on|off*
@@ -459,6 +520,8 @@ set_misc_base32_padding
 **phase:** *no*
 
 This directive can control whether to pad left-over bytes with the "=" character when encoding a base32 digest by the [set_encode_base32](#set_encode_base32) directive.
+
+[Back to TOC](#table-of-contents)
 
 set_decode_base32
 -----------------
@@ -475,6 +538,8 @@ set_decode_base32
 **category:** *ndk_set_var_value*
 
 Similar to the [set_encode_base32](#set_encode_base32) directive, but does exactly the the opposite operation, .i.e, decoding a base32(hex) digest into its original form.
+
+[Back to TOC](#table-of-contents)
 
 set_encode_base64
 -----------------
@@ -524,6 +589,8 @@ then request `GET /test` will give exactly the same output as the previous examp
 
 This directive can be invoked by [lua-nginx-module](http://github.com/chaoslawful/lua-nginx-module)'s [ndk.set_var.DIRECTIVE](http://github.com/chaoslawful/lua-nginx-module#ndkset_vardirective) interface and [array-var-nginx-module](http://github.com/agentzh/array-var-nginx-module)'s [array_map_op](http://github.com/agentzh/array-var-nginx-module#array_map_op) directive.
 
+[Back to TOC](#table-of-contents)
+
 set_decode_base64
 -----------------
 **syntax:** *set_decode_base64 $dst &lt;src&gt;*
@@ -539,6 +606,8 @@ set_decode_base64
 **category:** *ndk_set_var_value*
 
 Similar to the [set_encode_base64](#set_encode_base64) directive, but does exactly the the opposite operation, .i.e, decoding a base64 digest into its original form.
+
+[Back to TOC](#table-of-contents)
 
 set_encode_hex
 --------------
@@ -588,6 +657,8 @@ then request `GET /test` will give exactly the same output as the previous examp
 
 This directive can be invoked by [lua-nginx-module](http://github.com/chaoslawful/lua-nginx-module)'s [ndk.set_var.DIRECTIVE](http://github.com/chaoslawful/lua-nginx-module#ndkset_vardirective) interface and [array-var-nginx-module](http://github.com/agentzh/array-var-nginx-module)'s [array_map_op](http://github.com/agentzh/array-var-nginx-module#array_map_op) directive.
 
+[Back to TOC](#table-of-contents)
+
 set_decode_hex
 --------------
 **syntax:** *set_decode_hex $dst &lt;src&gt;*
@@ -603,6 +674,8 @@ set_decode_hex
 **category:** *ndk_set_var_value*
 
 Similar to the [set_encode_hex](#set_encode_hex) directive, but does exactly the the opposite operation, .i.e, decoding a hexadecimal digest into its original form.
+
+[Back to TOC](#table-of-contents)
 
 set_sha1
 --------
@@ -654,6 +727,8 @@ then request `GET /test` will give exactly the same output as the previous examp
 
 This directive can be invoked by [lua-nginx-module](http://github.com/chaoslawful/lua-nginx-module)'s [ndk.set_var.DIRECTIVE](http://github.com/chaoslawful/lua-nginx-module#ndkset_vardirective) interface and [array-var-nginx-module](http://github.com/agentzh/array-var-nginx-module)'s [array_map_op](http://github.com/agentzh/array-var-nginx-module#array_map_op) directive.
 
+[Back to TOC](#table-of-contents)
+
 set_md5
 -------
 **syntax:** *set_md5 $dst &lt;src&gt;*
@@ -704,6 +779,8 @@ then request `GET /test` will give exactly the same output as the previous examp
 
 This directive can be invoked by [lua-nginx-module](http://github.com/chaoslawful/lua-nginx-module)'s [ndk.set_var.DIRECTIVE](http://github.com/chaoslawful/lua-nginx-module#ndkset_vardirective) interface and [array-var-nginx-module](http://github.com/agentzh/array-var-nginx-module)'s [array_map_op](http://github.com/agentzh/array-var-nginx-module#array_map_op) directive.
 
+[Back to TOC](#table-of-contents)
+
 set_hmac_sha1
 -------------
 **syntax:** *set_hmac_sha1 $dst &lt;secret_key&gt; &lt;src&gt;*
@@ -741,6 +818,8 @@ Then request `GET /test` will yield the following output
 Please note that we're using [echo-nginx-module](http://github.com/agentzh/echo-nginx-module)'s [echo directive](http://github.com/agentzh/echo-nginx-module#echo) here to output values of nginx variables directly.
 
 This directive requires the OpenSSL library enabled in your Nignx build (usually by passing the `--with-http_ssl_module` option to the `./configure` script).
+
+[Back to TOC](#table-of-contents)
 
 set_random
 ----------
@@ -780,6 +859,8 @@ This directive was first introduced in the `v0.22rc1` release.
 
 See also [set_secure_random_alphanum](#set_secure_random_alphanum) and [set_secure_random_lcalpha](#set_secure_random_lcalpha).
 
+[Back to TOC](#table-of-contents)
+
 set_secure_random_alphanum
 --------------------------
 **syntax:** *set_secure_random_alphanum $res &lt;length&gt;*
@@ -812,6 +893,8 @@ See also [set_secure_random_lcalpha](#set_secure_random_lcalpha) and [set_random
 
 This directive was first introduced in the `v0.22rc8` release.
 
+[Back to TOC](#table-of-contents)
+
 set_secure_random_lcalpha
 -------------------------
 **syntax:** *set_secure_random_lcalpha $res &lt;length&gt;*
@@ -843,6 +926,8 @@ This function depends on the presence of the `/dev/urandom` device, available on
 This directive was first introduced in the `v0.22rc8` release.
 
 See also [set_secure_random_alphanum](#set_secure_random_alphanum) and [set_random](#set_random).
+
+[Back to TOC](#table-of-contents)
 
 set_rotate
 ----------
@@ -893,6 +978,8 @@ And accessing `/rotate` will also output integer sequence 0, 1, 2, 3, 0, 1, 2, 3
 
 This directive was first introduced in the `v0.22rc7` release.
 
+[Back to TOC](#table-of-contents)
+
 set_local_today
 ---------------
 **syntax:** *set_local_today $dst*
@@ -924,6 +1011,8 @@ and year, the actual date you get here will vary every day ;)
 
 Behind the scene, this directive utilizes the `ngx_time` API in the Nginx core, so usually no syscall is involved due to the time caching mechanism in the Nginx core.
 
+[Back to TOC](#table-of-contents)
+
 Caveats
 =======
 
@@ -934,6 +1023,8 @@ Do not use [$arg_PARAMETER](http://nginx.org/en/docs/http/ngx_http_core_module.h
 
 
 may lead to segmentation faults.
+
+[Back to TOC](#table-of-contents)
 
 Installation
 ============
@@ -962,6 +1053,8 @@ Download the latest version of the release tarball of this module from [set-misc
 
 Also, this module is included and enabled by default in the [ngx_openresty bundle](http://openresty.org/).
 
+[Back to TOC](#table-of-contents)
+
 Compatibility
 =============
 
@@ -977,6 +1070,8 @@ The following versions of Nginx should work with this module:
 
 If you find that any particular version of Nginx above 0.7.46 does not work with this module, please consider [reporting a bug](#report-bugs).
 
+[Back to TOC](#table-of-contents)
+
 Report Bugs
 ===========
 
@@ -985,10 +1080,14 @@ Although a lot of effort has been put into testing and code tuning, there must b
 1. send a bug report or even patches to the [openresty-en mailing list](https://groups.google.com/group/openresty-en),
 1. or create a ticket on the [issue tracking interface](http://github.com/agentzh/set-misc-nginx-module/issues) provided by GitHub.
 
+[Back to TOC](#table-of-contents)
+
 Source Repository
 =================
 
 Available on github at [agentzh/set-misc-nginx-module](http://github.com/agentzh/set-misc-nginx-module).
+
+[Back to TOC](#table-of-contents)
 
 Changes
 =======
@@ -996,6 +1095,8 @@ Changes
 The change logs for every release of this module can be obtained from the ngx_openresty bundle's change logs:
 
 <http://openresty.org/#Changes>
+
+[Back to TOC](#table-of-contents)
 
 Test Suite
 ==========
@@ -1013,10 +1114,14 @@ You need to terminate any Nginx processes before running the test suite if you h
 
 Because a single nginx server (by default, `localhost:1984`) is used across all the test scripts (`.t` files), it's meaningless to run the test suite in parallel by specifying `-jN` when invoking the `prove` utility.
 
+[Back to TOC](#table-of-contents)
+
 Getting involved
 ================
 
 You'll be very welcomed to submit patches to the [author](#author) or just ask for a commit bit to the [source repository](#source-repository) on GitHub.
+
+[Back to TOC](#table-of-contents)
 
 Author
 ======
@@ -1024,6 +1129,8 @@ Author
 Yichun Zhang (agentzh) *&lt;agentzh@gmail.com&gt;*, CloudFlare Inc.
 
 This wiki page is also maintained by the author himself, and everybody is encouraged to improve this page as well.
+
+[Back to TOC](#table-of-contents)
 
 Copyright & License
 ===================
@@ -1050,6 +1157,8 @@ PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
 LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+[Back to TOC](#table-of-contents)
 
 See Also
 ========
