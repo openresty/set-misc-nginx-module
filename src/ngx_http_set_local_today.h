@@ -6,5 +6,8 @@
 ngx_int_t ngx_http_set_local_today(ngx_http_request_t *r, ngx_str_t *res,
         ngx_http_variable_value_t *v);
 
-ngx_int_t ngx_http_set_gtime_format(ngx_http_request_t *r, ngx_str_t *res,
+ngx_int_t ngx_http_set_formatted_gmt_time(ngx_http_request_t *r, ngx_str_t *res,
+        ngx_http_variable_value_t *v);
+
+ngx_int_t ngx_http_set_formatted_local_time(ngx_http_request_t *r, ngx_str_t *res,
         ngx_http_variable_value_t *v);

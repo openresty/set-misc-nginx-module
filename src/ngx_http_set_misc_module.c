@@ -156,9 +156,16 @@ static ndk_set_var_t ngx_http_set_misc_local_today_filter = {
     NULL
 };
 
-static ndk_set_var_t ngx_http_set_misc_gtime_format_filter = {
+static ndk_set_var_t ngx_http_set_misc_formatted_gmt_time_filter = {
     NDK_SET_VAR_VALUE,
-    ngx_http_set_gtime_format,
+    ngx_http_set_formatted_gmt_time,
+    2,
+    NULL
+};
+
+static ndk_set_var_t ngx_http_set_misc_formatted_local_time_filter = {
+    NDK_SET_VAR_VALUE,
+    ngx_http_set_formatted_local_time,
     2,
     NULL
 };
@@ -352,13 +359,22 @@ static ngx_command_t  ngx_http_set_misc_commands[] = {
         &ngx_http_set_misc_local_today_filter
     },
     {
-        ngx_string("set_gtime_format"),
+        ngx_string("set_formatted_gmt_time"),
         NGX_HTTP_MAIN_CONF|NGX_HTTP_SRV_CONF|NGX_HTTP_SIF_CONF
             |NGX_HTTP_LOC_CONF|NGX_HTTP_LIF_CONF|NGX_CONF_TAKE2,
         ndk_set_var_value,
         0,
         0,
-        &ngx_http_set_misc_gtime_format_filter
+        &ngx_http_set_misc_formatted_gmt_time_filter
+    },
+    {
+        ngx_string("set_formatted_local_time"),
+        NGX_HTTP_MAIN_CONF|NGX_HTTP_SRV_CONF|NGX_HTTP_SIF_CONF
+            |NGX_HTTP_LOC_CONF|NGX_HTTP_LIF_CONF|NGX_CONF_TAKE2,
+        ndk_set_var_value,
+        0,
+        0,
+        &ngx_http_set_misc_formatted_local_time_filter
     },
     {   ngx_string ("set_random"),
         NGX_HTTP_MAIN_CONF|NGX_HTTP_SRV_CONF|NGX_HTTP_SIF_CONF
