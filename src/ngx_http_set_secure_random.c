@@ -3,6 +3,7 @@
 #endif
 #include "ddebug.h"
 
+
 #include <ndk.h>
 #include "ngx_http_set_secure_random.h"
 #include <stdlib.h>
@@ -15,9 +16,9 @@ enum {
 };
 
 
-ngx_int_t
+static ngx_int_t
 ngx_http_set_misc_set_secure_random_common(int alphabet_type,
-        ngx_http_request_t *r, ngx_str_t *res, ngx_http_variable_value_t *v);
+    ngx_http_request_t *r, ngx_str_t *res, ngx_http_variable_value_t *v);
 
 
 ngx_int_t
@@ -36,7 +37,7 @@ ngx_http_set_misc_set_secure_random_lcalpha(ngx_http_request_t *r,
 }
 
 
-ngx_int_t
+static ngx_int_t
 ngx_http_set_misc_set_secure_random_common(int alphabet_type,
     ngx_http_request_t *r, ngx_str_t *res, ngx_http_variable_value_t *v)
 {
@@ -53,7 +54,7 @@ ngx_http_set_misc_set_secure_random_common(int alphabet_type,
 
     if (length == NGX_ERROR || length < 1 || length > MAX_RANDOM_STRING) {
         ngx_log_error(NGX_LOG_ERR, r->connection->log, 0,
-                "set_random: bad \"length\" argument: %v", v);
+                      "set_random: bad \"length\" argument: %v", v);
         return NGX_ERROR;
     }
 
@@ -99,4 +100,3 @@ ngx_http_set_misc_set_secure_random_common(int alphabet_type,
 
     return NGX_OK;
 }
-
