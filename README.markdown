@@ -39,6 +39,8 @@ Table of Contents
     * [set_secure_random_lcalpha](#set_secure_random_lcalpha)
     * [set_rotate](#set_rotate)
     * [set_local_today](#set_local_today)
+    * [set_formatted_gmt_time](#set_formatted_gmt_time)
+    * [set_formatted_local_time](#set_formatted_local_time)
 * [Caveats](#caveats)
 * [Installation](#installation)
 * [Compatibility](#compatibility)
@@ -1039,6 +1041,74 @@ then request `GET /today` will output something like
 and year, the actual date you get here will vary every day ;)
 
 Behind the scene, this directive utilizes the `ngx_time` API in the Nginx core, so usually no syscall is involved due to the time caching mechanism in the Nginx core.
+
+[Back to TOC](#table-of-contents)
+
+set_formatted_gmt_time
+----------------------
+**syntax:** *set_formatted_gmt_time $res &lt;time-format&gt;*
+
+**default:** *no*
+
+**context:** *location, location if*
+
+**phase:** *rewrite*
+
+Set a formatted GMT time to variable `$res` (as the first argument) using the format string in the second argument.
+
+All the conversion specification notations in the standard C function `strftime` are supported, like `%Y` (for 4-digit years) and `%M` (for minutes in decimal). See <http://linux.die.net/man/3/strftime> for a complete list of conversion specification symbols.
+
+Below is an example:
+
+```nginx
+
+location = /t {
+    set_formatted_gmt_time $timestr "%a %b %e %H:%M:%S %Y GMT";
+    echo $timestr;
+}
+```
+
+Accessing `/t` yields the output
+
+    Fri Dec 13 15:34:37 2013 GMT
+
+This directive was first added in the `0.23` release.
+
+See also [set_formatted_local_time](#set_formatted_local_time).
+
+[Back to TOC](#table-of-contents)
+
+set_formatted_local_time
+------------------------
+**syntax:** *set_formatted_local_time $res &lt;time-format&gt;*
+
+**default:** *no*
+
+**context:** *location, location if*
+
+**phase:** *rewrite*
+
+Set a formatted local time to variable `$res` (as the first argument) using the format string in the second argument.
+
+All the conversion specification notations in the standard C function `strftime` are supported, like `%Y` (for 4-digit years) and `%M` (for minutes in decimal). See <http://linux.die.net/man/3/strftime> for a complete list of conversion specification symbols.
+
+Below is an example:
+
+```nginx
+
+location = /t {
+    set_formatted_local_time $timestr "%a %b %e %H:%M:%S %Y %Z";
+    echo $timestr;
+}
+```
+
+Accessing `/t` yields the output
+
+    Fri Dec 13 15:42:15 2013 PST
+
+This directive was first added in the `0.23` release.
+
+See also [set_formatted_gmt_time](#set_formatted_gmt_time).
 
 [Back to TOC](#table-of-contents)
 
