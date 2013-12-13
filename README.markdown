@@ -59,132 +59,133 @@ This document describes ngx_set_misc [v0.22](https://github.com/agentzh/set-misc
 Synopsis
 ========
 
+```nginx
 
-    location /foo {
-        set $a $arg_a;
-        set_if_empty $a 56;
+location /foo {
+    set $a $arg_a;
+    set_if_empty $a 56;
 
-        # GET /foo?a=32 will yield $a == 32
-        # while GET /foo and GET /foo?a= will
-        # yeild $a == 56 here.
-    }
+    # GET /foo?a=32 will yield $a == 32
+    # while GET /foo and GET /foo?a= will
+    # yeild $a == 56 here.
+}
 
-    location /bar {
-        set $foo "hello\n\n'\"\\";
-        set_quote_sql_str $foo $foo; # for mysql
+location /bar {
+    set $foo "hello\n\n'\"\\";
+    set_quote_sql_str $foo $foo; # for mysql
 
-        # OR in-place editing:
-        #   set_quote_sql_str $foo;
+    # OR in-place editing:
+    #   set_quote_sql_str $foo;
 
-        # now $foo is: 'hello\n\n\'\"\\'
-    }
+    # now $foo is: 'hello\n\n\'\"\\'
+}
 
-    location /bar {
-        set $foo "hello\n\n'\"\\";
-        set_quote_pgsql_str $foo;  # for PostgreSQL
+location /bar {
+    set $foo "hello\n\n'\"\\";
+    set_quote_pgsql_str $foo;  # for PostgreSQL
 
-        # now $foo is: E'hello\n\n\'\"\\'
-    }
+    # now $foo is: E'hello\n\n\'\"\\'
+}
 
-    location /json {
-        set $foo "hello\n\n'\"\\";
-        set_quote_json_str $foo $foo;
+location /json {
+    set $foo "hello\n\n'\"\\";
+    set_quote_json_str $foo $foo;
 
-        # OR in-place editing:
-        #   set_quote_json_str $foo;
+    # OR in-place editing:
+    #   set_quote_json_str $foo;
 
-        # now $foo is: "hello\n\n'\"\\"
-    }
+    # now $foo is: "hello\n\n'\"\\"
+}
 
-    location /baz {
-        set $foo "hello%20world";
-        set_unescape_uri $foo $foo;
+location /baz {
+    set $foo "hello%20world";
+    set_unescape_uri $foo $foo;
 
-        # OR in-place editing:
-        #   set_unescape_uri $foo;
+    # OR in-place editing:
+    #   set_unescape_uri $foo;
 
-        # now $foo is: hello world
-    }
+    # now $foo is: hello world
+}
 
-    upstream_list universe moon sun earth;
-    upstream moon { ... }
-    upstream sun { ... }
-    upstream earth { ... }
-    location /foo {
-        set_hashed_upstream $backend universe $arg_id;
-        drizzle_pass $backend; # used with ngx_drizzle
-    }
+upstream_list universe moon sun earth;
+upstream moon { ... }
+upstream sun { ... }
+upstream earth { ... }
+location /foo {
+    set_hashed_upstream $backend universe $arg_id;
+    drizzle_pass $backend; # used with ngx_drizzle
+}
 
-    location /base32 {
-        set $a 'abcde';
-        set_encode_base32 $a;
-        set_decode_base32 $b $a;
+location /base32 {
+    set $a 'abcde';
+    set_encode_base32 $a;
+    set_decode_base32 $b $a;
 
-        # now $a == 'c5h66p35' and
-        # $b == 'abcde'
-    }
+    # now $a == 'c5h66p35' and
+    # $b == 'abcde'
+}
 
-    location /base64 {
-        set $a 'abcde';
-        set_encode_base64 $a;
-        set_decode_base64 $b $a;
+location /base64 {
+    set $a 'abcde';
+    set_encode_base64 $a;
+    set_decode_base64 $b $a;
 
-        # now $a == 'YWJjZGU=' and
-        # $b == 'abcde'
-    }
+    # now $a == 'YWJjZGU=' and
+    # $b == 'abcde'
+}
 
-    location /hex {
-        set $a 'abcde';
-        set_encode_hex $a;
-        set_decode_hex $b $a;
+location /hex {
+    set $a 'abcde';
+    set_encode_hex $a;
+    set_decode_hex $b $a;
 
-        # now $a == '6162636465' and
-        # $b == 'abcde'
-    }
+    # now $a == '6162636465' and
+    # $b == 'abcde'
+}
 
-    # GET /sha1 yields the output
-    #   aaf4c61ddcc5e8a2dabede0f3b482cd9aea9434d
-    location /sha1 {
-        set_sha1 $a hello;
-        echo $a;
-    }
+# GET /sha1 yields the output
+#   aaf4c61ddcc5e8a2dabede0f3b482cd9aea9434d
+location /sha1 {
+    set_sha1 $a hello;
+    echo $a;
+}
 
-    # ditto
-    location /sha1 {
-        set $a hello;
-        set_sha1 $a;
-        echo $a;
-    }
+# ditto
+location /sha1 {
+    set $a hello;
+    set_sha1 $a;
+    echo $a;
+}
 
-    # GET /today yields the date of today in local time using format 'yyyy-mm-dd'
-    location /today {
-        set_local_today $today;
-        echo $today;
-    }
+# GET /today yields the date of today in local time using format 'yyyy-mm-dd'
+location /today {
+    set_local_today $today;
+    echo $today;
+}
 
-    # GET /signature yields the hmac-sha-1 signature
-    # given a secret and a string to sign
-    # this example yields the base64 encoded singature which is
-    # "HkADYytcoQQzqbjQX33k/ZBB/DQ="
-    location /signature {
-        set $secret_key 'secret-key';
-        set $string_to_sign "some-string-to-sign";
-        set_hmac_sha1 $signature $secret_key $string_to_sign;
-        set_encode_base64 $signature $signature;
-        echo $signature;
-    }
+# GET /signature yields the hmac-sha-1 signature
+# given a secret and a string to sign
+# this example yields the base64 encoded singature which is
+# "HkADYytcoQQzqbjQX33k/ZBB/DQ="
+location /signature {
+    set $secret_key 'secret-key';
+    set $string_to_sign "some-string-to-sign";
+    set_hmac_sha1 $signature $secret_key $string_to_sign;
+    set_encode_base64 $signature $signature;
+    echo $signature;
+}
 
-    location = /rand {
-        set $from 3;
-        set $to 15;
-        set_random $rand $from $to;
+location = /rand {
+    set $from 3;
+    set $to 15;
+    set_random $rand $from $to;
 
-        # or write directly
-        #   set_random $rand 3 15;
+    # or write directly
+    #   set_random $rand 3 15;
 
-        echo $rand;  # will print a random integer in the range [3, 15]
-    }
-
+    echo $rand;  # will print a random integer in the range [3, 15]
+}
+```
 
 Description
 ===========
@@ -214,18 +215,20 @@ Assign the value of the argument `<src>` if and only if variable `$dst` is empty
 
 In the following example,
 
+```nginx
 
-    set $a 32;
-    set_if_empty $a 56;
-
+set $a 32;
+set_if_empty $a 56;
+```
 
 the variable `$dst` will take the value 32 at last. But in the sample
 
+```nginx
 
-    set $a '';
-    set $value "hello, world"
-    set_if_empty $a $value;
-
+set $a '';
+set $value "hello, world"
+set_if_empty $a $value;
+```
 
 `$a` will take the value `"hello, world"` at last.
 
@@ -247,33 +250,36 @@ set_quote_sql_str
 
 When taking two arguments, this directive will quote the value of the second argument `<src>` by MySQL's string value quoting rule and assign the result into the first argument, variable `$dst`. For example,
 
+```nginx
 
-    location /test {
-        set $value "hello\n\r'\"\\";
-        set_quote_sql_str $quoted $value;
-    
-        echo $quoted;
-    }
+location /test {
+    set $value "hello\n\r'\"\\";
+    set_quote_sql_str $quoted $value;
 
+    echo $quoted;
+}
+```
 
 Then request `GET /test` will yield the following output
 
+```sql
 
-    'hello\n\r\'\"\\'
-
+'hello\n\r\'\"\\'
+```
 
 Please note that we're using [echo-nginx-module](http://github.com/agentzh/echo-nginx-module)'s [echo directive](http://github.com/agentzh/echo-nginx-module#echo) here to output values of nginx variables directly.
 
 When taking a single argument, this directive will do in-place modification of the argument variable. For example,
 
+```nginx
 
-    location /test {
-        set $value "hello\n\r'\"\\";
-        set_quote_sql_str $value;
-    
-        echo $value;
-    }
+location /test {
+    set $value "hello\n\r'\"\\";
+    set_quote_sql_str $value;
 
+    echo $value;
+}
+```
 
 then request `GET /test` will give exactly the same output as the previous example.
 
@@ -317,33 +323,36 @@ set_quote_json_str
 
 When taking two arguments, this directive will quote the value of the second argument `<src>` by JSON string value quoting rule and assign the result into the first argument, variable `$dst`. For example,
 
+```nginx
 
-    location /test {
-        set $value "hello\n\r'\"\\";
-        set_quote_json_str $quoted $value;
-    
-        echo $quoted;
-    }
+location /test {
+    set $value "hello\n\r'\"\\";
+    set_quote_json_str $quoted $value;
 
+    echo $quoted;
+}
+```
 
 Then request `GET /test` will yield the following output
 
+```javascript
 
-    "hello\n\r'\"\\"
-
+"hello\n\r'\"\\"
+```
 
 Please note that we're using [echo-nginx-module](http://github.com/agentzh/echo-nginx-module)'s [echo directive](http://github.com/agentzh/echo-nginx-module#echo) here to output values of nginx variables directly.
 
 When taking a single argument, this directive will do in-place modification of the argument variable. For example,
 
+```nginx
 
-    location /test {
-        set $value "hello\n\r'\"\\";
-        set_quote_json_str $value;
-    
-        echo $value;
-    }
+location /test {
+    set $value "hello\n\r'\"\\";
+    set_quote_json_str $value;
 
+    echo $value;
+}
+```
 
 then request `GET /test` will give exactly the same output as the previous example.
 
@@ -367,12 +376,13 @@ set_unescape_uri
 
 When taking two arguments, this directive will unescape the value of the second argument `<src>` as a URI component and assign the result into the first argument, variable `$dst`. For example,
 
+```nginx
 
-    location /test {
-        set_unescape_uri $key $arg_key;
-        echo $key;
-    }
-
+location /test {
+    set_unescape_uri $key $arg_key;
+    echo $key;
+}
+```
 
 Then request `GET /test?key=hello+world%21` will yield the following output
 
@@ -386,14 +396,15 @@ Please note that we're using [echo-nginx-module](http://github.com/agentzh/echo-
 
 When taking a single argument, this directive will do in-place modification of the argument variable. For example,
 
+```nginx
 
-    location /test {
-        set $key $arg_key;
-        set_unescape_uri $key;
+location /test {
+    set $key $arg_key;
+    set_unescape_uri $key;
 
-        echo $key;
-    }
-
+    echo $key;
+}
+```
 
 then request `GET /test?key=hello+world%21` will give exactly the same output as the previous example.
 
@@ -433,21 +444,22 @@ Hashes the string argument `<src>` into one of the upstream name included in the
 
 Here's an example,
 
+```nginx
 
-    upstream moon { ... }
-    upstream sun { ... }
-    upstream earth { ... }
+upstream moon { ... }
+upstream sun { ... }
+upstream earth { ... }
 
-    upstream_list universe moon sun earth;
+upstream_list universe moon sun earth;
 
-    location /test {
-        set_unescape_uri $key $arg_key;
-        set $list_name universe;
-        set_hashed_upstream $backend $list_name $key;
+location /test {
+    set_unescape_uri $key $arg_key;
+    set $list_name universe;
+    set_hashed_upstream $backend $list_name $key;
 
-        echo $backend;        
-    }
-
+    echo $backend;        
+}
+```
 
 Then `GET /test?key=blah` will output either "moon", "sun", or "earth", depending on the actual value of the `key` query argument.
 
@@ -471,14 +483,15 @@ set_encode_base32
 
 When taking two arguments, this directive will encode the value of the second argument `<src>` to its base32(hex) digest and assign the result into the first argument, variable `$dst`. For example,
 
+```nginx
 
-    location /test {
-        set $raw "abcde";
-        set_encode_base32 $digest $raw;
+location /test {
+    set $raw "abcde";
+    set_encode_base32 $digest $raw;
 
-        echo $digest;
-    }
-
+    echo $digest;
+}
+```
 
 Then request `GET /test` will yield the following output
 
@@ -494,14 +507,15 @@ By default, the `=` character is used to pad the left-over bytes due to alignmen
 
 When taking a single argument, this directive will do in-place modification of the argument variable. For example,
 
+```nginx
 
-    location /test {
-        set $value "abcde";
-        set_encode_base32 $value;
+location /test {
+    set $value "abcde";
+    set_encode_base32 $value;
 
-        echo $value;
-    }
-
+    echo $value;
+}
+```
 
 then request `GET /test` will give exactly the same output as the previous example.
 
@@ -557,14 +571,15 @@ set_encode_base64
 
 When taking two arguments, this directive will encode the value of the second argument `<src>` to its base64 digest and assign the result into the first argument, variable `$dst`. For example,
 
+```nginx
 
-    location /test {
-        set $raw "abcde";
-        set_encode_base64 $digest $raw;
+location /test {
+    set $raw "abcde";
+    set_encode_base64 $digest $raw;
 
-        echo $digest;
-    }
-
+    echo $digest;
+}
+```
 
 Then request `GET /test` will yield the following output
 
@@ -576,14 +591,15 @@ Please note that we're using [echo-nginx-module](http://github.com/agentzh/echo-
 
 When taking a single argument, this directive will do in-place modification of the argument variable. For example,
 
+```nginx
 
-    location /test {
-        set $value "abcde";
-        set_encode_base64 $value;
+location /test {
+    set $value "abcde";
+    set_encode_base64 $value;
 
-        echo $value;
-    }
-
+    echo $value;
+}
+```
 
 then request `GET /test` will give exactly the same output as the previous example.
 
@@ -625,14 +641,15 @@ set_encode_hex
 
 When taking two arguments, this directive will encode the value of the second argument `<src>` to its hexadecimal digest and assign the result into the first argument, variable `$dst`. For example,
 
+```nginx
 
-    location /test {
-        set $raw "章亦春";
-        set_encode_hex $digest $raw;
+location /test {
+    set $raw "章亦春";
+    set_encode_hex $digest $raw;
 
-        echo $digest;
-    }
-
+    echo $digest;
+}
+```
 
 Then request `GET /test` will yield the following output
 
@@ -644,14 +661,15 @@ Please note that we're using [echo-nginx-module](http://github.com/agentzh/echo-
 
 When taking a single argument, this directive will do in-place modification of the argument variable. For example,
 
+```nginx
 
-    location /test {
-        set $value "章亦春";
-        set_encode_hex $value;
+location /test {
+    set $value "章亦春";
+    set_encode_hex $value;
 
-        echo $value;
-    }
-
+    echo $value;
+}
+```
 
 then request `GET /test` will give exactly the same output as the previous example.
 
@@ -695,14 +713,15 @@ When taking two arguments, this directive will encode the value of the second ar
 
 For example,
 
+```nginx
 
-    location /test {
-        set $raw "hello";
-        set_sha1 $digest $raw;
+location /test {
+    set $raw "hello";
+    set_sha1 $digest $raw;
 
-        echo $digest;
-    }
-
+    echo $digest;
+}
+```
 
 Then request `GET /test` will yield the following output
 
@@ -714,14 +733,15 @@ Please note that we're using [echo-nginx-module](http://github.com/agentzh/echo-
 
 When taking a single argument, this directive will do in-place modification of the argument variable. For example,
 
+```nginx
 
-    location /test {
-        set $value "hello";
-        set_sha1 $value;
+location /test {
+    set $value "hello";
+    set_sha1 $value;
 
-        echo $value;
-    }
-
+    echo $value;
+}
+```
 
 then request `GET /test` will give exactly the same output as the previous example.
 
@@ -747,14 +767,15 @@ When taking two arguments, this directive will encode the value of the second ar
 
 For example,
 
+```nginx
 
-    location /test {
-        set $raw "hello";
-        set_md5 $digest $raw;
+location /test {
+    set $raw "hello";
+    set_md5 $digest $raw;
 
-        echo $digest;
-    }
-
+    echo $digest;
+}
+```
 
 Then request `GET /test` will yield the following output
 
@@ -766,14 +787,15 @@ Please note that we're using [echo-nginx-module](http://github.com/agentzh/echo-
 
 When taking a single argument, this directive will do in-place modification of the argument variable. For example,
 
+```nginx
 
-    location /test {
-        set $value "hello";
-        set_md5 $value;
+location /test {
+    set $value "hello";
+    set_md5 $value;
 
-        echo $value;
-    }
-
+    echo $value;
+}
+```
 
 then request `GET /test` will give exactly the same output as the previous example.
 
@@ -799,15 +821,16 @@ The raw binary form of the `HMAC-SHA1` digest will be generated, use [set_encode
 
 For example,
 
+```nginx
 
-    location /test {
-        set $secret 'thisisverysecretstuff';
-        set $string_to_sign 'some string we want to sign';
-        set_hmac_sha1 $signature $secret $string_to_sign;
-        set_encode_base64 $signature $signature;
-        echo $signature;
-    }
-
+location /test {
+    set $secret 'thisisverysecretstuff';
+    set $string_to_sign 'some string we want to sign';
+    set_hmac_sha1 $signature $secret $string_to_sign;
+    set_encode_base64 $signature $signature;
+    echo $signature;
+}
+```
 
 Then request `GET /test` will yield the following output
 
@@ -839,15 +862,16 @@ When `<from>` is greater than `<to>`, their values will be exchanged accordingly
 
 For instance,
 
+```nginx
 
-    location /test {
-        set $from 5;                              
-        set $to 7;                                
-        set_random $res $from $to;                
-                                                  
-        echo $res;                                
-    }
-
+location /test {
+    set $from 5;                              
+    set $to 7;                                
+    set_random $res $from $to;                
+                                              
+    echo $res;                                
+}
+```
 
 then request `GET /test` will output a number between 5 and 7 (i.e., among 5, 6, 7).
 
@@ -877,13 +901,14 @@ Generates a cryptographically-strong random string `<length>` characters long wi
 
 For instance,
 
+```nginx
 
-    location /test {
-        set_secure_random_alphanum $res 32;
+location /test {
+    set_secure_random_alphanum $res 32;
 
-        echo $res;
-    }
-
+    echo $res;
+}
+```
 
 then request `GET /test` will output a string like `ivVVRP2DGaAqDmdf3Rv4ZDJ7k0gOfASz`.
 
@@ -911,13 +936,14 @@ Generates a cryptographically-strong random string `<length>` characters long wi
 
 For instance,
 
+```nginx
 
-    location /test {
-        set_secure_random_lcalpha $res 32;
+location /test {
+    set_secure_random_lcalpha $res 32;
 
-        echo $res;
-    }
-
+    echo $res;
+}
+```
 
 then request `GET /test` will output a string like `kcuxcddktffsippuekhshdaclaquiusj`.
 
@@ -951,28 +977,30 @@ When `<from>` is greater than `<to>`, their values will be exchanged accordingly
 
 For instance,
 
+```nginx
 
-    location /rotate {
-        default_type text/plain;
-        set $counter $cookie_counter;
-        set_rotate $counter 1 5;
-        echo $counter;
-        add_header Set-Cookie counter=$counter;
-    }
-
+location /rotate {
+    default_type text/plain;
+    set $counter $cookie_counter;
+    set_rotate $counter 1 5;
+    echo $counter;
+    add_header Set-Cookie counter=$counter;
+}
+```
 
 then request `GET /rotate` will output next number between 1 and 5 (i.e., 1, 2, 3, 4, 5) on each
 refresh of the page. This directive may be userful for banner rotation purposes.
 
 Another example is to use server-side value persistence to do simple round-robin:
 
+```nginx
 
-    location /rotate {
-        default_type text/plain;
-        set_rotate $counter 0 3;
-        echo $counter;
-    }
-
+location /rotate {
+    default_type text/plain;
+    set_rotate $counter 0 3;
+    echo $counter;
+}
+```
 
 And accessing `/rotate` will also output integer sequence 0, 1, 2, 3, 0, 1, 2, 3, and so on.
 
@@ -994,12 +1022,13 @@ Set today's date ("yyyy-mm-dd") in localtime to the argument variable `$dst`.
 
 Here's an example,
 
+```nginx
 
-    location /today {
-        set_local_today $today;
-        echo $today;
-    }
-
+location /today {
+    set_local_today $today;
+    echo $today;
+}
+```
 
 then request `GET /today` will output something like
 
@@ -1018,9 +1047,10 @@ Caveats
 
 Do not use [$arg_PARAMETER](http://nginx.org/en/docs/http/ngx_http_core_module.html#var_arg_), [$cookie_COOKIE](http://nginx.org/en/docs/http/ngx_http_core_module.html#var_cookie_), [$http_HEADER](http://nginx.org/en/docs/http/ngx_http_core_module.html#var_http_) or other special variables defined in the Nginx core module as the target variable in this module's directives. For instance,
 
+```nginx
 
-    set_if_empty $arg_user 'foo';  # DO NOT USE THIS!
-
+set_if_empty $arg_user 'foo';  # DO NOT USE THIS!
+```
 
 may lead to segmentation faults.
 
@@ -1034,20 +1064,21 @@ This module is included and enabled by default in the [ngx_openresty bundle](htt
 Grab the nginx source code from [nginx.org](http://nginx.org/), for example,
 the version 1.4.2 (see [nginx compatibility](#compatibility)), and then build the source with this module:
 
+```bash
 
-    wget 'http://nginx.org/download/nginx-1.4.2.tar.gz'
-    tar -xzvf nginx-1.4.2.tar.gz
-    cd nginx-1.4.2/
-    
-    # Here we assume you would install you nginx under /opt/nginx/.
-    ./configure --prefix=/opt/nginx \
-        --with-http_ssl_module \
-        --add-module=/path/to/ngx_devel_kit \
-        --add-module=/path/to/set-misc-nginx-module
-    
-    make -j2
-    make install
+wget 'http://nginx.org/download/nginx-1.4.2.tar.gz'
+tar -xzvf nginx-1.4.2.tar.gz
+cd nginx-1.4.2/
 
+# Here we assume you would install you nginx under /opt/nginx/.
+./configure --prefix=/opt/nginx \
+    --with-http_ssl_module \
+    --add-module=/path/to/ngx_devel_kit \
+    --add-module=/path/to/set-misc-nginx-module
+
+make -j2
+make install
+```
 
 Download the latest version of the release tarball of this module from [set-misc-nginx-module file list](http://github.com/agentzh/set-misc-nginx-module/tags), and the latest tarball for [ngx_devel_kit](https://github.com/simpl/ngx_devel_kit) from its [file list](https://github.com/simpl/ngx_devel_kit/tags).
 
@@ -1106,9 +1137,10 @@ This module comes with a Perl-driven test suite. The [test cases](http://github.
 
 To run it on your side:
 
+```bash
 
-    $ PATH=/path/to/your/nginx-with-set-misc-module:$PATH prove -r t
-
+$ PATH=/path/to/your/nginx-with-set-misc-module:$PATH prove -r t
+```
 
 You need to terminate any Nginx processes before running the test suite if you have changed the Nginx server binary.
 
