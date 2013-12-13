@@ -6,6 +6,11 @@
 #include <ndk.h>
 
 
+#ifndef NGX_HTTP_SET_MISC_FMT_DATE_LEN
+#define NGX_HTTP_SET_MISC_FMT_DATE_LEN       256
+#endif
+
+
 ngx_int_t
 ngx_http_set_local_today(ngx_http_request_t *r, ngx_str_t *res,
     ngx_http_variable_value_t *v)
@@ -36,3 +41,70 @@ ngx_http_set_local_today(ngx_http_request_t *r, ngx_str_t *res,
     return NGX_OK;
 }
 
+
+ngx_int_t
+ngx_http_set_formatted_gmt_time(ngx_http_request_t *r, ngx_str_t *res,
+    ngx_http_variable_value_t *v)
+{
+    time_t           now;
+    u_char          *p;
+    ngx_tm_t         tm;
+
+    if (v->not_found || v->len == 0) {
+        res->data = NULL;
+        res->len = 0;
+        return NGX_OK;
+    }
+
+    now = ngx_time();
+    ngx_libc_gmtime(now, &tm);
+
+    p = ngx_palloc(r->pool, NGX_HTTP_SET_MISC_FMT_DATE_LEN);
+    if (p == NULL) {
+        return NGX_ERROR;
+    }
+
+    res->len = strftime((char *) p, NGX_HTTP_SET_MISC_FMT_DATE_LEN,
+                        (char *) v->data, &tm);
+    if (res->len == 0) {
+        return NGX_ERROR;
+    }
+
+    res->data = p;
+
+    return NGX_OK;
+}
+
+
+ngx_int_t
+ngx_http_set_formatted_local_time(ngx_http_request_t *r, ngx_str_t *res,
+    ngx_http_variable_value_t *v)
+{
+    time_t           now;
+    u_char          *p;
+    ngx_tm_t         tm;
+
+    if (v->not_found || v->len == 0) {
+        res->data = NULL;
+        res->len = 0;
+        return NGX_OK;
+    }
+
+    now = ngx_time();
+    ngx_libc_localtime(now, &tm);
+
+    p = ngx_palloc(r->pool, NGX_HTTP_SET_MISC_FMT_DATE_LEN);
+    if (p == NULL) {
+        return NGX_ERROR;
+    }
+
+    res->len = strftime((char *) p, NGX_HTTP_SET_MISC_FMT_DATE_LEN,
+                        (char *) v->data, &tm);
+    if (res->len == 0) {
+        return NGX_ERROR;
+    }
+
+    res->data = p;
+
+    return NGX_OK;
+}
