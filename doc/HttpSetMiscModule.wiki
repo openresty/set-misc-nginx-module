@@ -6,7 +6,7 @@
 
 = Version =
 
-This document describes ngx_set_misc [https://github.com/agentzh/set-misc-nginx-module/tags v0.22] released on 8 September 2013.
+This document describes ngx_set_misc [https://github.com/agentzh/set-misc-nginx-module/tags v0.23] released on 14 December 2013.
 
 = Synopsis =
 
@@ -777,7 +777,7 @@ For instance,
 
 then request <code>GET /test</code> will output a string like <code>ivVVRP2DGaAqDmdf3Rv4ZDJ7k0gOfASz</code>.
 
-This function depends on the presence of the <code>/dev/urandom</code> device, available on most UNIX-like systems.
+This functionality depends on the presence of the <code>/dev/urandom</code> device, available on most UNIX-like systems.
 
 See also [[#set_secure_random_lcalpha|set_secure_random_lcalpha]] and [[#set_random|set_random]].
 
@@ -808,7 +808,7 @@ For instance,
 
 then request <code>GET /test</code> will output a string like <code>kcuxcddktffsippuekhshdaclaquiusj</code>.
 
-This function depends on the presence of the <code>/dev/urandom</code> device, available on most UNIX-like systems.
+This functionality depends on the presence of the <code>/dev/urandom</code> device, available on most UNIX-like systems.
 
 This directive was first introduced in the <code>v0.22rc8</code> release.
 
@@ -967,12 +967,12 @@ may lead to segmentation faults.
 This module is included and enabled by default in the [http://openresty.org ngx_openresty bundle]. If you want to install this module manually with your own Nginx source tarball, then follow the steps below:
 
 Grab the nginx source code from [http://nginx.org/ nginx.org], for example,
-the version 1.4.2 (see [[#Compatibility|nginx compatibility]]), and then build the source with this module:
+the version 1.4.4 (see [[#Compatibility|nginx compatibility]]), and then build the source with this module:
 
 <geshi lang="bash">
-    wget 'http://nginx.org/download/nginx-1.4.2.tar.gz'
-    tar -xzvf nginx-1.4.2.tar.gz
-    cd nginx-1.4.2/
+    wget 'http://nginx.org/download/nginx-1.4.4.tar.gz'
+    tar -xzvf nginx-1.4.4.tar.gz
+    cd nginx-1.4.4/
     
     # Here we assume you would install you nginx under /opt/nginx/.
     ./configure --prefix=/opt/nginx \
@@ -992,7 +992,7 @@ Also, this module is included and enabled by default in the [http://openresty.or
 
 The following versions of Nginx should work with this module:
 
-* '''1.4.x'''                       (last tested: 1.4.2)
+* '''1.4.x'''                       (last tested: 1.4.4)
 * '''1.2.x'''                       (last tested: 1.2.9)
 * '''1.1.x'''                       (last tested: 1.1.5)
 * '''1.0.x'''                       (last tested: 1.0.15)
