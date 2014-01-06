@@ -32,14 +32,14 @@ static char *ngx_http_set_misc_merge_loc_conf(ngx_conf_t *cf, void *parent,
     void *child);
 
 
-static  ndk_set_var_t  ngx_http_set_misc_set_encode_base64_filter = {
+static ndk_set_var_t  ngx_http_set_misc_set_encode_base64_filter = {
     NDK_SET_VAR_VALUE,
     ngx_http_set_misc_set_encode_base64,
     1,
     NULL
 };
 
-static  ndk_set_var_t  ngx_http_set_misc_set_decode_base64_filter = {
+static ndk_set_var_t  ngx_http_set_misc_set_decode_base64_filter = {
     NDK_SET_VAR_VALUE,
     ngx_http_set_misc_set_decode_base64,
     1,
@@ -47,7 +47,7 @@ static  ndk_set_var_t  ngx_http_set_misc_set_decode_base64_filter = {
 };
 
 
-static  ndk_set_var_t  ngx_http_set_misc_set_decode_hex_filter = {
+static ndk_set_var_t  ngx_http_set_misc_set_decode_hex_filter = {
     NDK_SET_VAR_VALUE,
     ngx_http_set_misc_set_decode_hex,
     1,
@@ -55,7 +55,7 @@ static  ndk_set_var_t  ngx_http_set_misc_set_decode_hex_filter = {
 };
 
 
-static  ndk_set_var_t  ngx_http_set_misc_set_encode_hex_filter = {
+static ndk_set_var_t  ngx_http_set_misc_set_encode_hex_filter = {
     NDK_SET_VAR_VALUE,
     ngx_http_set_misc_set_encode_hex,
     1,
@@ -64,7 +64,7 @@ static  ndk_set_var_t  ngx_http_set_misc_set_encode_hex_filter = {
 
 
 #if NGX_OPENSSL
-static  ndk_set_var_t  ngx_http_set_misc_set_hmac_sha1_filter = {
+static ndk_set_var_t  ngx_http_set_misc_set_hmac_sha1_filter = {
     NDK_SET_VAR_MULTI_VALUE,
     ngx_http_set_misc_set_hmac_sha1,
     2,
@@ -74,7 +74,7 @@ static  ndk_set_var_t  ngx_http_set_misc_set_hmac_sha1_filter = {
 
 
 #ifndef NGX_HTTP_SET_HASH
-static  ndk_set_var_t  ngx_http_set_misc_set_md5_filter = {
+static ndk_set_var_t  ngx_http_set_misc_set_md5_filter = {
     NDK_SET_VAR_VALUE,
     ngx_http_set_misc_set_md5,
     1,
@@ -83,7 +83,7 @@ static  ndk_set_var_t  ngx_http_set_misc_set_md5_filter = {
 
 
 #if NGX_HAVE_SHA1
-static  ndk_set_var_t  ngx_http_set_misc_set_sha1_filter = {
+static ndk_set_var_t  ngx_http_set_misc_set_sha1_filter = {
     NDK_SET_VAR_VALUE,
     ngx_http_set_misc_set_sha1,
     1,
@@ -93,7 +93,7 @@ static  ndk_set_var_t  ngx_http_set_misc_set_sha1_filter = {
 #endif
 
 
-static  ndk_set_var_t  ngx_http_set_misc_unescape_uri_filter = {
+static ndk_set_var_t  ngx_http_set_misc_unescape_uri_filter = {
     NDK_SET_VAR_VALUE,
     ngx_http_set_misc_unescape_uri,
     1,
@@ -109,7 +109,7 @@ static ndk_set_var_t ngx_http_set_misc_escape_uri_filter = {
 };
 
 
-static  ndk_set_var_t  ngx_http_set_misc_decode_base32_filter = {
+static ndk_set_var_t  ngx_http_set_misc_decode_base32_filter = {
     NDK_SET_VAR_VALUE,
     ngx_http_set_misc_decode_base32,
     1,
@@ -117,7 +117,7 @@ static  ndk_set_var_t  ngx_http_set_misc_decode_base32_filter = {
 };
 
 
-static  ndk_set_var_t  ngx_http_set_misc_quote_sql_str_filter = {
+static ndk_set_var_t  ngx_http_set_misc_quote_sql_str_filter = {
     NDK_SET_VAR_VALUE,
     ngx_http_set_misc_quote_sql_str,
     1,
@@ -125,7 +125,7 @@ static  ndk_set_var_t  ngx_http_set_misc_quote_sql_str_filter = {
 };
 
 
-static  ndk_set_var_t  ngx_http_set_misc_quote_pgsql_str_filter = {
+static ndk_set_var_t  ngx_http_set_misc_quote_pgsql_str_filter = {
     NDK_SET_VAR_VALUE,
     ngx_http_set_misc_quote_pgsql_str,
     1,
@@ -133,7 +133,7 @@ static  ndk_set_var_t  ngx_http_set_misc_quote_pgsql_str_filter = {
 };
 
 
-static  ndk_set_var_t  ngx_http_set_misc_quote_json_str_filter = {
+static ndk_set_var_t  ngx_http_set_misc_quote_json_str_filter = {
     NDK_SET_VAR_VALUE,
     ngx_http_set_misc_quote_json_str,
     1,
@@ -141,7 +141,7 @@ static  ndk_set_var_t  ngx_http_set_misc_quote_json_str_filter = {
 };
 
 
-static  ndk_set_var_t  ngx_http_set_misc_encode_base32_filter = {
+static ndk_set_var_t  ngx_http_set_misc_encode_base32_filter = {
     NDK_SET_VAR_VALUE,
     ngx_http_set_misc_encode_base32,
     1,
@@ -173,7 +173,7 @@ static ndk_set_var_t ngx_http_set_misc_formatted_local_time_filter = {
 };
 
 
-static  ndk_set_var_t  ngx_http_set_misc_set_random_filter = {
+static ndk_set_var_t  ngx_http_set_misc_set_random_filter = {
     NDK_SET_VAR_MULTI_VALUE,
     ngx_http_set_misc_set_random,
     2,
@@ -181,7 +181,7 @@ static  ndk_set_var_t  ngx_http_set_misc_set_random_filter = {
 };
 
 
-static  ndk_set_var_t  ngx_http_set_misc_set_secure_random_alphanum_filter = {
+static ndk_set_var_t  ngx_http_set_misc_set_secure_random_alphanum_filter = {
     NDK_SET_VAR_VALUE,
     ngx_http_set_misc_set_secure_random_alphanum,
     1,
@@ -189,7 +189,7 @@ static  ndk_set_var_t  ngx_http_set_misc_set_secure_random_alphanum_filter = {
 };
 
 
-static  ndk_set_var_t  ngx_http_set_misc_set_secure_random_lcalpha_filter = {
+static ndk_set_var_t  ngx_http_set_misc_set_secure_random_lcalpha_filter = {
     NDK_SET_VAR_VALUE,
     ngx_http_set_misc_set_secure_random_lcalpha,
     1,
