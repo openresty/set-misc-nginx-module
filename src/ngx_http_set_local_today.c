@@ -48,7 +48,7 @@ ngx_http_set_formatted_gmt_time(ngx_http_request_t *r, ngx_str_t *res,
 {
     time_t           now;
     u_char          *p;
-    ngx_tm_t         tm;
+    struct tm        tm;
 
     if (v->not_found || v->len == 0) {
         res->data = NULL;
@@ -82,7 +82,7 @@ ngx_http_set_formatted_local_time(ngx_http_request_t *r, ngx_str_t *res,
 {
     time_t           now;
     u_char          *p;
-    ngx_tm_t         tm;
+    struct tm        tm;
 
     if (v->not_found || v->len == 0) {
         res->data = NULL;

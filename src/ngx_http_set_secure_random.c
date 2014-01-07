@@ -58,7 +58,8 @@ ngx_http_set_misc_set_secure_random_common(int alphabet_type,
         return NGX_ERROR;
     }
 
-    fd = ngx_open_file("/dev/urandom", NGX_FILE_RDONLY, NGX_FILE_OPEN, 0);
+    fd = ngx_open_file((u_char *) "/dev/urandom", NGX_FILE_RDONLY,
+                       NGX_FILE_OPEN, 0);
     if (fd == NGX_INVALID_FILE) {
         ngx_log_error(NGX_LOG_ERR, r->connection->log, 0,
                       "set_secure_random: could not open /dev/urandom");

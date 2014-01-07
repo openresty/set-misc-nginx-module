@@ -109,7 +109,7 @@ ngx_http_set_hashed_upstream(ngx_conf_t *cf, ngx_command_t *cmd, void *conf)
 
     n = ngx_http_script_variables_count(ulname);
 
-    filter.func = ngx_http_set_misc_set_hashed_upstream;
+    filter.func = (void *) ngx_http_set_misc_set_hashed_upstream;
 
     if (n) {
         /* upstream list name contains variables */

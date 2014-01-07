@@ -104,7 +104,7 @@ ngx_http_set_rotate(ngx_conf_t *cf, ngx_command_t *cmd, void *conf)
     value = cf->args->elts;
 
     filter.type = NDK_SET_VAR_MULTI_VALUE;
-    filter.func = ngx_http_set_misc_set_rotate;
+    filter.func = (void *) ngx_http_set_misc_set_rotate;
     filter.size = 3;
     filter.data = NULL;
 
