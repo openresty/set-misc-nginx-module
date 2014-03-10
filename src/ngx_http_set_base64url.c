@@ -11,13 +11,17 @@ ngx_int_t
 ngx_http_set_misc_set_decode_base64url(ngx_http_request_t *r, ngx_str_t *res,
     ngx_http_variable_value_t *v)
 {
-    ngx_str_t        src;
+    u_int     i;
+    ngx_str_t src;
 
     src.len = v->len;
     src.data = v->data;
 
     res->len = ngx_base64url_decoded_length(v->len);
-    ndk_palloc_re(res->data, r->pool, res->len);
+    res->data = ngx_palloc(r->pool, res->len);
+    if (res->data == NULL) {
+        return NGX_ERROR;
+    }
 
 #if defined(nginx_version) && nginx_version >= 1005010
     if (ngx_decode_base64url(res, &src) != NGX_OK) {
@@ -26,7 +30,6 @@ ngx_http_set_misc_set_decode_base64url(ngx_http_request_t *r, ngx_str_t *res,
         return NGX_ERROR;
     }
 #else
-    u_int i;
     for (i=0;i<src.len;i++) {
         switch (src.data[i]) {
             case '-': src.data[i]='+'; break;
@@ -48,19 +51,22 @@ ngx_int_t
 ngx_http_set_misc_set_encode_base64url(ngx_http_request_t *r, ngx_str_t *res,
     ngx_http_variable_value_t *v)
 {
+    u_int i;
     ngx_str_t        src;
 
     src.len = v->len;
     src.data = v->data;
 
     res->len = ngx_base64url_encoded_length(v->len);
-    ndk_palloc_re(res->data, r->pool, res->len);
+    res->data = ngx_palloc(r->pool, res->len);
+    if (res->data == NULL) {
+        return NGX_ERROR;
+    }
 
 #if defined(nginx_version) && nginx_version >= 1005010
     ngx_encode_base64url(res, &src);
 #else
     ngx_encode_base64(res, &src);
-    u_int i;
     for (i=0;i<res->len;i++) {
         switch (res->data[i]) {
             case '+': res->data[i]='-'; break;

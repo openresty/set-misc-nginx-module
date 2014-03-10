@@ -22,8 +22,11 @@ ngx_http_set_misc_set_expired(ngx_http_request_t *r, ngx_str_t *res,
     dd("now=%lld, deadline=%lld", (long long) now, (long long) deadline);
 
     res->len = 1;
-    ndk_palloc_re(res->data, r->pool, res->len);
-    res->data = (u_char*) ((deadline && now < deadline) ? "0" : "1");
+    res->data = ngx_palloc(r->pool, res->len);
+    if (res->data == NULL) {
+        return NGX_ERROR;
+    }
+    res->data[0] = (u_char) ((deadline && now < deadline) ? '0' : '1');
 
     return NGX_OK;
  }
