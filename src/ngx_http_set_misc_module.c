@@ -87,7 +87,6 @@ static ndk_set_var_t  ngx_http_set_misc_set_hmac_sha1_filter = {
     2,
     NULL
 };
-
 #endif
 
 
