@@ -29,6 +29,8 @@ Table of Contents
     * [set_decode_base32](#set_decode_base32)
     * [set_encode_base64](#set_encode_base64)
     * [set_decode_base64](#set_decode_base64)
+    * [set_encode_base64url](#set_encode_base64url)
+    * [set_decode_base64url](#set_decode_base64url)
     * [set_encode_hex](#set_encode_hex)
     * [set_decode_hex](#set_decode_hex)
     * [set_sha1](#set_sha1)
@@ -38,6 +40,7 @@ Table of Contents
     * [set_secure_random_alphanum](#set_secure_random_alphanum)
     * [set_secure_random_lcalpha](#set_secure_random_lcalpha)
     * [set_rotate](#set_rotate)
+    * [set_expired](#set_expired)
     * [set_local_today](#set_local_today)
     * [set_formatted_gmt_time](#set_formatted_gmt_time)
     * [set_formatted_local_time](#set_formatted_local_time)
@@ -136,6 +139,15 @@ location /base64 {
     # $b == 'abcde'
 }
 
+location /base64url {
+    set $a 'abcde';
+    set_encode_base64url $a;
+    set_decode_base64url $b $a;
+
+    # now $a == 'YWJjZGU' and
+    # $b == 'abcde'
+}
+
 location /hex {
     set $a 'abcde';
     set_encode_hex $a;
@@ -175,6 +187,24 @@ location /signature {
     set_hmac_sha1 $signature $secret_key $string_to_sign;
     set_encode_base64 $signature $signature;
     echo $signature;
+}
+
+# GET /secure?e=1394493753&s=HkADYytcoQQzqbjQX33k_ZBB_DQ
+# returns 403 when signature on expire time is not correct OR
+# when expire time is passed. See: HttpSecureLinkModule.
+# This example has a valid signed expiry at 2030-01-01. Output:
+# "OK"
+location /secure {
+    set_hmac_sha1 $signature 'secret-key' $arg_e;
+    set_encode_base64url $signature;
+    if ($signature != $arg_s) {
+        return 403;
+    }
+    set_expired $expired $arg_e;
+    if ($expired) {
+        return 403;
+    }
+    echo "OK";
 }
 
 location = /rand {
@@ -627,6 +657,42 @@ Similar to the [set_encode_base64](#set_encode_base64) directive, but does exact
 
 [Back to TOC](#table-of-contents)
 
+set_encode_base64url
+--------------------
+**syntax:** *set_encode_base64url $dst &lt;src&gt;*
+
+**syntax:** *set_encode_base64url $dst*
+
+**default:** *no*
+
+**context:** *location, location if*
+
+**phase:** *rewrite*
+
+**category:** *ndk_set_var_value*
+
+Similar to the [set_encode_base64](#set_encode_base64) directive, but uses URL safe base64 variant, '+' becomes '-', '/' becomes '_' and there is no padding with '=' characters.
+
+[Back to TOC](#table-of-contents)
+
+set_decode_base64url
+--------------------
+**syntax:** *set_decode_base64url $dst &lt;src&gt;*
+
+**syntax:** *set_decode_base64url $dst*
+
+**default:** *no*
+
+**context:** *location, location if*
+
+**phase:** *rewrite*
+
+**category:** *ndk_set_var_value*
+
+Similar to the [set_encode_base64url](#set_encode_base64url) directive, but does exactly the the opposite operation, .i.e, decoding a base64url digest into its original form.
+
+[Back to TOC](#table-of-contents)
+
 set_encode_hex
 --------------
 **syntax:** *set_encode_hex $dst &lt;src&gt;*
@@ -1007,6 +1073,23 @@ location /rotate {
 And accessing `/rotate` will also output integer sequence 0, 1, 2, 3, 0, 1, 2, 3, and so on.
 
 This directive was first introduced in the `v0.22rc7` release.
+
+[Back to TOC](#table-of-contents)
+
+set_expired
+-----------
+**syntax:** *set_expired $dst &lt;timestamp&gt;*
+
+**default:** *no*
+
+**context:** *location, location if*
+
+**phase:** *rewrite*
+
+Sets `$dst` to either `1` or `0`, dependent on whether or not the 
+timestamp as defined in `timestamp` (seconds since 1970-01-01 00:00:00) is or is not in the past. 
+
+Behind the scene, this directive utilizes the `ngx_time` API in the Nginx core, so usually no syscall is involved due to the time caching mechanism in the Nginx core.
 
 [Back to TOC](#table-of-contents)
 

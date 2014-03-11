@@ -84,6 +84,15 @@ This document describes ngx_set_misc [https://github.com/agentzh/set-misc-nginx-
         # $b == 'abcde'
     }
 
+    location /base64url {
+        set $a 'abcde';
+        set_encode_base64url $a;
+        set_decode_base64url $b $a;
+
+        # now $a == 'YWJjZGU' and
+        # $b == 'abcde'
+    }
+
     location /hex {
         set $a 'abcde';
         set_encode_hex $a;
@@ -123,6 +132,24 @@ This document describes ngx_set_misc [https://github.com/agentzh/set-misc-nginx-
         set_hmac_sha1 $signature $secret_key $string_to_sign;
         set_encode_base64 $signature $signature;
         echo $signature;
+    }
+
+    # GET /secure?e=1394493753&s=HkADYytcoQQzqbjQX33k_ZBB_DQ
+    # returns 403 when signature on expire time is not correct OR
+    # when expire time is passed. See: HttpSecureLinkModule.
+    # This example has a valid signed expiry at 2030-01-01. Output:
+    # "OK"
+    location /secure {
+        set_hmac_sha1 $signature 'secret-key' $arg_e;
+        set_encode_base64url $signature;
+        if ($signature != $arg_s) {
+            return 403;
+        }
+        set_expired $expired $arg_e;
+        if ($expired) {
+            return 403;
+        }
+        echo "OK";
     }
 
     location = /rand {
@@ -518,6 +545,36 @@ This directive can be invoked by [[HttpLuaModule]]'s [[HttpLuaModule#ndk.set_var
 
 Similar to the [[#set_encode_base64|set_encode_base64]] directive, but does exactly the the opposite operation, .i.e, decoding a base64 digest into its original form.
 
+== set_encode_base64url ==
+'''syntax:''' ''set_encode_base64url $dst <src>''
+
+'''syntax:''' ''set_encode_base64url $dst''
+
+'''default:''' ''no''
+
+'''context:''' ''location, location if''
+
+'''phase:''' ''rewrite''
+
+'''category:''' ''ndk_set_var_value''
+
+Similar to the [[#set_encode_base64|set_encode_base64]] directive, but uses URL safe base64 variant, '+' becomes '-', '/' becomes '_' and there is no padding with '=' characters.
+
+== set_decode_base64url ==
+'''syntax:''' ''set_decode_base64url $dst <src>''
+
+'''syntax:''' ''set_decode_base64url $dst''
+
+'''default:''' ''no''
+
+'''context:''' ''location, location if''
+
+'''phase:''' ''rewrite''
+
+'''category:''' ''ndk_set_var_value''
+
+Similar to the [[#set_encode_base64url|set_encode_base64url]] directive, but does exactly the the opposite operation, .i.e, decoding a base64url digest into its original form.
+
 == set_encode_hex ==
 '''syntax:''' ''set_encode_hex $dst <src>''
 
@@ -861,6 +918,20 @@ Another example is to use server-side value persistence to do simple round-robin
 And accessing <code>/rotate</code> will also output integer sequence 0, 1, 2, 3, 0, 1, 2, 3, and so on.
 
 This directive was first introduced in the <code>v0.22rc7</code> release.
+
+== set_expired ==
+'''syntax:''' ''set_expired $dst <timestamp>''
+
+'''default:''' ''no''
+
+'''context:''' ''location, location if''
+
+'''phase:''' ''rewrite''
+
+Sets <code>$dst</code> to either <code>1</code> or <code>0</code>, dependent on whether or not the 
+timestamp as defined in <code>timestamp</code> (seconds since 1970-01-01 00:00:00) is or is not in the past. 
+
+Behind the scene, this directive utilizes the <code>ngx_time</code> API in the Nginx core, so usually no syscall is involved due to the time caching mechanism in the Nginx core.
 
 == set_local_today ==
 '''syntax:''' ''set_local_today $dst''
