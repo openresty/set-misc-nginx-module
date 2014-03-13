@@ -134,19 +134,24 @@ Synopsis
             echo $signature;
         }
 
-        # GET /secure?e=1394493753&s=HkADYytcoQQzqbjQX33k_ZBB_DQ
-        # returns 403 when signature on expire time is not correct OR
-        # when expire time is passed. See: HttpSecureLinkModule.
-        # This example has a valid signed expiry at 2030-01-01. Output:
-        # "OK"
+        # GET /secure?e=1893456000&n=MC4wLjAuMC8w&s=CyTCGzrXeRqq9_MvY1hm6ZvqwmY
+        # returns 403 when signature on the arguments is not correct OR
+        # when expire time is passed or network does not match.
+        # It is an alternative to the HttpSecureLinkModule in Nginx.
+        # This example has expiry "2030-01-01" and network "0.0.0.0/0".
         location /secure {
-            set_hmac_sha1 $signature 'secret-key' $arg_e;
+            set_hmac_sha1 $signature 'secret-key' "$arg_e&$arg_n";
             set_encode_base64url $signature;
             if ($signature != $arg_s) {
                 return 403;
             }
             set_expired $expired $arg_e;
             if ($expired) {
+                return 403;
+            }
+            set_decode_base64url $network $arg_n;
+            set_ip_matches $ip_matches $network $remote_ip;
+            if ($ip_matches = 0) {
                 return 403;
             }
             echo "OK";
@@ -820,6 +825,34 @@ Directives
     This directive requires the OpenSSL library enabled in your Nignx build
     (usually by passing the "--with-http_ssl_module" option to the
     "./configure" script).
+
+  set_ip_matches
+    syntax: *set_ip_matches $dst <network> <ip>*
+
+    default: *no*
+
+    context: *location, location if*
+
+    phase: *rewrite*
+
+    Sets $dst to either 1 or 0, dependent on whether or not the IP address
+    (either IPv4 or IPv6) as defined in "ip" matches the network defined in
+    "network". The network can be specified as a single IP address or using
+    CIDR notation.
+
+    For instance,
+
+        location /test {
+            set_ip_matches $r1 10.0.0.0/8 10.0.2.101;
+            set_ip_matches $r2 10.0.0.0/24 10.0.2.101;
+            echo "r1=$r1, r2=$r2";
+        }
+
+    then request "GET /test" will output "r1=1, r2=0".
+
+    This directive looks a lot like the "allow" directive, but it executes
+    in the "rewrite" phase and allows for custom handling of matches and
+    mismatches.
 
   set_random
     syntax: *set_random $res <from> <to>*

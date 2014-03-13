@@ -134,13 +134,13 @@ This document describes ngx_set_misc [https://github.com/agentzh/set-misc-nginx-
         echo $signature;
     }
 
-    # GET /secure?e=1394493753&s=HkADYytcoQQzqbjQX33k_ZBB_DQ
-    # returns 403 when signature on expire time is not correct OR
-    # when expire time is passed. See: HttpSecureLinkModule.
-    # This example has a valid signed expiry at 2030-01-01. Output:
-    # "OK"
+    # GET /secure?e=1893456000&n=MC4wLjAuMC8w&s=CyTCGzrXeRqq9_MvY1hm6ZvqwmY
+    # returns 403 when signature on the arguments is not correct OR
+    # when expire time is passed or network does not match.
+    # It is an alternative to the HttpSecureLinkModule in Nginx.
+    # This example has expiry "2030-01-01" and network "0.0.0.0/0".
     location /secure {
-        set_hmac_sha1 $signature 'secret-key' $arg_e;
+        set_hmac_sha1 $signature 'secret-key' "$arg_e&$arg_n";
         set_encode_base64url $signature;
         if ($signature != $arg_s) {
             return 403;
@@ -149,9 +149,14 @@ This document describes ngx_set_misc [https://github.com/agentzh/set-misc-nginx-
         if ($expired) {
             return 403;
         }
+        set_decode_base64url $network $arg_n;
+        set_ip_matches $ip_matches $network $remote_ip;
+        if ($ip_matches = 0) {
+            return 403;
+        }
         echo "OK";
     }
-
+    
     location = /rand {
         set $from 3;
         set $to 15;
@@ -771,6 +776,31 @@ R/pvxzHC4NLtj7S+kXFg/NePTmk=
 Please note that we're using [[HttpEchoModule]]'s [[HttpEchoModule#echo|echo directive]] here to output values of nginx variables directly.
 
 This directive requires the OpenSSL library enabled in your Nignx build (usually by passing the <code>--with-http_ssl_module</code> option to the <code>./configure</code> script).
+
+== set_ip_matches ==
+'''syntax:''' ''set_ip_matches $dst <network> <ip>''
+
+'''default:''' ''no''
+
+'''context:''' ''location, location if''
+
+'''phase:''' ''rewrite''
+
+Sets <code>$dst</code> to either <code>1</code> or <code>0</code>, dependent on whether or not the IP address (either IPv4 or IPv6) as defined in <code>ip</code> matches the network defined in <code>network</code>. The network can be specified as a single IP address or using CIDR notation.
+
+For instance,
+
+<geshi lang="nginx">
+    location /test {
+        set_ip_matches $r1 10.0.0.0/8 10.0.2.101;
+        set_ip_matches $r2 10.0.0.0/24 10.0.2.101;
+        echo "r1=$r1, r2=$r2";
+    }
+</geshi>
+
+then request <code>GET /test</code> will output <code>r1=1, r2=0</code>.
+
+This directive looks a lot like the "allow" directive, but it executes in the "rewrite" phase and allows for custom handling of matches and mismatches.
 
 == set_random ==
 '''syntax:''' ''set_random $res <from> <to>''
