@@ -29,15 +29,19 @@ Table of Contents
     * [set_decode_base32](#set_decode_base32)
     * [set_encode_base64](#set_encode_base64)
     * [set_decode_base64](#set_decode_base64)
+    * [set_encode_base64url](#set_encode_base64url)
+    * [set_decode_base64url](#set_decode_base64url)
     * [set_encode_hex](#set_encode_hex)
     * [set_decode_hex](#set_decode_hex)
     * [set_sha1](#set_sha1)
     * [set_md5](#set_md5)
     * [set_hmac_sha1](#set_hmac_sha1)
+    * [set_ip_matches](#set_ip_matches)
     * [set_random](#set_random)
     * [set_secure_random_alphanum](#set_secure_random_alphanum)
     * [set_secure_random_lcalpha](#set_secure_random_lcalpha)
     * [set_rotate](#set_rotate)
+    * [set_expired](#set_expired)
     * [set_local_today](#set_local_today)
     * [set_formatted_gmt_time](#set_formatted_gmt_time)
     * [set_formatted_local_time](#set_formatted_local_time)
@@ -136,6 +140,15 @@ location /base64 {
     # $b == 'abcde'
 }
 
+location /base64url {
+    set $a 'abcde';
+    set_encode_base64url $a;
+    set_decode_base64url $b $a;
+
+    # now $a == 'YWJjZGU' and
+    # $b == 'abcde'
+}
+
 location /hex {
     set $a 'abcde';
     set_encode_hex $a;
@@ -175,6 +188,29 @@ location /signature {
     set_hmac_sha1 $signature $secret_key $string_to_sign;
     set_encode_base64 $signature $signature;
     echo $signature;
+}
+
+# GET /secure?e=1893456000&n=MC4wLjAuMC8w&s=CyTCGzrXeRqq9_MvY1hm6ZvqwmY
+# returns 403 when signature on the arguments is not correct OR
+# when expire time is passed or network does not match.
+# It is an alternative to the HttpSecureLinkModule in Nginx.
+# This example has expiry "2030-01-01" and network "0.0.0.0/0".
+location /secure {
+    set_hmac_sha1 $signature 'secret-key' "$arg_e&$arg_n";
+    set_encode_base64url $signature;
+    if ($signature != $arg_s) {
+        return 403;
+    }
+    set_expired $expired $arg_e;
+    if ($expired) {
+        return 403;
+    }
+    set_decode_base64url $network $arg_n;
+    set_ip_matches $ip_matches $network $remote_ip;
+    if ($ip_matches = 0) {
+        return 403;
+    }
+    echo "OK";
 }
 
 location = /rand {
@@ -627,6 +663,42 @@ Similar to the [set_encode_base64](#set_encode_base64) directive, but does exact
 
 [Back to TOC](#table-of-contents)
 
+set_encode_base64url
+--------------------
+**syntax:** *set_encode_base64url $dst &lt;src&gt;*
+
+**syntax:** *set_encode_base64url $dst*
+
+**default:** *no*
+
+**context:** *location, location if*
+
+**phase:** *rewrite*
+
+**category:** *ndk_set_var_value*
+
+Similar to the [set_encode_base64](#set_encode_base64) directive, but uses URL safe base64 variant, '+' becomes '-', '/' becomes '_' and there is no padding with '=' characters.
+
+[Back to TOC](#table-of-contents)
+
+set_decode_base64url
+--------------------
+**syntax:** *set_decode_base64url $dst &lt;src&gt;*
+
+**syntax:** *set_decode_base64url $dst*
+
+**default:** *no*
+
+**context:** *location, location if*
+
+**phase:** *rewrite*
+
+**category:** *ndk_set_var_value*
+
+Similar to the [set_encode_base64url](#set_encode_base64url) directive, but does exactly the the opposite operation, .i.e, decoding a base64url digest into its original form.
+
+[Back to TOC](#table-of-contents)
+
 set_encode_hex
 --------------
 **syntax:** *set_encode_hex $dst &lt;src&gt;*
@@ -846,6 +918,35 @@ This directive requires the OpenSSL library enabled in your Nignx build (usually
 
 [Back to TOC](#table-of-contents)
 
+set_ip_matches
+--------------
+**syntax:** *set_ip_matches $dst &lt;network&gt; &lt;ip&gt;*
+
+**default:** *no*
+
+**context:** *location, location if*
+
+**phase:** *rewrite*
+
+Sets `$dst` to either `1` or `0`, dependent on whether or not the IP address (either IPv4 or IPv6) as defined in `ip` matches the network defined in `network`. The network can be specified as a single IP address or using CIDR notation.
+
+For instance,
+
+```nginx
+
+location /test {
+    set_ip_matches $r1 10.0.0.0/8 10.0.2.101;
+    set_ip_matches $r2 10.0.0.0/24 10.0.2.101;
+    echo "r1=$r1, r2=$r2";
+}
+```
+
+then request `GET /test` will output `r1=1, r2=0`.
+
+This directive looks a lot like the "allow" directive, but it executes in the "rewrite" phase and allows for custom handling of matches and mismatches.
+
+[Back to TOC](#table-of-contents)
+
 set_random
 ----------
 **syntax:** *set_random $res &lt;from&gt; &lt;to&gt;*
@@ -1007,6 +1108,23 @@ location /rotate {
 And accessing `/rotate` will also output integer sequence 0, 1, 2, 3, 0, 1, 2, 3, and so on.
 
 This directive was first introduced in the `v0.22rc7` release.
+
+[Back to TOC](#table-of-contents)
+
+set_expired
+-----------
+**syntax:** *set_expired $dst &lt;timestamp&gt;*
+
+**default:** *no*
+
+**context:** *location, location if*
+
+**phase:** *rewrite*
+
+Sets `$dst` to either `1` or `0`, dependent on whether or not the 
+timestamp as defined in `timestamp` (seconds since 1970-01-01 00:00:00) is or is not in the past. 
+
+Behind the scene, this directive utilizes the `ngx_time` API in the Nginx core, so usually no syscall is involved due to the time caching mechanism in the Nginx core.
 
 [Back to TOC](#table-of-contents)
 

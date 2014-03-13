@@ -6,9 +6,9 @@ Name
     installation instructions.
 
 Version
-    This document describes ngx_set_misc v0.22
-    (<https://github.com/agentzh/set-misc-nginx-module/tags>) released on 8
-    September 2013.
+    This document describes ngx_set_misc v0.24
+    (<https://github.com/agentzh/set-misc-nginx-module/tags>) released on 10
+    January 2014.
 
 Synopsis
         location /foo {
@@ -84,6 +84,15 @@ Synopsis
             # $b == 'abcde'
         }
 
+        location /base64url {
+            set $a 'abcde';
+            set_encode_base64url $a;
+            set_decode_base64url $b $a;
+
+            # now $a == 'YWJjZGU' and
+            # $b == 'abcde'
+        }
+
         location /hex {
             set $a 'abcde';
             set_encode_hex $a;
@@ -123,6 +132,29 @@ Synopsis
             set_hmac_sha1 $signature $secret_key $string_to_sign;
             set_encode_base64 $signature $signature;
             echo $signature;
+        }
+
+        # GET /secure?e=1893456000&n=MC4wLjAuMC8w&s=CyTCGzrXeRqq9_MvY1hm6ZvqwmY
+        # returns 403 when signature on the arguments is not correct OR
+        # when expire time is passed or network does not match.
+        # It is an alternative to the HttpSecureLinkModule in Nginx.
+        # This example has expiry "2030-01-01" and network "0.0.0.0/0".
+        location /secure {
+            set_hmac_sha1 $signature 'secret-key' "$arg_e&$arg_n";
+            set_encode_base64url $signature;
+            if ($signature != $arg_s) {
+                return 403;
+            }
+            set_expired $expired $arg_e;
+            if ($expired) {
+                return 403;
+            }
+            set_decode_base64url $network $arg_n;
+            set_ip_matches $ip_matches $network $remote_ip;
+            if ($ip_matches = 0) {
+                return 403;
+            }
+            echo "OK";
         }
 
         location = /rand {
@@ -545,6 +577,40 @@ Directives
     opposite operation, .i.e, decoding a base64 digest into its original
     form.
 
+  set_encode_base64url
+    syntax: *set_encode_base64url $dst <src>*
+
+    syntax: *set_encode_base64url $dst*
+
+    default: *no*
+
+    context: *location, location if*
+
+    phase: *rewrite*
+
+    category: *ndk_set_var_value*
+
+    Similar to the set_encode_base64 directive, but uses URL safe base64
+    variant, '+' becomes '-', '/' becomes '_' and there is no padding with
+    '=' characters.
+
+  set_decode_base64url
+    syntax: *set_decode_base64url $dst <src>*
+
+    syntax: *set_decode_base64url $dst*
+
+    default: *no*
+
+    context: *location, location if*
+
+    phase: *rewrite*
+
+    category: *ndk_set_var_value*
+
+    Similar to the set_encode_base64url directive, but does exactly the the
+    opposite operation, .i.e, decoding a base64url digest into its original
+    form.
+
   set_encode_hex
     syntax: *set_encode_hex $dst <src>*
 
@@ -760,6 +826,34 @@ Directives
     (usually by passing the "--with-http_ssl_module" option to the
     "./configure" script).
 
+  set_ip_matches
+    syntax: *set_ip_matches $dst <network> <ip>*
+
+    default: *no*
+
+    context: *location, location if*
+
+    phase: *rewrite*
+
+    Sets $dst to either 1 or 0, dependent on whether or not the IP address
+    (either IPv4 or IPv6) as defined in "ip" matches the network defined in
+    "network". The network can be specified as a single IP address or using
+    CIDR notation.
+
+    For instance,
+
+        location /test {
+            set_ip_matches $r1 10.0.0.0/8 10.0.2.101;
+            set_ip_matches $r2 10.0.0.0/24 10.0.2.101;
+            echo "r1=$r1, r2=$r2";
+        }
+
+    then request "GET /test" will output "r1=1, r2=0".
+
+    This directive looks a lot like the "allow" directive, but it executes
+    in the "rewrite" phase and allows for custom handling of matches and
+    mismatches.
+
   set_random
     syntax: *set_random $res <from> <to>*
 
@@ -824,7 +918,7 @@ Directives
     then request "GET /test" will output a string like
     "ivVVRP2DGaAqDmdf3Rv4ZDJ7k0gOfASz".
 
-    This function depends on the presence of the "/dev/urandom" device,
+    This functionality depends on the presence of the "/dev/urandom" device,
     available on most UNIX-like systems.
 
     See also set_secure_random_lcalpha and set_random.
@@ -856,7 +950,7 @@ Directives
     then request "GET /test" will output a string like
     "kcuxcddktffsippuekhshdaclaquiusj".
 
-    This function depends on the presence of the "/dev/urandom" device,
+    This functionality depends on the presence of the "/dev/urandom" device,
     available on most UNIX-like systems.
 
     This directive was first introduced in the "v0.22rc8" release.
@@ -914,6 +1008,23 @@ Directives
 
     This directive was first introduced in the "v0.22rc7" release.
 
+  set_expired
+    syntax: *set_expired $dst <timestamp>*
+
+    default: *no*
+
+    context: *location, location if*
+
+    phase: *rewrite*
+
+    Sets $dst to either 1 or 0, dependent on whether or not the timestamp as
+    defined in "timestamp" (seconds since 1970-01-01 00:00:00) is or is not
+    in the past.
+
+    Behind the scene, this directive utilizes the "ngx_time" API in the
+    Nginx core, so usually no syscall is involved due to the time caching
+    mechanism in the Nginx core.
+
   set_local_today
     syntax: *set_local_today $dst*
 
@@ -943,6 +1054,70 @@ Directives
     Nginx core, so usually no syscall is involved due to the time caching
     mechanism in the Nginx core.
 
+  set_formatted_gmt_time
+    syntax: *set_formatted_gmt_time $res &lt;time-format&gt;*
+
+    default: *no*
+
+    context: *location, location if*
+
+    phase: *rewrite*
+
+    Set a formatted GMT time to variable $res (as the first argument) using
+    the format string in the second argument.
+
+    All the conversion specification notations in the standard C function
+    "strftime" are supported, like %Y (for 4-digit years) and %M (for
+    minutes in decimal). See http://linux.die.net/man/3/strftime for a
+    complete list of conversion specification symbols.
+
+    Below is an example:
+
+        location = /t {
+            set_formatted_gmt_time $timestr "%a %b %e %H:%M:%S %Y GMT";
+            echo $timestr;
+        }
+
+    Accessing "/t" yields the output
+
+        Fri Dec 13 15:34:37 2013 GMT
+
+    This directive was first added in the 0.23 release.
+
+    See also set_formatted_local_time.
+
+  set_formatted_local_time
+    syntax: *set_formatted_local_time $res &lt;time-format&gt;*
+
+    default: *no*
+
+    context: *location, location if*
+
+    phase: *rewrite*
+
+    Set a formatted local time to variable $res (as the first argument)
+    using the format string in the second argument.
+
+    All the conversion specification notations in the standard C function
+    "strftime" are supported, like %Y (for 4-digit years) and %M (for
+    minutes in decimal). See http://linux.die.net/man/3/strftime for a
+    complete list of conversion specification symbols.
+
+    Below is an example:
+
+        location = /t {
+            set_formatted_local_time $timestr "%a %b %e %H:%M:%S %Y %Z";
+            echo $timestr;
+        }
+
+    Accessing "/t" yields the output
+
+        Fri Dec 13 15:42:15 2013 PST
+
+    This directive was first added in the 0.23 release.
+
+    See also set_formatted_gmt_time.
+
 Caveats
     Do not use $arg_PARAMETER, $cookie_COOKIE, $http_HEADER or other special
     variables defined in the Nginx core module as the target variable in
@@ -959,12 +1134,12 @@ Installation
     below:
 
     Grab the nginx source code from nginx.org (<http://nginx.org/>), for
-    example, the version 1.4.2 (see nginx compatibility), and then build the
+    example, the version 1.5.8 (see nginx compatibility), and then build the
     source with this module:
 
-        wget 'http://nginx.org/download/nginx-1.4.2.tar.gz'
-        tar -xzvf nginx-1.4.2.tar.gz
-        cd nginx-1.4.2/
+        wget 'http://nginx.org/download/nginx-1.5.8.tar.gz'
+        tar -xzvf nginx-1.5.8.tar.gz
+        cd nginx-1.5.8/
 
         # Here we assume you would install you nginx under /opt/nginx/.
         ./configure --prefix=/opt/nginx \
@@ -987,7 +1162,9 @@ Installation
 Compatibility
     The following versions of Nginx should work with this module:
 
-    *   1.4.x (last tested: 1.4.2)
+    *   1.5.x (last tested: 1.5.8)
+
+    *   1.4.x (last tested: 1.4.4)
 
     *   1.2.x (last tested: 1.2.9)
 
@@ -1057,7 +1234,8 @@ Author
     is encouraged to improve this page as well.
 
 Copyright & License
-    Copyright (C) 2009-2013, Yichun Zhang (章亦春) <agentzh@gmail.com>.
+    Copyright (C) 2009-2014, Yichun Zhang (章亦春) <agentzh@gmail.com>,
+    CloudFlare Inc.
 
     This module is licensed under the terms of the BSD license.
 
