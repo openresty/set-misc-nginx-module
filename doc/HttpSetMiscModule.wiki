@@ -84,6 +84,15 @@ This document describes ngx_set_misc [https://github.com/agentzh/set-misc-nginx-
         # $b == 'abcde'
     }
 
+    location /base64url {
+        set $a 'abcde';
+        set_encode_base64url $a;
+        set_decode_base64url $b $a;
+
+        # now $a == 'YWJjZGU' and
+        # $b == 'abcde'
+    }
+
     location /hex {
         set $a 'abcde';
         set_encode_hex $a;
@@ -517,6 +526,36 @@ This directive can be invoked by [[HttpLuaModule]]'s [[HttpLuaModule#ndk.set_var
 '''category:''' ''ndk_set_var_value''
 
 Similar to the [[#set_encode_base64|set_encode_base64]] directive, but does exactly the the opposite operation, .i.e, decoding a base64 digest into its original form.
+
+== set_encode_base64url ==
+'''syntax:''' ''set_encode_base64url $dst <src>''
+
+'''syntax:''' ''set_encode_base64url $dst''
+
+'''default:''' ''no''
+
+'''context:''' ''location, location if''
+
+'''phase:''' ''rewrite''
+
+'''category:''' ''ndk_set_var_value''
+
+Similar to the [[#set_encode_base64|set_encode_base64]] directive, but uses URL safe base64 variant, '+' becomes '-', '/' becomes '_' and there is no padding with '=' characters.
+
+== set_decode_base64url ==
+'''syntax:''' ''set_decode_base64url $dst <src>''
+
+'''syntax:''' ''set_decode_base64url $dst''
+
+'''default:''' ''no''
+
+'''context:''' ''location, location if''
+
+'''phase:''' ''rewrite''
+
+'''category:''' ''ndk_set_var_value''
+
+Similar to the [[#set_encode_base64url|set_encode_base64url]] directive, but does exactly the the opposite operation, .i.e, decoding a base64url digest into its original form.
 
 == set_encode_hex ==
 '''syntax:''' ''set_encode_hex $dst <src>''
