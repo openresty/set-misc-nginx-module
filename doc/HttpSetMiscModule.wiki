@@ -715,6 +715,31 @@ Please note that we're using [[HttpEchoModule]]'s [[HttpEchoModule#echo|echo dir
 
 This directive requires the OpenSSL library enabled in your Nignx build (usually by passing the <code>--with-http_ssl_module</code> option to the <code>./configure</code> script).
 
+== set_ip_matches ==
+'''syntax:''' ''set_ip_matches $dst <network> <ip>''
+
+'''default:''' ''no''
+
+'''context:''' ''location, location if''
+
+'''phase:''' ''rewrite''
+
+Sets <code>$dst</code> to either <code>1</code> or <code>0</code>, dependent on whether or not the IP address (either IPv4 or IPv6) as defined in <code>ip</code> matches the network defined in <code>network</code>. The network can be specified as a single IP address or using CIDR notation.
+
+For instance,
+
+<geshi lang="nginx">
+    location /test {
+        set_ip_matches $r1 10.0.0.0/8 10.0.2.101;
+        set_ip_matches $r2 10.0.0.0/24 10.0.2.101;
+        echo "r1=$r1, r2=$r2";
+    }
+</geshi>
+
+then request <code>GET /test</code> will output <code>r1=1, r2=0</code>.
+
+This directive looks a lot like the "allow" directive, but it executes in the "rewrite" phase and allows for custom handling of matches and mismatches.
+
 == set_random ==
 '''syntax:''' ''set_random $res <from> <to>''
 
