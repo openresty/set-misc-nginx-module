@@ -862,6 +862,20 @@ And accessing <code>/rotate</code> will also output integer sequence 0, 1, 2, 3,
 
 This directive was first introduced in the <code>v0.22rc7</code> release.
 
+== set_expired ==
+'''syntax:''' ''set_expired $dst <timestamp>''
+
+'''default:''' ''no''
+
+'''context:''' ''location, location if''
+
+'''phase:''' ''rewrite''
+
+Sets <code>$dst</code> to either <code>1</code> or <code>0</code>, dependent on whether or not the
+timestamp as defined in <code>timestamp</code> (seconds since 1970-01-01 00:00:00) is or is not in the past.
+
+Behind the scene, this directive utilizes the <code>ngx_time</code> API in the Nginx core, so usually no syscall is involved due to the time caching mechanism in the Nginx core.
+
 == set_local_today ==
 '''syntax:''' ''set_local_today $dst''
 
