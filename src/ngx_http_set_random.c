@@ -3,6 +3,7 @@
 #endif
 #include "ddebug.h"
 
+
 #include <ndk.h>
 #include "ngx_http_set_random.h"
 #include <stdlib.h>
@@ -21,14 +22,14 @@ ngx_http_set_misc_set_random(ngx_http_request_t *r, ngx_str_t *res,
     int_from = ngx_atoi(rand_from->data, rand_from->len);
     if (int_from == NGX_ERROR) {
         ngx_log_error(NGX_LOG_ERR, r->connection->log, 0,
-                "set_random: bad \"from\" argument: %v", rand_from);
+                      "set_random: bad \"from\" argument: %v", rand_from);
         return NGX_ERROR;
     }
 
     int_to = ngx_atoi(rand_to->data, rand_to->len);
     if (int_to == NGX_ERROR) {
         ngx_log_error(NGX_LOG_ERR, r->connection->log, 0,
-                "set_random: bad \"to\" argument: %v", rand_to);
+                      "set_random: bad \"to\" argument: %v", rand_to);
         return NGX_ERROR;
     }
 
@@ -54,4 +55,3 @@ ngx_http_set_misc_set_random(ngx_http_request_t *r, ngx_str_t *res,
 
     return NGX_OK;
 }
-
