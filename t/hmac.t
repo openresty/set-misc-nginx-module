@@ -1,4 +1,4 @@
-# vi:filetype=
+# vi:filetype=perl
 
 use lib 'lib';
 use Test::Nginx::Socket;

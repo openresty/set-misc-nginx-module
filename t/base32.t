@@ -1,4 +1,4 @@
-# vi:filetype=
+# vi:filetype=perl
 
 use Test::Nginx::Socket;
 
