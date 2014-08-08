@@ -1,17 +1,16 @@
-#vi:filetype=perl
+# vi:filetype=
 
 use lib 'lib';
 use Test::Nginx::Socket;
 
-#repeat_each(3);
+repeat_each(3);
 
 plan tests => repeat_each(2) * 2 * blocks();
 
 no_long_string();
+#no_diff();
 
 run_tests();
-
-#no_diff();
 
 __DATA__
 
@@ -81,7 +80,7 @@ GET /foo
 --- request
 GET /foo
 --- response_body
-%e4%bd%a0%e5%a5%bd
+%E4%BD%A0%E5%A5%BD
 
 
 
@@ -95,7 +94,7 @@ GET /foo
 --- request
 GET /foo
 --- response_body
-%e6%b3%95%e8%a7%84%e5%8f%8a%e9%a5%bf%e5%93%a6%e7%89%a9%e6%9d%83%e6%b3%95%e5%ae%b6%e5%93%a6%e4%bd%8e%e4%bb%b7%e9%9d%9e%e7%bb%93%e6%9e%9c%e5%93%a6%e6%88%91%e4%ba%8c%e6%9c%9f%e7%95%8c%20%20%e9%99%84%e4%bb%b6%e9%a5%bf%e5%93%a6%e6%ad%a6%e5%99%a8%20%20%e7%a7%af%e5%88%86%e9%a5%bf%e5%93%a6%e4%b8%ba%e5%a5%91%e6%9c%ba%e4%bd%9bi%20%e8%af%a5%e8%bd%af%e4%bb%b6%e5%93%a6%e6%b0%94%e6%b0%9b%20%20%e4%bb%bd%e9%a2%9d%e5%8f%ab%e6%88%91%e8%b5%b7%20%e5%9b%bd%e6%97%a0%e4%ba%8c%e5%90%9b%e5%93%a6%e6%b0%94%e6%b0%9b%e4%b8%ba%e7%95%8c%e9%9d%9eieowq%e7%bb%93%e6%9e%9c%e5%93%a6%e8%80%8c%e5%ae%8c%e5%85%a8%e9%99%84%e4%bb%b6%20%20%e4%bb%bd%e9%a2%9d%e5%8f%ab%e6%88%91iqfjeowiqgjeriowqfjpdjfosadijfoiasdjf%20%e9%99%84%e4%bb%b6%e9%a5%bf%e5%93%a6%e6%ad%a6%e5%99%a8%e7%95%8c%20%e4%bb%bd%e9%a2%9d%e5%8f%ab%e6%88%91%e8%b5%b7%e7%95%8c%e4%bb%bd%e9%a2%9d%e5%8f%ab%e6%88%91%e8%b5%b7%e5%93%a6ifjefejwioq%e9%99%84%e4%bb%b6%e9%a5%bf%e5%93%a6%e6%ad%a6%e5%99%a8%e7%95%8c%e9%9d%9e%e9%a3%8e%e6%a0%bc%e5%8f%8a%e5%8e%bb%e5%93%a6%e6%a0%b9%e6%8d%ae%e4%bb%bd%e9%a2%9d%e5%8f%ab%e6%88%91%e8%b5%b7%e5%93%a6%e7%95%8c%e4%bb%bd%e9%a2%9d%e4%b8%ba%e5%a5%91%e6%9c%ba%e5%93%a6%e4%b9%b3%e6%88%bf%e9%98%bf%e5%9f%ba%e5%ae%8c%e5%85%a8%e5%93%a6igqtewqo%e4%b8%aa%e4%ba%ba%e5%b0%b1%e5%8e%bb%e5%93%a6ieorjwrewqoi%e6%97%a5%e5%93%a6%e9%a2%9d%e5%a4%96%e8%b5%b7%e4%bb%8a%e5%a4%a9%e8%af%b6%e5%93%a6%e6%88%91%e4%ba%b2%e7%83%ad%e4%b8%ba%e7%89%b9%e5%8a%a1%e5%89%8d%e6%97%a5%e5%93%a6%e6%88%91%e8%80%8c%e5%93%a5%e7%89%b9%e5%ae%8c%e5%85%a8%e5%93%a6iijrtewmkdf%20%e6%9c%8d%e5%8a%a1%e9%84%82%e6%bd%9c%e6%b1%9f%e5%93%a6irewq
+%E6%B3%95%E8%A7%84%E5%8F%8A%E9%A5%BF%E5%93%A6%E7%89%A9%E6%9D%83%E6%B3%95%E5%AE%B6%E5%93%A6%E4%BD%8E%E4%BB%B7%E9%9D%9E%E7%BB%93%E6%9E%9C%E5%93%A6%E6%88%91%E4%BA%8C%E6%9C%9F%E7%95%8C%20%20%E9%99%84%E4%BB%B6%E9%A5%BF%E5%93%A6%E6%AD%A6%E5%99%A8%20%20%E7%A7%AF%E5%88%86%E9%A5%BF%E5%93%A6%E4%B8%BA%E5%A5%91%E6%9C%BA%E4%BD%9Bi%20%E8%AF%A5%E8%BD%AF%E4%BB%B6%E5%93%A6%E6%B0%94%E6%B0%9B%20%20%E4%BB%BD%E9%A2%9D%E5%8F%AB%E6%88%91%E8%B5%B7%20%E5%9B%BD%E6%97%A0%E4%BA%8C%E5%90%9B%E5%93%A6%E6%B0%94%E6%B0%9B%E4%B8%BA%E7%95%8C%E9%9D%9Eieowq%E7%BB%93%E6%9E%9C%E5%93%A6%E8%80%8C%E5%AE%8C%E5%85%A8%E9%99%84%E4%BB%B6%20%20%E4%BB%BD%E9%A2%9D%E5%8F%AB%E6%88%91iqfjeowiqgjeriowqfjpdjfosadijfoiasdjf%20%E9%99%84%E4%BB%B6%E9%A5%BF%E5%93%A6%E6%AD%A6%E5%99%A8%E7%95%8C%20%E4%BB%BD%E9%A2%9D%E5%8F%AB%E6%88%91%E8%B5%B7%E7%95%8C%E4%BB%BD%E9%A2%9D%E5%8F%AB%E6%88%91%E8%B5%B7%E5%93%A6ifjefejwioq%E9%99%84%E4%BB%B6%E9%A5%BF%E5%93%A6%E6%AD%A6%E5%99%A8%E7%95%8C%E9%9D%9E%E9%A3%8E%E6%A0%BC%E5%8F%8A%E5%8E%BB%E5%93%A6%E6%A0%B9%E6%8D%AE%E4%BB%BD%E9%A2%9D%E5%8F%AB%E6%88%91%E8%B5%B7%E5%93%A6%E7%95%8C%E4%BB%BD%E9%A2%9D%E4%B8%BA%E5%A5%91%E6%9C%BA%E5%93%A6%E4%B9%B3%E6%88%BF%E9%98%BF%E5%9F%BA%E5%AE%8C%E5%85%A8%E5%93%A6igqtewqo%E4%B8%AA%E4%BA%BA%E5%B0%B1%E5%8E%BB%E5%93%A6ieorjwrewqoi%E6%97%A5%E5%93%A6%E9%A2%9D%E5%A4%96%E8%B5%B7%E4%BB%8A%E5%A4%A9%E8%AF%B6%E5%93%A6%E6%88%91%E4%BA%B2%E7%83%AD%E4%B8%BA%E7%89%B9%E5%8A%A1%E5%89%8D%E6%97%A5%E5%93%A6%E6%88%91%E8%80%8C%E5%93%A5%E7%89%B9%E5%AE%8C%E5%85%A8%E5%93%A6iijrtewmkdf%20%E6%9C%8D%E5%8A%A1%E9%84%82%E6%BD%9C%E6%B1%9F%E5%93%A6irewq
 
 
 
@@ -123,7 +122,7 @@ welcometotheworldofnginx
 --- request
 GET /foo
 --- response_body
-%2b%2f%3d
+%2B%2F%3D
 
 
 
@@ -137,5 +136,5 @@ GET /foo
 --- request
 GET /foo
 --- response_body
-%22a%2fb%3d%7b%7d%3a%3c%3e%3b%26%5b%5d%5c%5e
+%22a%2Fb%3D%7B%7D%3A%3C%3E%3B%26%5B%5D%5C%5E
 
