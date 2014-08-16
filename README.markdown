@@ -56,7 +56,7 @@ Table of Contents
 Version
 =======
 
-This document describes ngx_set_misc [v0.24](https://github.com/agentzh/set-misc-nginx-module/tags) released on 10 January 2014.
+This document describes ngx_set_misc [v0.25](https://github.com/openresty/set-misc-nginx-module/tags) released on 16 August 2014.
 
 Synopsis
 ========
@@ -269,7 +269,7 @@ Then request `GET /test` will yield the following output
 'hello\n\r\'\"\\'
 ```
 
-Please note that we're using [echo-nginx-module](http://github.com/agentzh/echo-nginx-module)'s [echo directive](http://github.com/agentzh/echo-nginx-module#echo) here to output values of nginx variables directly.
+Please note that we're using [echo-nginx-module](http://github.com/openresty/echo-nginx-module)'s [echo directive](http://github.com/openresty/echo-nginx-module#echo) here to output values of nginx variables directly.
 
 When taking a single argument, this directive will do in-place modification of the argument variable. For example,
 
@@ -287,7 +287,7 @@ then request `GET /test` will give exactly the same output as the previous examp
 
 This directive is usually used to prevent SQL injection.
 
-This directive can be invoked by [lua-nginx-module](http://github.com/chaoslawful/lua-nginx-module)'s [ndk.set_var.DIRECTIVE](http://github.com/chaoslawful/lua-nginx-module#ndkset_vardirective) interface and [array-var-nginx-module](http://github.com/agentzh/array-var-nginx-module)'s [array_map_op](http://github.com/agentzh/array-var-nginx-module#array_map_op) directive.
+This directive can be invoked by [lua-nginx-module](http://github.com/openresty/lua-nginx-module)'s [ndk.set_var.DIRECTIVE](http://github.com/openresty/lua-nginx-module#ndkset_vardirective) interface and [array-var-nginx-module](http://github.com/openresty/array-var-nginx-module)'s [array_map_op](http://github.com/openresty/array-var-nginx-module#array_map_op) directive.
 
 [Back to TOC](#table-of-contents)
 
@@ -342,7 +342,7 @@ Then request `GET /test` will yield the following output
 "hello\n\r'\"\\"
 ```
 
-Please note that we're using [echo-nginx-module](http://github.com/agentzh/echo-nginx-module)'s [echo directive](http://github.com/agentzh/echo-nginx-module#echo) here to output values of nginx variables directly.
+Please note that we're using [echo-nginx-module](http://github.com/openresty/echo-nginx-module)'s [echo directive](http://github.com/openresty/echo-nginx-module#echo) here to output values of nginx variables directly.
 
 When taking a single argument, this directive will do in-place modification of the argument variable. For example,
 
@@ -358,7 +358,7 @@ location /test {
 
 then request `GET /test` will give exactly the same output as the previous example.
 
-This directive can be invoked by [lua-nginx-module](http://github.com/chaoslawful/lua-nginx-module)'s [ndk.set_var.DIRECTIVE](http://github.com/chaoslawful/lua-nginx-module#ndkset_vardirective) interface and [array-var-nginx-module](http://github.com/agentzh/array-var-nginx-module)'s [array_map_op](http://github.com/agentzh/array-var-nginx-module#array_map_op) directive.
+This directive can be invoked by [lua-nginx-module](http://github.com/openresty/lua-nginx-module)'s [ndk.set_var.DIRECTIVE](http://github.com/openresty/lua-nginx-module#ndkset_vardirective) interface and [array-var-nginx-module](http://github.com/openresty/array-var-nginx-module)'s [array_map_op](http://github.com/openresty/array-var-nginx-module#array_map_op) directive.
 
 [Back to TOC](#table-of-contents)
 
@@ -394,7 +394,7 @@ Then request `GET /test?key=hello+world%21` will yield the following output
 
 The nginx standard [$arg_PARAMETER](http://nginx.org/en/docs/http/ngx_http_core_module.html#var_arg_) variable holds the raw (escaped) value of the URI parameter. So we need the `set_unescape_uri` directive to unescape it first.
 
-Please note that we're using [echo-nginx-module](http://github.com/agentzh/echo-nginx-module)'s [echo directive](http://github.com/agentzh/echo-nginx-module#echo) here to output values of nginx variables directly.
+Please note that we're using [echo-nginx-module](http://github.com/openresty/echo-nginx-module)'s [echo directive](http://github.com/openresty/echo-nginx-module#echo) here to output values of nginx variables directly.
 
 When taking a single argument, this directive will do in-place modification of the argument variable. For example,
 
@@ -410,7 +410,7 @@ location /test {
 
 then request `GET /test?key=hello+world%21` will give exactly the same output as the previous example.
 
-This directive can be invoked by [lua-nginx-module](http://github.com/chaoslawful/lua-nginx-module)'s [ndk.set_var.DIRECTIVE](http://github.com/chaoslawful/lua-nginx-module#ndkset_vardirective) interface and [array-var-nginx-module](http://github.com/agentzh/array-var-nginx-module)'s [array_map_op](http://github.com/agentzh/array-var-nginx-module#array_map_op) directive.
+This directive can be invoked by [lua-nginx-module](http://github.com/openresty/lua-nginx-module)'s [ndk.set_var.DIRECTIVE](http://github.com/openresty/lua-nginx-module#ndkset_vardirective) interface and [array-var-nginx-module](http://github.com/openresty/array-var-nginx-module)'s [array_map_op](http://github.com/openresty/array-var-nginx-module#array_map_op) directive.
 
 [Back to TOC](#table-of-contents)
 
@@ -465,7 +465,7 @@ location /test {
 
 Then `GET /test?key=blah` will output either "moon", "sun", or "earth", depending on the actual value of the `key` query argument.
 
-This directive is usually used to compute an nginx variable to be passed to [memc-nginx-module](http://github.com/agentzh/memc-nginx-module)'s [memc_pass](http://github.com/agentzh/memc-nginx-module#memc_pass) directive, [redis2-nginx-module](http://github.com/agentzh/redis2-nginx-module)'s [[HttpRedis2Module#redis2_pass]] directive, and [ngx_http_proxy_module](http://nginx.org/en/docs/http/ngx_http_proxy_module.html)'s [proxy_pass](http://nginx.org/en/docs/http/ngx_http_proxy_module.html#proxy_pass) directive, among others.
+This directive is usually used to compute an nginx variable to be passed to [memc-nginx-module](http://github.com/openresty/memc-nginx-module)'s [memc_pass](http://github.com/openresty/memc-nginx-module#memc_pass) directive, [redis2-nginx-module](http://github.com/openresty/redis2-nginx-module)'s [[HttpRedis2Module#redis2_pass]] directive, and [ngx_http_proxy_module](http://nginx.org/en/docs/http/ngx_http_proxy_module.html)'s [proxy_pass](http://nginx.org/en/docs/http/ngx_http_proxy_module.html#proxy_pass) directive, among others.
 
 [Back to TOC](#table-of-contents)
 
@@ -501,7 +501,7 @@ Then request `GET /test` will yield the following output
     c5h66p35
 
 
-Please note that we're using [echo-nginx-module](http://github.com/agentzh/echo-nginx-module)'s [echo directive](http://github.com/agentzh/echo-nginx-module#echo) here to output values of nginx variables directly.
+Please note that we're using [echo-nginx-module](http://github.com/openresty/echo-nginx-module)'s [echo directive](http://github.com/openresty/echo-nginx-module#echo) here to output values of nginx variables directly.
 
 RFC forces the `[A-Z2-7]` RFC-3548 compliant encoding, but we're using the "base32hex" encoding (`[0-9a-v]`).
 
@@ -521,7 +521,7 @@ location /test {
 
 then request `GET /test` will give exactly the same output as the previous example.
 
-This directive can be invoked by [lua-nginx-module](http://github.com/chaoslawful/lua-nginx-module)'s [ndk.set_var.DIRECTIVE](http://github.com/chaoslawful/lua-nginx-module#ndkset_vardirective) interface and [array-var-nginx-module](http://github.com/agentzh/array-var-nginx-module)'s [array_map_op](http://github.com/agentzh/array-var-nginx-module#array_map_op) directive.
+This directive can be invoked by [lua-nginx-module](http://github.com/openresty/lua-nginx-module)'s [ndk.set_var.DIRECTIVE](http://github.com/openresty/lua-nginx-module#ndkset_vardirective) interface and [array-var-nginx-module](http://github.com/openresty/array-var-nginx-module)'s [array_map_op](http://github.com/openresty/array-var-nginx-module#array_map_op) directive.
 
 [Back to TOC](#table-of-contents)
 
@@ -589,7 +589,7 @@ Then request `GET /test` will yield the following output
     YWJjZGU=
 
 
-Please note that we're using [echo-nginx-module](http://github.com/agentzh/echo-nginx-module)'s [echo directive](http://github.com/agentzh/echo-nginx-module#echo) here to output values of nginx variables directly.
+Please note that we're using [echo-nginx-module](http://github.com/openresty/echo-nginx-module)'s [echo directive](http://github.com/openresty/echo-nginx-module#echo) here to output values of nginx variables directly.
 
 When taking a single argument, this directive will do in-place modification of the argument variable. For example,
 
@@ -605,7 +605,7 @@ location /test {
 
 then request `GET /test` will give exactly the same output as the previous example.
 
-This directive can be invoked by [lua-nginx-module](http://github.com/chaoslawful/lua-nginx-module)'s [ndk.set_var.DIRECTIVE](http://github.com/chaoslawful/lua-nginx-module#ndkset_vardirective) interface and [array-var-nginx-module](http://github.com/agentzh/array-var-nginx-module)'s [array_map_op](http://github.com/agentzh/array-var-nginx-module#array_map_op) directive.
+This directive can be invoked by [lua-nginx-module](http://github.com/openresty/lua-nginx-module)'s [ndk.set_var.DIRECTIVE](http://github.com/openresty/lua-nginx-module#ndkset_vardirective) interface and [array-var-nginx-module](http://github.com/openresty/array-var-nginx-module)'s [array_map_op](http://github.com/openresty/array-var-nginx-module#array_map_op) directive.
 
 [Back to TOC](#table-of-contents)
 
@@ -659,7 +659,7 @@ Then request `GET /test` will yield the following output
     e7aba0e4baa6e698a5
 
 
-Please note that we're using [echo-nginx-module](http://github.com/agentzh/echo-nginx-module)'s [echo directive](http://github.com/agentzh/echo-nginx-module#echo) here to output values of nginx variables directly.
+Please note that we're using [echo-nginx-module](http://github.com/openresty/echo-nginx-module)'s [echo directive](http://github.com/openresty/echo-nginx-module#echo) here to output values of nginx variables directly.
 
 When taking a single argument, this directive will do in-place modification of the argument variable. For example,
 
@@ -675,7 +675,7 @@ location /test {
 
 then request `GET /test` will give exactly the same output as the previous example.
 
-This directive can be invoked by [lua-nginx-module](http://github.com/chaoslawful/lua-nginx-module)'s [ndk.set_var.DIRECTIVE](http://github.com/chaoslawful/lua-nginx-module#ndkset_vardirective) interface and [array-var-nginx-module](http://github.com/agentzh/array-var-nginx-module)'s [array_map_op](http://github.com/agentzh/array-var-nginx-module#array_map_op) directive.
+This directive can be invoked by [lua-nginx-module](http://github.com/openresty/lua-nginx-module)'s [ndk.set_var.DIRECTIVE](http://github.com/openresty/lua-nginx-module#ndkset_vardirective) interface and [array-var-nginx-module](http://github.com/openresty/array-var-nginx-module)'s [array_map_op](http://github.com/openresty/array-var-nginx-module#array_map_op) directive.
 
 [Back to TOC](#table-of-contents)
 
@@ -731,7 +731,7 @@ Then request `GET /test` will yield the following output
     aaf4c61ddcc5e8a2dabede0f3b482cd9aea9434d
 
 
-Please note that we're using [echo-nginx-module](http://github.com/agentzh/echo-nginx-module)'s [echo directive](http://github.com/agentzh/echo-nginx-module#echo) here to output values of nginx variables directly.
+Please note that we're using [echo-nginx-module](http://github.com/openresty/echo-nginx-module)'s [echo directive](http://github.com/openresty/echo-nginx-module#echo) here to output values of nginx variables directly.
 
 When taking a single argument, this directive will do in-place modification of the argument variable. For example,
 
@@ -747,7 +747,7 @@ location /test {
 
 then request `GET /test` will give exactly the same output as the previous example.
 
-This directive can be invoked by [lua-nginx-module](http://github.com/chaoslawful/lua-nginx-module)'s [ndk.set_var.DIRECTIVE](http://github.com/chaoslawful/lua-nginx-module#ndkset_vardirective) interface and [array-var-nginx-module](http://github.com/agentzh/array-var-nginx-module)'s [array_map_op](http://github.com/agentzh/array-var-nginx-module#array_map_op) directive.
+This directive can be invoked by [lua-nginx-module](http://github.com/openresty/lua-nginx-module)'s [ndk.set_var.DIRECTIVE](http://github.com/openresty/lua-nginx-module#ndkset_vardirective) interface and [array-var-nginx-module](http://github.com/openresty/array-var-nginx-module)'s [array_map_op](http://github.com/openresty/array-var-nginx-module#array_map_op) directive.
 
 [Back to TOC](#table-of-contents)
 
@@ -785,7 +785,7 @@ Then request `GET /test` will yield the following output
     5d41402abc4b2a76b9719d911017c592
 
 
-Please note that we're using [echo-nginx-module](http://github.com/agentzh/echo-nginx-module)'s [echo directive](http://github.com/agentzh/echo-nginx-module#echo) here to output values of nginx variables directly.
+Please note that we're using [echo-nginx-module](http://github.com/openresty/echo-nginx-module)'s [echo directive](http://github.com/openresty/echo-nginx-module#echo) here to output values of nginx variables directly.
 
 When taking a single argument, this directive will do in-place modification of the argument variable. For example,
 
@@ -801,7 +801,7 @@ location /test {
 
 then request `GET /test` will give exactly the same output as the previous example.
 
-This directive can be invoked by [lua-nginx-module](http://github.com/chaoslawful/lua-nginx-module)'s [ndk.set_var.DIRECTIVE](http://github.com/chaoslawful/lua-nginx-module#ndkset_vardirective) interface and [array-var-nginx-module](http://github.com/agentzh/array-var-nginx-module)'s [array_map_op](http://github.com/agentzh/array-var-nginx-module#array_map_op) directive.
+This directive can be invoked by [lua-nginx-module](http://github.com/openresty/lua-nginx-module)'s [ndk.set_var.DIRECTIVE](http://github.com/openresty/lua-nginx-module#ndkset_vardirective) interface and [array-var-nginx-module](http://github.com/openresty/array-var-nginx-module)'s [array_map_op](http://github.com/openresty/array-var-nginx-module#array_map_op) directive.
 
 [Back to TOC](#table-of-contents)
 
@@ -840,7 +840,7 @@ Then request `GET /test` will yield the following output
     R/pvxzHC4NLtj7S+kXFg/NePTmk=
 
 
-Please note that we're using [echo-nginx-module](http://github.com/agentzh/echo-nginx-module)'s [echo directive](http://github.com/agentzh/echo-nginx-module#echo) here to output values of nginx variables directly.
+Please note that we're using [echo-nginx-module](http://github.com/openresty/echo-nginx-module)'s [echo directive](http://github.com/openresty/echo-nginx-module#echo) here to output values of nginx variables directly.
 
 This directive requires the OpenSSL library enabled in your Nignx build (usually by passing the `--with-http_ssl_module` option to the `./configure` script).
 
@@ -1132,13 +1132,13 @@ Installation
 This module is included and enabled by default in the [ngx_openresty bundle](http://openresty.org). If you want to install this module manually with your own Nginx source tarball, then follow the steps below:
 
 Grab the nginx source code from [nginx.org](http://nginx.org/), for example,
-the version 1.5.8 (see [nginx compatibility](#compatibility)), and then build the source with this module:
+the version 1.7.4 (see [nginx compatibility](#compatibility)), and then build the source with this module:
 
 ```bash
 
-wget 'http://nginx.org/download/nginx-1.5.8.tar.gz'
-tar -xzvf nginx-1.5.8.tar.gz
-cd nginx-1.5.8/
+wget 'http://nginx.org/download/nginx-1.7.4.tar.gz'
+tar -xzvf nginx-1.7.4.tar.gz
+cd nginx-1.7.4/
 
 # Here we assume you would install you nginx under /opt/nginx/.
 ./configure --prefix=/opt/nginx \
@@ -1150,7 +1150,7 @@ make -j2
 make install
 ```
 
-Download the latest version of the release tarball of this module from [set-misc-nginx-module file list](http://github.com/agentzh/set-misc-nginx-module/tags), and the latest tarball for [ngx_devel_kit](https://github.com/simpl/ngx_devel_kit) from its [file list](https://github.com/simpl/ngx_devel_kit/tags).
+Download the latest version of the release tarball of this module from [set-misc-nginx-module file list](http://github.com/openresty/set-misc-nginx-module/tags), and the latest tarball for [ngx_devel_kit](https://github.com/simpl/ngx_devel_kit) from its [file list](https://github.com/simpl/ngx_devel_kit/tags).
 
 Also, this module is included and enabled by default in the [ngx_openresty bundle](http://openresty.org/).
 
@@ -1161,6 +1161,8 @@ Compatibility
 
 The following versions of Nginx should work with this module:
 
+* **1.7.x**                       (last tested: 1.7.4)
+* **1.6.x**
 * **1.5.x**                       (last tested: 1.5.8)
 * **1.4.x**                       (last tested: 1.4.4)
 * **1.2.x**                       (last tested: 1.2.9)
@@ -1180,14 +1182,14 @@ Report Bugs
 Although a lot of effort has been put into testing and code tuning, there must be some serious bugs lurking somewhere in this module. So whenever you are bitten by any quirks, please don't hesitate to
 
 1. send a bug report or even patches to the [openresty-en mailing list](https://groups.google.com/group/openresty-en),
-1. or create a ticket on the [issue tracking interface](http://github.com/agentzh/set-misc-nginx-module/issues) provided by GitHub.
+1. or create a ticket on the [issue tracking interface](http://github.com/openresty/set-misc-nginx-module/issues) provided by GitHub.
 
 [Back to TOC](#table-of-contents)
 
 Source Repository
 =================
 
-Available on github at [agentzh/set-misc-nginx-module](http://github.com/agentzh/set-misc-nginx-module).
+Available on github at [openresty/set-misc-nginx-module](http://github.com/openresty/set-misc-nginx-module).
 
 [Back to TOC](#table-of-contents)
 
@@ -1203,8 +1205,8 @@ The change logs for every release of this module can be obtained from the ngx_op
 Test Suite
 ==========
 
-This module comes with a Perl-driven test suite. The [test cases](http://github.com/agentzh/set-misc-nginx-module/tree/master/t/) are
-[declarative](http://github.com/agentzh/set-misc-nginx-module/blob/master/t/escape-uri.t) too. Thanks to the [Test::Nginx](http://search.cpan.org/perldoc?Test::Nginx) module in the Perl world.
+This module comes with a Perl-driven test suite. The [test cases](http://github.com/openresty/set-misc-nginx-module/tree/master/t/) are
+[declarative](http://github.com/openresty/set-misc-nginx-module/blob/master/t/escape-uri.t) too. Thanks to the [Test::Nginx](http://search.cpan.org/perldoc?Test::Nginx) module in the Perl world.
 
 To run it on your side:
 
@@ -1267,3 +1269,4 @@ See Also
 ========
 * [Nginx Devel Kit](https://github.com/simpl/ngx_devel_kit)
 * [The ngx_openresty bundle](http://openresty.org)
+

@@ -6,7 +6,7 @@
 
 = Version =
 
-This document describes ngx_set_misc [https://github.com/agentzh/set-misc-nginx-module/tags v0.24] released on 10 January 2014.
+This document describes ngx_set_misc [https://github.com/openresty/set-misc-nginx-module/tags v0.25] released on 16 August 2014.
 
 = Synopsis =
 
@@ -967,12 +967,12 @@ may lead to segmentation faults.
 This module is included and enabled by default in the [http://openresty.org ngx_openresty bundle]. If you want to install this module manually with your own Nginx source tarball, then follow the steps below:
 
 Grab the nginx source code from [http://nginx.org/ nginx.org], for example,
-the version 1.5.8 (see [[#Compatibility|nginx compatibility]]), and then build the source with this module:
+the version 1.7.4 (see [[#Compatibility|nginx compatibility]]), and then build the source with this module:
 
 <geshi lang="bash">
-    wget 'http://nginx.org/download/nginx-1.5.8.tar.gz'
-    tar -xzvf nginx-1.5.8.tar.gz
-    cd nginx-1.5.8/
+    wget 'http://nginx.org/download/nginx-1.7.4.tar.gz'
+    tar -xzvf nginx-1.7.4.tar.gz
+    cd nginx-1.7.4/
     
     # Here we assume you would install you nginx under /opt/nginx/.
     ./configure --prefix=/opt/nginx \
@@ -984,7 +984,7 @@ the version 1.5.8 (see [[#Compatibility|nginx compatibility]]), and then build t
     make install
 </geshi>
 
-Download the latest version of the release tarball of this module from [http://github.com/agentzh/set-misc-nginx-module/tags set-misc-nginx-module file list], and the latest tarball for [https://github.com/simpl/ngx_devel_kit ngx_devel_kit] from its [https://github.com/simpl/ngx_devel_kit/tags file list].
+Download the latest version of the release tarball of this module from [http://github.com/openresty/set-misc-nginx-module/tags set-misc-nginx-module file list], and the latest tarball for [https://github.com/simpl/ngx_devel_kit ngx_devel_kit] from its [https://github.com/simpl/ngx_devel_kit/tags file list].
 
 Also, this module is included and enabled by default in the [http://openresty.org/ ngx_openresty bundle].
 
@@ -992,6 +992,8 @@ Also, this module is included and enabled by default in the [http://openresty.or
 
 The following versions of Nginx should work with this module:
 
+* '''1.7.x'''                       (last tested: 1.7.4)
+* '''1.6.x'''
 * '''1.5.x'''                       (last tested: 1.5.8)
 * '''1.4.x'''                       (last tested: 1.4.4)
 * '''1.2.x'''                       (last tested: 1.2.9)
@@ -1008,11 +1010,11 @@ If you find that any particular version of Nginx above 0.7.46 does not work with
 Although a lot of effort has been put into testing and code tuning, there must be some serious bugs lurking somewhere in this module. So whenever you are bitten by any quirks, please don't hesitate to
 
 # send a bug report or even patches to the [https://groups.google.com/group/openresty-en openresty-en mailing list],
-# or create a ticket on the [http://github.com/agentzh/set-misc-nginx-module/issues issue tracking interface] provided by GitHub.
+# or create a ticket on the [http://github.com/openresty/set-misc-nginx-module/issues issue tracking interface] provided by GitHub.
 
 = Source Repository =
 
-Available on github at [http://github.com/agentzh/set-misc-nginx-module agentzh/set-misc-nginx-module].
+Available on github at [http://github.com/openresty/set-misc-nginx-module openresty/set-misc-nginx-module].
 
 = Changes =
 
@@ -1022,8 +1024,8 @@ http://openresty.org/#Changes
 
 = Test Suite =
 
-This module comes with a Perl-driven test suite. The [http://github.com/agentzh/set-misc-nginx-module/tree/master/t/ test cases] are
-[http://github.com/agentzh/set-misc-nginx-module/blob/master/t/escape-uri.t declarative] too. Thanks to the [http://search.cpan.org/perldoc?Test::Nginx Test::Nginx] module in the Perl world.
+This module comes with a Perl-driven test suite. The [http://github.com/openresty/set-misc-nginx-module/tree/master/t/ test cases] are
+[http://github.com/openresty/set-misc-nginx-module/blob/master/t/escape-uri.t declarative] too. Thanks to the [http://search.cpan.org/perldoc?Test::Nginx Test::Nginx] module in the Perl world.
 
 To run it on your side:
 
@@ -1073,3 +1075,4 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 = See Also =
 * [https://github.com/simpl/ngx_devel_kit Nginx Devel Kit]
 * [http://openresty.org The ngx_openresty bundle]
+
