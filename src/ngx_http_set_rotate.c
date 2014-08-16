@@ -75,7 +75,7 @@ ngx_http_set_misc_set_rotate(ngx_http_request_t *r, ngx_str_t *res,
     int_current++;
 
     if (int_current > int_to || int_current < int_from) {
-	int_current = int_from;
+        int_current = int_from;
     }
 
     conf->current = int_current;
