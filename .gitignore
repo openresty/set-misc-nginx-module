@@ -68,3 +68,5 @@ analyze
 src/rotate.[ch]
 *.plist
 Makefile
+src/base64url.[ch]
+src/expired.[ch]
