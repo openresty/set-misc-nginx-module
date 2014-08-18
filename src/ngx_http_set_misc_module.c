@@ -453,7 +453,7 @@ ngx_http_set_misc_create_loc_conf(ngx_conf_t *cf)
 
     conf = ngx_palloc(cf->pool, sizeof(ngx_http_set_misc_loc_conf_t));
     if (conf == NULL) {
-        return NGX_CONF_ERROR;
+        return NULL;
     }
 
     conf->base32_padding = NGX_CONF_UNSET;
