@@ -426,7 +426,11 @@ Directives
     directly.
 
     RFC forces the "[A-Z2-7]" RFC-3548 compliant encoding, but we're using
-    the "base32hex" encoding ("[0-9a-v]").
+    the "base32hex" encoding by default ("[0-9a-v]").
+
+    Encoding can be overriden by setting set_misc_base32_standard_alphabet
+    directive to "on" in which case "[A-Z2-7]" RFC-3548 compliant encoding
+    will be used.
 
     By default, the "=" character is used to pad the left-over bytes due to
     alignment. But the padding behavior can be completely disabled by
@@ -461,6 +465,20 @@ Directives
     This directive can control whether to pad left-over bytes with the "="
     character when encoding a base32 digest by the set_encode_base32
     directive.
+
+  set_misc_base32_standard_alphabet
+    syntax: *set_misc_base32_standard_alphabet on|off*
+
+    default: *off*
+
+    context: *http, server, server if, location, location if*
+
+    phase: *no*
+
+    This directive can control whether to use standard "[A-Z2-7]" RFC-3548
+    compliant encoding or the extended "base32hex" ("[0-9a-v]") when encoding
+    or decoding a base32 digest by the set_encode_base32/set_decode_base32
+    directives.
 
   set_decode_base32
     syntax: *set_decode_base32 $dst <src>*

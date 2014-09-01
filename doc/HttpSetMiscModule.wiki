@@ -413,6 +413,8 @@ Please note that we're using [[HttpEchoModule]]'s [[HttpEchoModule#echo|echo dir
 
 RFC forces the <code>[A-Z2-7]</code> RFC-3548 compliant encoding, but we're using the "base32hex" encoding (<code>[0-9a-v]</code>).
 
+Encoding can be overriden by setting set_misc_base32_standard_alphabet directive to "on" in which case <code>[A-Z2-7]</code> RFC-3548 compliant encoding will be used.
+
 By default, the <code>=</code> character is used to pad the left-over bytes due to alignment. But the padding behavior can be completely disabled by setting [[#set_misc_base32_padding|set_misc_base32_padding]] <code>off</code>.
 
 When taking a single argument, this directive will do in-place modification of the argument variable. For example,
@@ -440,6 +442,17 @@ This directive can be invoked by [[HttpLuaModule]]'s [[HttpLuaModule#ndk.set_var
 '''phase:''' ''no''
 
 This directive can control whether to pad left-over bytes with the "=" character when encoding a base32 digest by the [[#set_encode_base32|set_encode_base32]] directive.
+
+== set_misc_base32_standard_alphabet ==
+'''syntax:''' ''set_misc_base32_standard_alphabet on|off''
+
+'''default:''' ''off''
+
+'''context:''' ''http, server, server if, location, location if''
+
+'''phase:''' ''no''
+
+This directive can control whether to use standard <code>[A-Z2-7]</code> RFC-3548 compliant encoding or the extended "base32hex" <code>[0-9a-v]</code> when encoding or decoding a base32 digest by the [[#set_encode_base32|set_encode_base32]] and [[#set_decode_base32|set_decode_base32]] directives.
 
 == set_decode_base32 ==
 '''syntax:''' ''set_decode_base32 $dst <src>''

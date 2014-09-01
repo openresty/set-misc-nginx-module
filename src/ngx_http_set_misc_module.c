@@ -334,6 +334,15 @@ static ngx_command_t  ngx_http_set_misc_commands[] = {
         NULL
     },
     {
+        ngx_string("set_misc_base32_standard_alphabet"),
+        NGX_HTTP_MAIN_CONF|NGX_HTTP_SRV_CONF|NGX_HTTP_SIF_CONF
+            |NGX_HTTP_LOC_CONF|NGX_HTTP_LIF_CONF|NGX_CONF_FLAG,
+        ngx_conf_set_flag_slot,
+        NGX_HTTP_LOC_CONF_OFFSET,
+        offsetof(ngx_http_set_misc_loc_conf_t, base32_standard_alphabet),
+        NULL
+    },
+    {
         ngx_string("set_encode_base32"),
         NGX_HTTP_MAIN_CONF|NGX_HTTP_SRV_CONF|NGX_HTTP_SIF_CONF
             |NGX_HTTP_LOC_CONF|NGX_HTTP_LIF_CONF|NGX_CONF_TAKE12,
@@ -457,6 +466,7 @@ ngx_http_set_misc_create_loc_conf(ngx_conf_t *cf)
     }
 
     conf->base32_padding = NGX_CONF_UNSET;
+    conf->base32_standard_alphabet = NGX_CONF_UNSET;
     conf->current = NGX_CONF_UNSET;
 
     return conf;
@@ -470,6 +480,8 @@ ngx_http_set_misc_merge_loc_conf(ngx_conf_t *cf, void *parent, void *child)
     ngx_http_set_misc_loc_conf_t *conf = child;
 
     ngx_conf_merge_value(conf->base32_padding, prev->base32_padding, 1);
+
+    ngx_conf_merge_value(conf->base32_standard_alphabet, prev->base32_standard_alphabet, 0);
 
     ngx_conf_merge_value(conf->current, prev->current, NGX_CONF_UNSET);
 
