@@ -1,5 +1,5 @@
 #ifndef DDEBUG
-#define DDEBUG 1
+#define DDEBUG 0
 #endif
 #include "ddebug.h"
 
@@ -34,7 +34,7 @@ ngx_http_set_misc_encode_base32(ngx_http_request_t *r, ngx_str_t *res,
     len = base32_encoded_length(v->len);
 
     dd("estimated dst len: %d", (int) len);
-    dd("padding: %d", (void*) conf->base32_padding);
+
     p = ngx_palloc(r->pool, len);
     if (p == NULL) {
         return NGX_ERROR;
