@@ -14,8 +14,9 @@
 
 
 static void encode_base32(size_t slen, u_char *src, size_t *dlen, u_char *dst,
-        ngx_flag_t padding);
-static int decode_base32(size_t slen, u_char *src, size_t *dlen, u_char *dst);
+        ngx_flag_t padding, ngx_str_t *alphabet);
+static int decode_base32(size_t slen, u_char *src, size_t *dlen, u_char *dst,
+        ngx_str_t *alphabet);
 
 
 ngx_int_t
@@ -41,7 +42,7 @@ ngx_http_set_misc_encode_base32(ngx_http_request_t *r, ngx_str_t *res,
 
     src = v->data; dst = p;
 
-    encode_base32(v->len, src, &len, dst, conf->base32_padding);
+    encode_base32(v->len, src, &len, dst, conf->base32_padding, &conf->base32_alphabet);
 
     res->data = p;
     res->len = len;
@@ -61,6 +62,10 @@ ngx_http_set_misc_decode_base32(ngx_http_request_t *r, ngx_str_t *res,
     u_char                  *src, *dst;
     int                      ret;
 
+    ngx_http_set_misc_loc_conf_t        *conf;
+
+    conf = ngx_http_get_module_loc_conf(r, ngx_http_set_misc_module);
+
     len = base32_decoded_length(v->len);
 
     dd("estimated dst len: %d", (int) len);
@@ -72,7 +77,7 @@ ngx_http_set_misc_decode_base32(ngx_http_request_t *r, ngx_str_t *res,
 
     src = v->data; dst = p;
 
-    ret = decode_base32(v->len, src, &len, dst);
+    ret = decode_base32(v->len, src, &len, dst, &conf->base32_alphabet);
 
     if (ret == 0 /* OK */) {
         res->data = p;
@@ -113,9 +118,9 @@ ngx_http_set_misc_decode_base32(ngx_http_request_t *r, ngx_str_t *res,
  * */
 static void
 encode_base32(size_t slen, u_char *src, size_t *dlen, u_char *dst,
-    ngx_flag_t padding)
+    ngx_flag_t padding, ngx_str_t *alphabet)
 {
-    static unsigned char basis32[] = "0123456789abcdefghijklmnopqrstuv";
+    unsigned char *basis32 = alphabet->data;
 
     size_t len;
     u_char *s;
@@ -204,57 +209,15 @@ encode_base32(size_t slen, u_char *src, size_t *dlen, u_char *dst,
 
 
 static int
-decode_base32(size_t slen, u_char *src, size_t *dlen, u_char *dst)
+decode_base32(size_t slen, u_char *src, size_t *dlen, u_char *dst,
+    ngx_str_t *alphabet)
 {
-    static unsigned char basis32[] = {
-        /* 0 - 15 */
-        77, 77, 77, 77, 77, 77, 77, 77, 77, 77, 77, 77, 77, 77, 77, 77,
+    static unsigned char    basis32[256] = { 77 };
+    ngx_uint_t              i;
 
-        /* 16 - 31 */
-        77, 77, 77, 77, 77, 77, 77, 77, 77, 77, 77, 77, 77, 77, 77, 77,
-
-        /* 32 - 47 */
-        77, 77, 77, 77, 77, 77, 77, 77, 77, 77, 77, 77, 77, 77, 77, 77,
-
-        /* 48 - 63 */
-        0,  1,  2,  3,  4,  5,  6,  7,  8,  9, 77, 77, 77, 77, 77, 77,
-
-        /* 64 - 79 */
-        77, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24,
-
-        /* 80 - 95 */
-        25, 26, 27, 28, 29, 30, 31, 77, 77, 77, 77, 77, 77, 77, 77, 77,
-
-        /* 96 - 111 */
-        77, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24,
-
-        /* 112 - 127 */
-        25, 26, 27, 28, 29, 30, 31, 77, 77, 77, 77, 77, 77, 77, 77, 77,
-
-        /* 128 - 143 */
-        77, 77, 77, 77, 77, 77, 77, 77, 77, 77, 77, 77, 77, 77, 77, 77,
-
-        /* 144 - 159 */
-        77, 77, 77, 77, 77, 77, 77, 77, 77, 77, 77, 77, 77, 77, 77, 77,
-
-        /* 160 - 175 */
-        77, 77, 77, 77, 77, 77, 77, 77, 77, 77, 77, 77, 77, 77, 77, 77,
-
-        /* 176 - 191 */
-        77, 77, 77, 77, 77, 77, 77, 77, 77, 77, 77, 77, 77, 77, 77, 77,
-
-        /* 192 - 207 */
-        77, 77, 77, 77, 77, 77, 77, 77, 77, 77, 77, 77, 77, 77, 77, 77,
-
-        /* 208 - 223 */
-        77, 77, 77, 77, 77, 77, 77, 77, 77, 77, 77, 77, 77, 77, 77, 77,
-
-        /* 224 - 239 */
-        77, 77, 77, 77, 77, 77, 77, 77, 77, 77, 77, 77, 77, 77, 77, 77,
-
-        /* 240 - 255 */
-        77, 77, 77, 77, 77, 77, 77, 77, 77, 77, 77, 77, 77, 77, 77, 77
-    };
+    for (i = 0; i < 32; i++) {
+        basis32[alphabet->data[i]] = i;
+    }
 
     size_t                   len, mod;
     u_char                  *s = src;

@@ -26,6 +26,7 @@ Table of Contents
     * [set_hashed_upstream](#set_hashed_upstream)
     * [set_encode_base32](#set_encode_base32)
     * [set_misc_base32_padding](#set_misc_base32_padding)
+    * [set_misc_base32_alphabet](#set_misc_base32_alphabet)
     * [set_decode_base32](#set_decode_base32)
     * [set_encode_base64](#set_encode_base64)
     * [set_decode_base64](#set_decode_base64)
@@ -505,6 +506,8 @@ Please note that we're using [echo-nginx-module](http://github.com/openresty/ech
 
 RFC forces the `[A-Z2-7]` RFC-3548 compliant encoding, but we're using the "base32hex" encoding (`[0-9a-v]`).
 
+The set_misc_base32_alphabet directive allows you to change the alphabet used for encoding/decoding so RFC-3548 compliant encoding is still possible.
+
 By default, the `=` character is used to pad the left-over bytes due to alignment. But the padding behavior can be completely disabled by setting [set_misc_base32_padding](#set_misc_base32_padding) `off`.
 
 When taking a single argument, this directive will do in-place modification of the argument variable. For example,
@@ -536,6 +539,22 @@ set_misc_base32_padding
 **phase:** *no*
 
 This directive can control whether to pad left-over bytes with the "=" character when encoding a base32 digest by the [set_encode_base32](#set_encode_base32) directive.
+
+[Back to TOC](#table-of-contents)
+
+set_misc_base32_alphabet
+-----------------------
+**syntax:** *set_misc_base32_alphabet &lt;alphabet&gt;*
+
+**default:** *"0123456789abcdefghijklmnopqrstuv"*
+
+**context:** *http, server, server if, location, location if*
+
+**phase:** *no*
+
+This directive controls the alphabet used for encoding/decoding a base32 digest. It accepts a string containing the desired alphabet like "ABCDEFGHIJKLMNOPQRSTUVWXYZ234567" for standard alphabet.
+
+Extended (base32hex) alphabet is used by default.
 
 [Back to TOC](#table-of-contents)
 
