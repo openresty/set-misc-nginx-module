@@ -6,7 +6,7 @@
 
 = Version =
 
-This document describes ngx_set_misc [https://github.com/openresty/set-misc-nginx-module/tags v0.25] released on 16 August 2014.
+This document describes ngx_set_misc [https://github.com/openresty/set-misc-nginx-module/tags v0.26] released on 2 September 2014.
 
 = Synopsis =
 

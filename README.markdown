@@ -56,7 +56,7 @@ Table of Contents
 Version
 =======
 
-This document describes ngx_set_misc [v0.25](https://github.com/openresty/set-misc-nginx-module/tags) released on 16 August 2014.
+This document describes ngx_set_misc [v0.26](https://github.com/openresty/set-misc-nginx-module/tags) released on 2 September 2014.
 
 Synopsis
 ========
