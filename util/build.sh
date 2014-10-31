@@ -9,6 +9,8 @@ force=$2
 
     #--with-cc="gcc46" \
     #--with-ld-opt="-rdynamic" \
+    #--with-mail \
+    #--with-mail_ssl_module \
 
 ngx-build $force $version \
     --with-http_ssl_module \
