@@ -475,6 +475,8 @@ ngx_http_set_misc_create_loc_conf(ngx_conf_t *cf)
 char *
 ngx_http_set_misc_merge_loc_conf(ngx_conf_t *cf, void *parent, void *child)
 {
+    ngx_uint_t               i;
+
     ngx_http_set_misc_loc_conf_t *prev = parent;
     ngx_http_set_misc_loc_conf_t *conf = child;
 
@@ -483,6 +485,10 @@ ngx_http_set_misc_merge_loc_conf(ngx_conf_t *cf, void *parent, void *child)
     ngx_conf_merge_str_value(conf->base32_alphabet, prev->base32_alphabet, "0123456789abcdefghijklmnopqrstuv");
 
     ngx_conf_merge_value(conf->current, prev->current, NGX_CONF_UNSET);
+
+    for (i = 0; i < 32; i++) {
+        conf->basis32[conf->base32_alphabet.data[i]] = i;
+    }
 
     return NGX_CONF_OK;
 }

@@ -61,8 +61,6 @@ ngx_http_set_misc_decode_base32(ngx_http_request_t *r, ngx_str_t *res,
     u_char                  *p;
     u_char                  *src, *dst;
     int                      ret;
-    static unsigned char     basis32[256] = { 77 };
-    ngx_uint_t               i;
 
     ngx_http_set_misc_loc_conf_t        *conf;
 
@@ -79,11 +77,7 @@ ngx_http_set_misc_decode_base32(ngx_http_request_t *r, ngx_str_t *res,
 
     src = v->data; dst = p;
 
-    for (i = 0; i < 32; i++) {
-        basis32[conf->base32_alphabet.data[i]] = i;
-    }
-
-    ret = decode_base32(v->len, src, &len, dst, &basis32);
+    ret = decode_base32(v->len, src, &len, dst, conf->basis32);
 
     if (ret == 0 /* OK */) {
         res->data = p;
