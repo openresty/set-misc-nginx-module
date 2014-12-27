@@ -42,7 +42,8 @@ ngx_http_set_misc_encode_base32(ngx_http_request_t *r, ngx_str_t *res,
 
     src = v->data; dst = p;
 
-    encode_base32(v->len, src, &len, dst, conf->base32_padding, &conf->base32_alphabet);
+    encode_base32(v->len, src, &len, dst, conf->base32_padding,
+        &conf->base32_alphabet);
 
     res->data = p;
     res->len = len;

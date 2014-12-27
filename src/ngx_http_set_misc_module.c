@@ -482,7 +482,8 @@ ngx_http_set_misc_merge_loc_conf(ngx_conf_t *cf, void *parent, void *child)
 
     ngx_conf_merge_value(conf->base32_padding, prev->base32_padding, 1);
 
-    ngx_conf_merge_str_value(conf->base32_alphabet, prev->base32_alphabet, "0123456789abcdefghijklmnopqrstuv");
+    ngx_conf_merge_str_value(conf->base32_alphabet, prev->base32_alphabet,
+        "0123456789abcdefghijklmnopqrstuv");
 
     ngx_conf_merge_value(conf->current, prev->current, NGX_CONF_UNSET);
 
