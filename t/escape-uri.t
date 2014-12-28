@@ -5,7 +5,7 @@ use Test::Nginx::Socket;
 
 repeat_each(3);
 
-plan tests => repeat_each(2) * 2 * blocks();
+plan tests => repeat_each() * 2 * blocks();
 
 no_long_string();
 #no_diff();
