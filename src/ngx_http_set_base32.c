@@ -3,6 +3,7 @@
 #endif
 #include "ddebug.h"
 
+
 #include <ndk.h>
 
 #include "ngx_http_set_base32.h"
@@ -14,7 +15,7 @@
 
 
 static void encode_base32(size_t slen, u_char *src, size_t *dlen, u_char *dst,
-        ngx_flag_t padding);
+    ngx_flag_t padding);
 static int decode_base32(size_t slen, u_char *src, size_t *dlen, u_char *dst);
 
 
@@ -90,27 +91,9 @@ ngx_http_set_misc_decode_base32(ngx_http_request_t *r, ngx_str_t *res,
 }
 
 
-/* 实现参考 src/core/ngx_string.c 中的 ngx_(encode|decode)_base64()
- * 例程 */
+/* See the implementation in src/core/ngx_string.c's
+ * ngx_(encode|decode)_base64() for details. */
 
-/**
- * 将给定字符串转换成对应的 Base32 编码形式.
- * 目标字符串必须保证有充足的空间容纳编码后的数据.
- * 可以用宏 base32_encoded_length() 预估编码后数据
- * 长度并预先为目标字符串分配空间.
- * <code>
- *     char *src, *dst;
- *     int slen, dlen;
- *     slen = sizeof("hello") - 1;
- *     src = (char*) "hello";
- *     dst = malloc(base32_encoded_length(slen));
- *     encode_base32(slen, src, &(dlen), dst);
- * </code>
- * @param slen 源数据串长度.
- * @param src 原数据串指针.
- * @param dlen 目标数据串长度指针, 保存 Base32 编码后数据长度.
- * @param dst 目标数据串指针, 保存 Base32 编码后数据.
- * */
 static void
 encode_base32(size_t slen, u_char *src, size_t *dlen, u_char *dst,
     ngx_flag_t padding)
@@ -321,4 +304,3 @@ decode_base32(size_t slen, u_char *src, size_t *dlen, u_char *dst)
 
     return 0;
 }
-
