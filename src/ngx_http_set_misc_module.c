@@ -32,6 +32,11 @@ static char *ngx_http_set_misc_merge_loc_conf(ngx_conf_t *cf, void *parent,
     void *child);
 
 
+static ngx_conf_deprecated_t  ngx_conf_deprecated_set_misc_base32_padding = {
+    ngx_conf_deprecated, "set_misc_base32_padding", "set_base32_padding"
+};
+
+
 static ndk_set_var_t  ngx_http_set_misc_set_encode_base64_filter = {
     NDK_SET_VAR_VALUE,
     (void *) ngx_http_set_misc_set_encode_base64,
@@ -325,9 +330,19 @@ static ngx_command_t  ngx_http_set_misc_commands[] = {
         NULL
     },
     {
+        /* this is now deprecated; use set_base32_padding instead */
         ngx_string("set_misc_base32_padding"),
         NGX_HTTP_MAIN_CONF|NGX_HTTP_SRV_CONF|NGX_HTTP_SIF_CONF
-            |NGX_HTTP_LOC_CONF|NGX_HTTP_LIF_CONF|NGX_CONF_FLAG,
+                          |NGX_HTTP_LOC_CONF|NGX_HTTP_LIF_CONF|NGX_CONF_FLAG,
+        ngx_conf_set_flag_slot,
+        NGX_HTTP_LOC_CONF_OFFSET,
+        offsetof(ngx_http_set_misc_loc_conf_t, base32_padding),
+        &ngx_conf_deprecated_set_misc_base32_padding,
+    },
+    {
+        ngx_string("set_base32_padding"),
+        NGX_HTTP_MAIN_CONF|NGX_HTTP_SRV_CONF|NGX_HTTP_SIF_CONF
+                          |NGX_HTTP_LOC_CONF|NGX_HTTP_LIF_CONF|NGX_CONF_FLAG,
         ngx_conf_set_flag_slot,
         NGX_HTTP_LOC_CONF_OFFSET,
         offsetof(ngx_http_set_misc_loc_conf_t, base32_padding),

@@ -92,7 +92,7 @@ hiya"
 
 === TEST 5: base32 (0 bytes left)
 --- config
-    set_misc_base32_padding on;
+    set_base32_padding on;
     location /bar {
         set $a '"hello, world!"';
         set_encode_base32 $a;
@@ -108,7 +108,7 @@ hiya"
 
 === TEST 6: base32 (6 bytes padded)
 --- config
-    set_misc_base32_padding on;
+    set_base32_padding on;
     location /bar {
         set $a '"hello, world!"a';
         set_encode_base32 $a;
@@ -124,7 +124,7 @@ hiya"
 
 === TEST 7: base32 (4 bytes left)
 --- config
-    set_misc_base32_padding on;
+    set_base32_padding on;
     location /bar {
         set $a '"hello, world!"ab';
         set_encode_base32 $a;
@@ -140,7 +140,7 @@ hiya"
 
 === TEST 8: base32 (3 bytes left)
 --- config
-    set_misc_base32_padding on;
+    set_base32_padding on;
     location /bar {
         set $a '"hello, world!"abc';
         set_encode_base32 $a;
@@ -156,7 +156,7 @@ hiya"
 
 === TEST 9: base32 (1 bytes left)
 --- config
-    set_misc_base32_padding on;
+    set_base32_padding on;
     location /bar {
         set $a '"hello, world!"abcd';
         set_encode_base32 $a;
@@ -252,7 +252,7 @@ hiya"
 
 === TEST 14: base32 standard alphabet (0 bytes left)
 --- config
-    set_misc_base32_padding on;
+    set_base32_padding on;
     set_base32_alphabet "ABCDEFGHIJKLMNOPQRSTUVWXYZ234567";
     location /bar {
         set $a '"hello, world!"';
@@ -269,7 +269,7 @@ EJUGK3DMN4WCA53POJWGIIJC
 
 === TEST 15: base32 standard alphabet (6 bytes padded)
 --- config
-    set_misc_base32_padding on;
+    set_base32_padding on;
     set_base32_alphabet "ABCDEFGHIJKLMNOPQRSTUVWXYZ234567";
     location /bar {
         set $a '"hello, world!"a';
@@ -286,7 +286,7 @@ EJUGK3DMN4WCA53POJWGIIJCME======
 
 === TEST 16: base32 standard alphabet (4 bytes left)
 --- config
-    set_misc_base32_padding on;
+    set_base32_padding on;
     set_base32_alphabet "ABCDEFGHIJKLMNOPQRSTUVWXYZ234567";
     location /bar {
         set $a '"hello, world!"ab';
@@ -303,7 +303,7 @@ EJUGK3DMN4WCA53POJWGIIJCMFRA====
 
 === TEST 17: base32 standard alphabet (3 bytes left)
 --- config
-    set_misc_base32_padding on;
+    set_base32_padding on;
     set_base32_alphabet "ABCDEFGHIJKLMNOPQRSTUVWXYZ234567";
     location /bar {
         set $a '"hello, world!"abc';
@@ -320,7 +320,7 @@ EJUGK3DMN4WCA53POJWGIIJCMFRGG===
 
 === TEST 18: base32 standard alphabet (1 bytes left)
 --- config
-    set_misc_base32_padding on;
+    set_base32_padding on;
     set_base32_alphabet "ABCDEFGHIJKLMNOPQRSTUVWXYZ234567";
     location /bar {
         set $a '"hello, world!"abcd';
@@ -417,7 +417,7 @@ hiya"
 
 === TEST 23: base32 custom alphabet (0 bytes left)
 --- config
-    set_misc_base32_padding on;
+    set_base32_padding on;
     set_base32_alphabet "efghijklmnopqrstuvwxyz0123456789";
     location /bar {
         set $a '"hello, world!"';
@@ -434,7 +434,7 @@ inyko5hqr60ge75tsn0kmmng
 
 === TEST 24: base32 custom alphabet (6 bytes padded)
 --- config
-    set_misc_base32_padding on;
+    set_base32_padding on;
     set_base32_alphabet "efghijklmnopqrstuvwxyz0123456789";
     location /bar {
         set $a '"hello, world!"a';
@@ -451,7 +451,7 @@ inyko5hqr60ge75tsn0kmmngqi======
 
 === TEST 25: base32 custom alphabet (4 bytes left)
 --- config
-    set_misc_base32_padding on;
+    set_base32_padding on;
     set_base32_alphabet "efghijklmnopqrstuvwxyz0123456789";
     location /bar {
         set $a '"hello, world!"ab';
@@ -468,7 +468,7 @@ inyko5hqr60ge75tsn0kmmngqjve====
 
 === TEST 26: base32 custom alphabet (3 bytes left)
 --- config
-    set_misc_base32_padding on;
+    set_base32_padding on;
     set_base32_alphabet "efghijklmnopqrstuvwxyz0123456789";
     location /bar {
         set $a '"hello, world!"abc';
@@ -485,7 +485,7 @@ inyko5hqr60ge75tsn0kmmngqjvkk===
 
 === TEST 27: base32 custom alphabet (1 bytes left)
 --- config
-    set_misc_base32_padding on;
+    set_base32_padding on;
     set_base32_alphabet "efghijklmnopqrstuvwxyz0123456789";
     location /bar {
         set $a '"hello, world!"abcd';
@@ -502,7 +502,7 @@ inyko5hqr60ge75tsn0kmmngqjvkk3e=
 
 === TEST 28: use set_base32_alphabet in location
 --- config
-    set_misc_base32_padding on;
+    set_base32_padding on;
     location /bar {
         set_base32_alphabet "efghijklmnopqrstuvwxyz0123456789";
         set $a '"hello, world!"abcd';

@@ -413,7 +413,7 @@ Please note that we're using [[HttpEchoModule]]'s [[HttpEchoModule#echo|echo dir
 
 RFC forces the <code>[A-Z2-7]</code> RFC-3548 compliant encoding, but we are using the "base32hex" encoding (<code>[0-9a-v]</code>) by default. The [[#set_base32_alphabet|set_base32_alphabet]] directive (first introduced in <code>v0.28</code>) allows you to change the alphabet used for encoding/decoding so RFC-3548 compliant encoding is still possible by custom configurations.
 
-By default, the <code>=</code> character is used to pad the left-over bytes due to alignment. But the padding behavior can be completely disabled by setting [[#set_misc_base32_padding|set_misc_base32_padding]] <code>off</code>.
+By default, the <code>=</code> character is used to pad the left-over bytes due to alignment. But the padding behavior can be completely disabled by setting [[#set_base32_padding|set_base32_padding]] <code>off</code>.
 
 When taking a single argument, this directive will do in-place modification of the argument variable. For example,
 
@@ -430,6 +430,20 @@ then request <code>GET /test</code> will give exactly the same output as the pre
 
 This directive can be invoked by [[HttpLuaModule]]'s [[HttpLuaModule#ndk.set_var.DIRECTIVE|ndk.set_var.DIRECTIVE]] interface and [[HttpArrayVarModule]]'s [[HttpArrayVarModule#array_map_op|array_map_op]] directive.
 
+== set_base32_padding ==
+'''syntax:''' ''set_base32_padding on|off''
+
+'''default:''' ''on''
+
+'''context:''' ''http, server, server if, location, location if''
+
+'''phase:''' ''no''
+
+This directive can control whether to pad left-over bytes with the "=" character when encoding a base32 digest by the
+[[#set_encode_base32|set_encode_base32]] directive.
+
+This directive was first introduced in <code>v0.28</code>. If you use earlier versions of this module, then you should use [[#set_misc_base32_padding|set_misc_base32_padding]] instead.
+
 == set_misc_base32_padding ==
 '''syntax:''' ''set_misc_base32_padding on|off''
 
@@ -439,7 +453,7 @@ This directive can be invoked by [[HttpLuaModule]]'s [[HttpLuaModule#ndk.set_var
 
 '''phase:''' ''no''
 
-This directive can control whether to pad left-over bytes with the "=" character when encoding a base32 digest by the [[#set_encode_base32|set_encode_base32]] directive.
+This directive has been deprecated since <code>v0.28</code>. Use [[#set_base32_padding|set_base32_padding]] instead if you are using <code>v0.28+</code>.
 
 == set_base32_alphabet ==
 '''syntax:''' ''set_base32_alphabet <alphabet>''

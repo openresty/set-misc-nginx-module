@@ -25,6 +25,7 @@ Table of Contents
     * [set_escape_uri](#set_escape_uri)
     * [set_hashed_upstream](#set_hashed_upstream)
     * [set_encode_base32](#set_encode_base32)
+    * [set_base32_padding](#set_base32_padding)
     * [set_misc_base32_padding](#set_misc_base32_padding)
     * [set_base32_alphabet](#set_base32_alphabet)
     * [set_decode_base32](#set_decode_base32)
@@ -506,7 +507,7 @@ Please note that we're using [echo-nginx-module](http://github.com/openresty/ech
 
 RFC forces the `[A-Z2-7]` RFC-3548 compliant encoding, but we are using the "base32hex" encoding (`[0-9a-v]`) by default. The [set_base32_alphabet](#set_base32_alphabet) directive (first introduced in `v0.28`) allows you to change the alphabet used for encoding/decoding so RFC-3548 compliant encoding is still possible by custom configurations.
 
-By default, the `=` character is used to pad the left-over bytes due to alignment. But the padding behavior can be completely disabled by setting [set_misc_base32_padding](#set_misc_base32_padding) `off`.
+By default, the `=` character is used to pad the left-over bytes due to alignment. But the padding behavior can be completely disabled by setting [set_base32_padding](#set_base32_padding) `off`.
 
 When taking a single argument, this directive will do in-place modification of the argument variable. For example,
 
@@ -526,6 +527,23 @@ This directive can be invoked by [lua-nginx-module](http://github.com/openresty/
 
 [Back to TOC](#table-of-contents)
 
+set_base32_padding
+------------------
+**syntax:** *set_base32_padding on|off*
+
+**default:** *on*
+
+**context:** *http, server, server if, location, location if*
+
+**phase:** *no*
+
+This directive can control whether to pad left-over bytes with the "=" character when encoding a base32 digest by the
+[set_encode_base32](#set_encode_base32) directive.
+
+This directive was first introduced in `v0.28`. If you use earlier versions of this module, then you should use [set_misc_base32_padding](#set_misc_base32_padding) instead.
+
+[Back to TOC](#table-of-contents)
+
 set_misc_base32_padding
 -----------------------
 **syntax:** *set_misc_base32_padding on|off*
@@ -536,7 +554,7 @@ set_misc_base32_padding
 
 **phase:** *no*
 
-This directive can control whether to pad left-over bytes with the "=" character when encoding a base32 digest by the [set_encode_base32](#set_encode_base32) directive.
+This directive has been deprecated since `v0.28`. Use [set_base32_padding](#set_base32_padding) instead if you are using `v0.28+`.
 
 [Back to TOC](#table-of-contents)
 
