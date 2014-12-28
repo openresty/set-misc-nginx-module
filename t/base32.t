@@ -515,3 +515,43 @@ inyko5hqr60ge75tsn0kmmngqjvkk3e=
 --- response_body
 inyko5hqr60ge75tsn0kmmngqjvkk3e=
 
+
+
+=== TEST 29: one byte less in set_base32_alphabet
+--- config
+    set_base32_padding on;
+    location /bar {
+        set_base32_alphabet "efghijklmnopqrstuvwxyz012345678";
+        set $a '"hello, world!"abcd?\/.;';
+        set_encode_base32 $a;
+
+        echo $a;
+    }
+--- request
+    GET /bar
+--- response_body
+inyko5hqr60ge75tsn0kmmngqjvkk3e=
+--- must_die
+--- error_log eval
+qr/\[emerg\] .*? "set_base32_alphabet" directive takes an alphabet of 31 bytes but 32 expected/
+
+
+
+=== TEST 30: one byte more in set_base32_alphabet
+--- config
+    set_base32_padding on;
+    location /bar {
+        set_base32_alphabet "efghijklmnopqrstuvwxyz0123456789A";
+        set $a '"hello, world!"abcd?\/.;';
+        set_encode_base32 $a;
+
+        echo $a;
+    }
+--- request
+    GET /bar
+--- response_body
+inyko5hqr60ge75tsn0kmmngqjvkk3e=
+--- must_die
+--- error_log eval
+qr/\[emerg\] .*? "set_base32_alphabet" directive takes an alphabet of 33 bytes but 32 expected/
+

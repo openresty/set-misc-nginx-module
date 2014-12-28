@@ -25,11 +25,14 @@
 
 
 #define NGX_UNESCAPE_URI_COMPONENT  0
+#define BASE32_ALPHABET_LEN         32
 
 
 static void *ngx_http_set_misc_create_loc_conf(ngx_conf_t *cf);
 static char *ngx_http_set_misc_merge_loc_conf(ngx_conf_t *cf, void *parent,
     void *child);
+static char * ngx_http_set_misc_base32_alphabet(ngx_conf_t *cf,
+    ngx_command_t *cmd, void *conf);
 
 
 static ngx_conf_deprecated_t  ngx_conf_deprecated_set_misc_base32_padding = {
@@ -352,7 +355,7 @@ static ngx_command_t  ngx_http_set_misc_commands[] = {
         ngx_string("set_base32_alphabet"),
         NGX_HTTP_MAIN_CONF|NGX_HTTP_SRV_CONF|NGX_HTTP_SIF_CONF
             |NGX_HTTP_LOC_CONF|NGX_HTTP_LIF_CONF|NGX_CONF_TAKE1,
-        ngx_conf_set_str_slot,
+        ngx_http_set_misc_base32_alphabet,
         NGX_HTTP_LOC_CONF_OFFSET,
         offsetof(ngx_http_set_misc_loc_conf_t, base32_alphabet),
         NULL
@@ -504,10 +507,29 @@ ngx_http_set_misc_merge_loc_conf(ngx_conf_t *cf, void *parent, void *child)
 
     ngx_conf_merge_value(conf->current, prev->current, NGX_CONF_UNSET);
 
-    for (i = 0; i < 32; i++) {
+    for (i = 0; i < BASE32_ALPHABET_LEN; i++) {
         conf->basis32[conf->base32_alphabet.data[i]] = i;
     }
 
     return NGX_CONF_OK;
 }
 
+
+static char *
+ngx_http_set_misc_base32_alphabet(ngx_conf_t *cf, ngx_command_t *cmd,
+    void *conf)
+{
+    ngx_str_t       *value;
+
+    value = cf->args->elts;
+
+    if (value[1].len != BASE32_ALPHABET_LEN) {
+        ngx_conf_log_error(NGX_LOG_EMERG, cf, 0,
+                           "\"set_base32_alphabet\" directive takes an "
+                           "alphabet of %uz bytes but %d expected",
+                           value[1].len, BASE32_ALPHABET_LEN);
+        return NGX_CONF_ERROR;
+    }
+
+    return ngx_conf_set_str_slot(cf, cmd, conf);
+}
