@@ -508,7 +508,7 @@ ngx_http_set_misc_merge_loc_conf(ngx_conf_t *cf, void *parent, void *child)
     ngx_conf_merge_value(conf->current, prev->current, NGX_CONF_UNSET);
 
     for (i = 0; i < BASE32_ALPHABET_LEN; i++) {
-        conf->basis32[conf->base32_alphabet.data[i]] = i;
+        conf->basis32[conf->base32_alphabet.data[i]] = (u_char) i;
     }
 
     return NGX_CONF_OK;
