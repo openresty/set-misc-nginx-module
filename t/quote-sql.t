@@ -168,7 +168,7 @@ GET /foo?a=a%09b%09
 
 
 
-=== TEST 12: \z for mysql
+=== TEST 12: \Z for mysql
 --- config
     location /foo {
         set_unescape_uri $foo $arg_a;
@@ -178,4 +178,5 @@ GET /foo?a=a%09b%09
 --- request
 GET /foo?a=a%1ab%1a
 --- response_body
-'a\zb\z'
+'a\Zb\Z'
+
