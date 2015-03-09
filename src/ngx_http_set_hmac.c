@@ -17,7 +17,7 @@ ngx_http_set_misc_set_hmac_sha1(ngx_http_request_t *r, ngx_str_t *res,
     ngx_http_variable_value_t *v)
 {
     ngx_http_variable_value_t   *secret, *string_to_sign;
-    unsigned int                 md_len;
+    unsigned int                 md_len = 0;
     unsigned char                md[EVP_MAX_MD_SIZE];
     const EVP_MD                *evp_md;
 
@@ -31,6 +31,12 @@ ngx_http_set_misc_set_hmac_sha1(ngx_http_request_t *r, ngx_str_t *res,
 
     HMAC(evp_md, secret->data, secret->len, string_to_sign->data,
          string_to_sign->len, md, &md_len);
+
+    /* defensive test if there is something wrong with openssl */
+    if (md_len == 0 || md_len > EVP_MAX_MD_SIZE) {
+        res->len = 0;
+        return NGX_ERROR;
+    }
 
     res->len = md_len;
     ndk_palloc_re(res->data, r->pool, md_len);
