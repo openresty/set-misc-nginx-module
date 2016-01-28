@@ -16,6 +16,7 @@
 #include "ngx_http_set_hash.h"
 #include "ngx_http_set_hex.h"
 #include "ngx_http_set_base64.h"
+#include "ngx_http_set_ip_matches.h"
 #if NGX_OPENSSL
 #include "ngx_http_set_hmac.h"
 #endif
@@ -67,6 +68,13 @@ static ndk_set_var_t  ngx_http_set_misc_set_encode_hex_filter = {
     NDK_SET_VAR_VALUE,
     (void *) ngx_http_set_misc_set_encode_hex,
     1,
+    NULL
+};
+
+static ndk_set_var_t  ngx_http_set_misc_set_ip_matches_filter = {
+    NDK_SET_VAR_MULTI_VALUE,
+    (void *) ngx_http_set_misc_set_ip_matches,
+    2,
     NULL
 };
 
@@ -322,6 +330,15 @@ static ngx_command_t  ngx_http_set_misc_commands[] = {
         0,
         0,
         NULL
+    },
+    {
+		ngx_string ("set_ip_matches"),
+		NGX_HTTP_MAIN_CONF|NGX_HTTP_SRV_CONF|NGX_HTTP_SIF_CONF
+			|NGX_HTTP_LOC_CONF|NGX_HTTP_LIF_CONF|NGX_CONF_TAKE3,
+		ndk_set_var_multi_value,
+		0,
+		0,
+		&ngx_http_set_misc_set_ip_matches_filter
     },
     {
         ngx_string("set_hashed_upstream"),
