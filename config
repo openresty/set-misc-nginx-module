@@ -1,10 +1,19 @@
 ngx_addon_name=ngx_http_set_misc_module
 
-if echo $HTTP_MODULES | grep " ndk_http_module" > /dev/null; then
-    echo "found ngx_devel_kit for ngx_set_misc; looks good."
+if test -n "$ngx_module_link"; then
+    if test -n "$NDK_SRCS"; then
+        echo "found ngx_devel_kit for ngx_set_misc; looks good."
+    else
+        echo "error: ngx_devel_kit is required to build ngx_set_misc; please put it before ngx_set_misc." 1>&2
+        exit 1
+    fi
 else
-    echo "error: ngx_devel_kit is required to build ngx_set_misc; please put it before ngx_set_misc." 1>&2
-    exit 1
+    if echo $HTTP_MODULES | grep " ndk_http_module" > /dev/null; then
+        echo "found ngx_devel_kit for ngx_set_misc; looks good."
+    else
+        echo "error: ngx_devel_kit is required to build ngx_set_misc; please put it before ngx_set_misc." 1>&2
+        exit 1
+    fi
 fi
 
 SET_MISC_SRCS="                                                             \
