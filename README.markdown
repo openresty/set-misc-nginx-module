@@ -13,6 +13,7 @@ Name
 Table of Contents
 =================
 
+* [Name](#name)
 * [Version](#version)
 * [Synopsis](#synopsis)
 * [Description](#description)
@@ -45,6 +46,7 @@ Table of Contents
     * [set_formatted_local_time](#set_formatted_local_time)
 * [Caveats](#caveats)
 * [Installation](#installation)
+    * [Building as a dynamic module](#building-as-a-dynamic-module)
 * [Compatibility](#compatibility)
 * [Report Bugs](#report-bugs)
 * [Source Repository](#source-repository)
@@ -1193,11 +1195,17 @@ the version 1.9.7 (see [nginx compatibility](#compatibility)), and then build th
 
 Download the latest version of the release tarball of this module from [set-misc-nginx-module file list](http://github.com/openresty/set-misc-nginx-module/tags), and the latest tarball for [ngx_devel_kit](https://github.com/simpl/ngx_devel_kit) from its [file list](https://github.com/simpl/ngx_devel_kit/tags).
 
+[Back to TOC](#table-of-contents)
+
+Building as a dynamic module
+----------------------------
+
 Starting from NGINX 1.9.11, you can also compile this module as a dynamic module, by using the `--add-dynamic-module=PATH` option instead of `--add-module=PATH` on the
 `./configure` command line above. And then you can explicitly load the module in your `nginx.conf` via the [load_module](http://nginx.org/en/docs/ngx_core_module.html#load_module)
 directive, for example,
 
 ```nginx
+load_module /path/to/modules/ndk_http_module.so;  # assuming NDK is built as a dynamic module too
 load_module /path/to/modules/ngx_http_set_misc_module.so;
 ```
 
@@ -1320,4 +1328,6 @@ See Also
 ========
 * [Nginx Devel Kit](https://github.com/simpl/ngx_devel_kit)
 * [The OpenResty bundle](http://openresty.org)
+
+[Back to TOC](#table-of-contents)
 
