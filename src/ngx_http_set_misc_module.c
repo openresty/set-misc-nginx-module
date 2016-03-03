@@ -204,6 +204,12 @@ static ndk_set_var_t  ngx_http_set_misc_set_secure_random_lcalpha_filter = {
     NULL
 };
 
+static ndk_set_var_t  ngx_http_set_misc_set_secure_random_hex_filter = {
+    NDK_SET_VAR_VALUE,
+    (void *) ngx_http_set_misc_set_secure_random_hex,
+    1,
+    NULL
+};
 
 static ngx_command_t  ngx_http_set_misc_commands[] = {
     {   ngx_string ("set_encode_base64"),
@@ -428,6 +434,14 @@ static ngx_command_t  ngx_http_set_misc_commands[] = {
         0,
         0,
         &ngx_http_set_misc_set_secure_random_lcalpha_filter
+    },
+    {   ngx_string ("set_secure_random_hex"),
+        NGX_HTTP_MAIN_CONF|NGX_HTTP_SRV_CONF|NGX_HTTP_SIF_CONF
+            |NGX_HTTP_LOC_CONF|NGX_HTTP_LIF_CONF|NGX_CONF_TAKE12,
+        ndk_set_var_value,
+        0,
+        0,
+        &ngx_http_set_misc_set_secure_random_hex_filter
     },
     {   ngx_string ("set_rotate"),
         NGX_HTTP_MAIN_CONF|NGX_HTTP_SRV_CONF|NGX_HTTP_SIF_CONF

@@ -40,6 +40,7 @@ Table of Contents
     * [set_random](#set_random)
     * [set_secure_random_alphanum](#set_secure_random_alphanum)
     * [set_secure_random_lcalpha](#set_secure_random_lcalpha)
+    * [set_secure_random_hex](#set_secure_random_hex)
     * [set_rotate](#set_rotate)
     * [set_local_today](#set_local_today)
     * [set_formatted_gmt_time](#set_formatted_gmt_time)
@@ -922,7 +923,7 @@ Behind the scene, it makes use of the standard C function `rand()`.
 
 This directive was first introduced in the `v0.22rc1` release.
 
-See also [set_secure_random_alphanum](#set_secure_random_alphanum) and [set_secure_random_lcalpha](#set_secure_random_lcalpha).
+See also [set_secure_random_alphanum](#set_secure_random_alphanum), [set_secure_random_lcalpha](#set_secure_random_lcalpha) and [set_secure_random_hex](#set_secure_random_hex).
 
 [Back to TOC](#table-of-contents)
 
@@ -955,8 +956,7 @@ then request `GET /test` will output a string like `ivVVRP2DGaAqDmdf3Rv4ZDJ7k0gO
 
 This functionality depends on the presence of the `/dev/urandom` device, available on most UNIX-like systems.
 
-See also [set_secure_random_lcalpha](#set_secure_random_lcalpha) and [set_random](#set_random).
-
+See also [set_secure_random_lcalpha](#set_secure_random_lcalpha), [set_random](#set_random) and [set_secure_random_hex](#set_secure_random_hex).
 This directive was first introduced in the `v0.22rc8` release.
 
 [Back to TOC](#table-of-contents)
@@ -992,7 +992,43 @@ This functionality depends on the presence of the `/dev/urandom` device, availab
 
 This directive was first introduced in the `v0.22rc8` release.
 
-See also [set_secure_random_alphanum](#set_secure_random_alphanum) and [set_random](#set_random).
+See also [set_secure_random_alphanum](#set_secure_random_alphanum), [set_random](#set_random) and [set_secure_random_hex](#set_secure_random_hex).
+
+[Back to TOC](#table-of-contents)
+
+
+set_secure_random_hex
+---------------------
+**syntax:** *set_secure_random_hex $res &lt;length&gt;*
+
+**default:** *no*
+
+**context:** *location, location if*
+
+**phase:** *rewrite*
+
+Generates a cryptographically-strong random string `<length>` characters long with the alphabet `[0-9a-f]` (hexadecimal digits).
+
+`<length>` may be between 1 and 64, inclusive.
+
+For instance,
+
+```nginx
+
+ location /test {
+     set_secure_random_hex $res 16;
+
+     echo $res;
+ }
+```
+
+then request `GET /test` will output a string like `1f7213a9fbcd4890`.
+
+This functionality depends on the presence of the `/dev/urandom` device, available on most UNIX-like systems.
+
+This directive was first introduced in the `0.29` release.
+
+See also [set_secure_random_alphanum](#set_secure_random_alphanum), [set_random](#set_random) and [set_secure_random_lcalpha](#set_secure_random_lcalpha).
 
 [Back to TOC](#table-of-contents)
 

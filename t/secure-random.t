@@ -106,3 +106,16 @@ __DATA__
     GET /lcalpha
 --- response_body_like: ^[a-z]{16}$
 
+
+
+=== TEST 8: a 13-character hex
+--- config
+    location /hex {
+        set_secure_random_hex $res 13;
+
+        echo $res;
+    }
+--- request
+    GET /hex
+--- response_body_like: ^[0-9a-f]{13}$
+

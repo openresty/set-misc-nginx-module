@@ -12,7 +12,8 @@
 enum {
     MAX_RANDOM_STRING = 64,
     ALPHANUM = 1,
-    LCALPHA  = 2
+    LCALPHA  = 2,
+    HEXONLY = 3
 };
 
 
@@ -36,6 +37,12 @@ ngx_http_set_misc_set_secure_random_lcalpha(ngx_http_request_t *r,
     return ngx_http_set_misc_set_secure_random_common(LCALPHA, r, res, v);
 }
 
+ngx_int_t
+ngx_http_set_misc_set_secure_random_hex(ngx_http_request_t *r,
+    ngx_str_t *res, ngx_http_variable_value_t *v)
+{
+    return ngx_http_set_misc_set_secure_random_common(HEXONLY, r, res, v);
+}
 
 static ngx_int_t
 ngx_http_set_misc_set_secure_random_common(int alphabet_type,
@@ -43,6 +50,7 @@ ngx_http_set_misc_set_secure_random_common(int alphabet_type,
 {
     static u_char  alphabet[] = "abcdefghijklmnopqrstuvwxyz"
                                 "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+    static u_char  hexalpha[] = "0123456789abcdef";
 
     u_char         entropy[MAX_RANDOM_STRING];
     u_char         output[MAX_RANDOM_STRING];
@@ -77,9 +85,10 @@ ngx_http_set_misc_set_secure_random_common(int alphabet_type,
     ngx_close_file(fd);
 
     for (i = 0; i < length; i++) {
-        if (alphabet_type == LCALPHA) {
+        if (alphabet_type == HEXONLY) {
+            output[i] = hexalpha[ entropy[i] % 16 ];
+        } else if (alphabet_type == LCALPHA) {
             output[i] = entropy[i] % 26 + 'a';
-
         } else {
             output[i] = alphabet[ entropy[i] % (sizeof alphabet - 1) ];
         }
