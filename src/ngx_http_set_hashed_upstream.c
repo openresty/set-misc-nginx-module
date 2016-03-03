@@ -1,27 +1,61 @@
 #ifndef DDEBUG
 #define DDEBUG 0
 #endif
+
 #include "ddebug.h"
 
 #include "ngx_http_set_hashed_upstream.h"
 
 
 ngx_uint_t
-ngx_http_set_misc_apply_distribution(ngx_log_t *log, ngx_uint_t hash,
-    ndk_upstream_list_t *ul, ngx_http_set_misc_distribution_t type)
-{
+ngx_http_set_misc_apply_distribution(ngx_log_t *log, ngx_uint_t hash, ngx_http_set_hashed_upstream_conf *hashConf,
+                                     ngx_http_set_misc_distribution_t type) {
     switch (type) {
-    case ngx_http_set_misc_distribution_modula:
-        return (uint32_t) hash % (uint32_t) ul->nelts;
+        case ngx_http_set_misc_distribution_modula:
+            return (uint32_t) hash % (uint32_t) hashConf->ul->nelts;
+        case ngx_http_set_misc_consistent_hash:
+            return ngx_http_set_misc_bsearch(hashConf->hashNodes, hashConf->nodeLen, hash) %
+                   (uint32_t) hashConf->ul->nelts;
+        default:
+            ngx_log_error(NGX_LOG_ERR, log, 0, "apply_distribution: "
+                    "unknown distribution: %d", type);
 
-    default:
-        ngx_log_error(NGX_LOG_ERR, log, 0, "apply_distribution: "
-                "unknown distribution: %d", type);
-
-        return 0;
+            return 0;
     }
 
     /* impossible to reach here */
+}
+
+uint32_t
+ngx_http_set_misc_bsearch(ngx_http_set_hashed_upstream_consistent_hash_node *nodes, uint32_t nodeLen, uint32_t target) {
+    uint32_t m = 0,n = nodeLen,l;
+    while(m < n) {
+        l = (m + n) << 1;
+        if(target == nodes[l].hash) {
+            return l;
+        }
+        if(target < nodes[l].hash) {
+            n = l;
+        } else {
+            m = l + 1;
+        }
+    }
+    return m;
+}
+
+int
+ngx_http_set_misc_consistent_hash_compare(
+        const ngx_http_set_hashed_upstream_consistent_hash_node *node1,
+        const ngx_http_set_hashed_upstream_consistent_hash_node *node2)
+{
+    if (node1->hash < node2->hash) {
+        return -1;
+    }
+    else if (node1->hash > node2->hash) {
+        return 1;
+    }
+
+    return 0;
 }
 
 
@@ -29,11 +63,12 @@ ngx_int_t
 ngx_http_set_misc_set_hashed_upstream(ngx_http_request_t *r, ngx_str_t *res,
     ngx_http_variable_value_t *v, void *data)
 {
+    ngx_http_set_hashed_upstream_conf *hashConf = data;
     ngx_str_t                  **u;
-    ndk_upstream_list_t         *ul = data;
     ngx_str_t                    ulname;
     ngx_uint_t                   hash, index;
     ngx_http_variable_value_t   *key;
+    ndk_upstream_list_t         *ul = hashConf->ul;
 
     if (ul == NULL) {
         ulname.data = v->data;
@@ -80,8 +115,11 @@ ngx_http_set_misc_set_hashed_upstream(ngx_http_request_t *r, ngx_str_t *res,
 
     hash = ngx_hash_key_lc(key->data, key->len);
 
-    index = ngx_http_set_misc_apply_distribution(r->connection->log, hash, ul,
-            ngx_http_set_misc_distribution_modula);
+    index = ngx_http_set_misc_apply_distribution(r->connection->log, hash, hashConf, hashConf->hashType);
+
+    ngx_log_error(NGX_LOG_DEBUG, r->connection->log, 0, "distribution:%d hash:%d index:%d",
+                  hashConf->hashType, hash,
+                  index);
 
     res->data = u[index]->data;
     res->len = u[index]->len;
@@ -89,17 +127,28 @@ ngx_http_set_misc_set_hashed_upstream(ngx_http_request_t *r, ngx_str_t *res,
     return NGX_OK;
 }
 
+char *
+ngx_http_set_hashed_upstream_distribution_modula(ngx_conf_t *cf, ngx_command_t *cmd, void *conf) {
+    return ngx_http_set_hashed_upstream_hashtype(cf,cmd,conf,ngx_http_set_misc_distribution_modula);
+}
 
 char *
-ngx_http_set_hashed_upstream(ngx_conf_t *cf, ngx_command_t *cmd, void *conf)
-{
+ngx_http_set_hashed_upstream_consistent_hash(ngx_conf_t *cf, ngx_command_t *cmd, void *conf) {
+    return ngx_http_set_hashed_upstream_hashtype(cf,cmd,conf,ngx_http_set_misc_consistent_hash);
+}
+
+char *
+ngx_http_set_hashed_upstream_hashtype(ngx_conf_t *cf, ngx_command_t *cmd, void *conf,
+                                      ngx_http_set_misc_distribution_t hashType) {
     ngx_str_t               *value;
     ndk_set_var_t            filter;
-    ngx_uint_t               n;
+    ngx_uint_t               n, i;
     ngx_str_t               *var;
     ngx_str_t               *ulname;
     ndk_upstream_list_t     *ul;
     ngx_str_t               *v;
+
+    ngx_http_set_hashed_upstream_conf *hashConf;
 
     value = cf->args->elts;
 
@@ -129,10 +178,35 @@ ngx_http_set_hashed_upstream(ngx_conf_t *cf, ngx_command_t *cmd, void *conf)
         return NGX_CONF_ERROR;
     }
 
+    hashConf = ngx_pcalloc(cf->pool,sizeof(ngx_http_set_hashed_upstream_conf));
+    hashConf->ul = ul;
+    hashConf->hashType = hashType;
+    if(ul->nelts <= 0) {
+        hashConf->nodeLen = 0;
+        hashConf->hashNodes = NULL;
+    } else {
+        hashConf->nodeLen = ul->nelts;
+        hashConf->hashNodes = ngx_pcalloc(cf->pool, sizeof(ngx_http_set_hashed_upstream_consistent_hash_node) *
+                                                    hashConf->nodeLen);
+        for (i = 0; i < hashConf->nodeLen; i++) {
+            hashConf->hashNodes[i].name = ul->elts[i];
+            hashConf->hashNodes[i].hash = ngx_hash_key_lc(hashConf->hashNodes[i].name->data,
+                                                          hashConf->hashNodes[i].name->len);
+        }
+
+        qsort(hashConf->hashNodes, hashConf->nodeLen, sizeof(ngx_http_set_hashed_upstream_consistent_hash_node),
+              (const void *) ngx_http_set_misc_consistent_hash_compare);
+
+        for (i = 0; i < hashConf->nodeLen; i++) {
+            ngx_log_error(NGX_LOG_INFO, cf->log, 0, "upstream name: %V hashCode:%d", hashConf->hashNodes[i].name,
+                          hashConf->hashNodes[i].hash);
+        }
+    }
+
     v = &value[3];
 
     filter.size = 1;
-    filter.data = ul;
+    filter.data = hashConf;
     filter.type = NDK_SET_VAR_VALUE_DATA;
 
     return ndk_set_var_value_core(cf, var, v, &filter);
