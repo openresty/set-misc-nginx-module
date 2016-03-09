@@ -106,9 +106,9 @@ encode_base32(size_t slen, u_char *src, size_t *dlen, u_char *dst,
 {
     unsigned char *basis32 = alphabet->data;
 
-    size_t len;
-    u_char *s;
-    u_char *d;
+    size_t       len;
+    u_char      *s;
+    u_char      *d;
 
     len = slen;
     s = src;

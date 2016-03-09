@@ -33,7 +33,7 @@ ngx_http_set_local_today(ngx_http_request_t *r, ngx_str_t *res,
     }
 
     ngx_sprintf(p, "%04d-%02d-%02d", tm.ngx_tm_year, tm.ngx_tm_mon,
-            tm.ngx_tm_mday);
+                tm.ngx_tm_mday);
 
     res->data = p;
     res->len = sizeof("yyyy-mm-dd") - 1;

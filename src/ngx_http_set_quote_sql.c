@@ -17,7 +17,7 @@ ngx_http_set_misc_quote_pgsql_str(ngx_http_request_t *r, ngx_str_t *res,
     ngx_http_variable_value_t *v)
 {
     u_char                   *pstr;
-    ngx_int_t               length;
+    ngx_int_t                 length;
 
     if (v->not_found || v->len ==0) {
         res->data = (u_char *) "''";
@@ -39,7 +39,7 @@ ngx_http_set_misc_quote_pgsql_str(ngx_http_request_t *r, ngx_str_t *res,
     res->len    = length + 1;
 
     if (ngx_http_pg_utf_islegal(res->data, res->len)) {
-       return NGX_OK;
+        return NGX_OK;
     }
 
     if (ngx_http_pg_utf_escape(r, res) != NGX_OK) {
@@ -222,6 +222,7 @@ ngx_http_set_misc_quote_sql_str(ngx_http_request_t *r, ngx_str_t *res,
 
     if (escape == 0) {
         p = ngx_copy(p, v->data, v->len);
+
     } else {
         p = (u_char *) ngx_http_set_misc_escape_sql_str(p, v->data, v->len);
     }
@@ -230,7 +231,7 @@ ngx_http_set_misc_quote_sql_str(ngx_http_request_t *r, ngx_str_t *res,
 
     if (p != res->data + res->len) {
         ngx_log_error(NGX_LOG_ERR, r->connection->log, 0,
-                "set_quote_sql_str: buffer error");
+                      "set_quote_sql_str: buffer error");
         return NGX_ERROR;
     }
 

@@ -27,7 +27,7 @@ ngx_http_set_misc_set_hmac_sha1(ngx_http_request_t *r, ngx_str_t *res,
     string_to_sign = v + 1;
 
     dd("secret=%.*s, string_to_sign=%.*s", (int) secret->len, secret->data,
-            (int) string_to_sign->len, string_to_sign->data);
+       (int) string_to_sign->len, string_to_sign->data);
 
     HMAC(evp_md, secret->data, secret->len, string_to_sign->data,
          string_to_sign->len, md, &md_len);

@@ -47,7 +47,7 @@ ngx_http_set_misc_quote_json_str(ngx_http_request_t *r, ngx_str_t *res,
 
     if (p != res->data + res->len) {
         ngx_log_error(NGX_LOG_ERR, r->connection->log, 0,
-                "set_quote_sql_str: buffer error");
+                      "set_quote_sql_str: buffer error");
         return NGX_ERROR;
     }
 

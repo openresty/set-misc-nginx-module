@@ -35,7 +35,7 @@ ngx_http_set_misc_unescape_uri(ngx_http_request_t *r, ngx_str_t *res,
 
     if (src != v->data + v->len) {
         ngx_log_error(NGX_LOG_ERR, r->connection->log, 0,
-                "set_unescape_uri: input data not consumed completely");
+                      "set_unescape_uri: input data not consumed completely");
         return NGX_ERROR;
     }
 
