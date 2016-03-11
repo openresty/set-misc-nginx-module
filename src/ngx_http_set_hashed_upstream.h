@@ -15,8 +15,8 @@ typedef enum {
 } ngx_http_set_misc_distribution_t;
 
 typedef struct {
-    ngx_str_t*                   name;
     uint32_t                     hash;
+    uint32_t                     index;
 } ngx_http_set_hashed_upstream_consistent_hash_node;
 
 typedef struct {
