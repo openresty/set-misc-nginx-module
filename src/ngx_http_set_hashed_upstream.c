@@ -114,7 +114,7 @@ ngx_http_set_misc_set_hashed_upstream(ngx_http_request_t *r, ngx_str_t *res,
 
     dd("key: \"%.*s\"", key->len, key->data);
 
-    hash = ngx_crc32_long(key->data, key->len);
+    hash = ngx_hash_key_lc(key->data, key->len);
 
     index = ngx_http_set_misc_apply_distribution(r->connection->log, hash, hashConf, hashConf->hashType);
 
@@ -195,8 +195,8 @@ ngx_http_set_hashed_upstream_hashtype(ngx_conf_t *cf, ngx_command_t *cmd, void *
             ulname_vnode_size = ul->elts[i]->len + 1 + 10 + 1;
             ulname_vnode = ngx_pcalloc(cf->pool, ulname_vnode_size);
             for (j = 0; j < HASH_VNODES; j++) {
-                ngx_snprintf(ulname_vnode, ulname_vnode_size, "%V-%d%Z", ul->elts[i], j);
-                hashConf->hashNodes[i * HASH_VNODES + j].hash = ngx_crc32_long(ulname_vnode,
+                ngx_snprintf(ulname_vnode, ulname_vnode_size, "%i-%V%Z", j,ul->elts[i]);
+                hashConf->hashNodes[i * HASH_VNODES + j].hash = ngx_hash_key_lc(ulname_vnode,
                                                                                 ngx_strlen(ulname_vnode));
                 hashConf->hashNodes[i * HASH_VNODES + j].index = i;
             }
@@ -213,7 +213,7 @@ ngx_http_set_hashed_upstream_hashtype(ngx_conf_t *cf, ngx_command_t *cmd, void *
         hashConf->nodeLen = i + 1;
 
         for (i = 0; i < hashConf->nodeLen; i++) {
-            ngx_log_error(NGX_LOG_INFO, cf->log, 0, "upstream name: %V hashCode:%d", ul->elts[hashConf->hashNodes[i].index],
+            ngx_log_error(NGX_LOG_INFO, cf->log, 0, "upstream name: %V hashCode:%D", ul->elts[hashConf->hashNodes[i].index],
                           hashConf->hashNodes[i].hash);
         }
     }
