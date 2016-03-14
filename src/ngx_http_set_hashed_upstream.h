@@ -27,22 +27,33 @@ typedef struct {
 } ngx_http_set_hashed_upstream_conf;
 
 
-ngx_uint_t ngx_http_set_misc_apply_distribution(ngx_log_t *log, ngx_uint_t hash,
-                                                ngx_http_set_hashed_upstream_conf *hashConf,
-                                                ngx_http_set_misc_distribution_t type);
+ngx_uint_t ngx_http_set_misc_apply_distribution
+        (ngx_log_t *log, ngx_uint_t hash,
+         ngx_http_set_hashed_upstream_conf *hash_conf,
+         ngx_http_set_misc_distribution_t type);
 
-uint32_t ngx_http_set_misc_bsearch(ngx_http_set_hashed_upstream_consistent_hash_node *nodes, uint32_t nodeLen,
-                                   uint32_t target);
+uint32_t ngx_http_set_misc_bsearch(
+        ngx_http_set_hashed_upstream_consistent_hash_node *nodes,
+        uint32_t node_len,
+        uint32_t target);
 
-char *ngx_http_set_hashed_upstream_distribution_modula(ngx_conf_t *cf, ngx_command_t *cmd, void *conf);
+char *ngx_http_set_hashed_upstream_distribution_modula(ngx_conf_t *cf,
+                                                       ngx_command_t *cmd,
+                                                       void *conf);
 
-char *ngx_http_set_hashed_upstream_consistent_hash(ngx_conf_t *cf, ngx_command_t *cmd, void *conf);
+char *ngx_http_set_hashed_upstream_consistent_hash(ngx_conf_t *cf,
+                                                   ngx_command_t *cmd,
+                                                   void *conf);
 
-char *ngx_http_set_hashed_upstream_hashtype(ngx_conf_t *cf, ngx_command_t *cmd, void *conf,
-                                            ngx_http_set_misc_distribution_t hashType);
+char *ngx_http_set_hashed_upstream_hashtype(
+        ngx_conf_t *cf, ngx_command_t *cmd,
+        void *conf,
+        ngx_http_set_misc_distribution_t hash_type);
 
 ngx_int_t ngx_http_set_misc_set_hashed_upstream(ngx_http_request_t *r,
-        ngx_str_t *res, ngx_http_variable_value_t *v, void *data);
+                                                ngx_str_t *res,
+                                                ngx_http_variable_value_t *v,
+                                                void *data);
 
 
 #endif /* NGX_HTTP_SET_HASHED_UPSTREAM */
