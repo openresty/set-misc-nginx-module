@@ -9,14 +9,20 @@
 #define HASH_VNODES           160
 
 ngx_uint_t
-ngx_http_set_misc_apply_distribution(ngx_log_t *log, ngx_uint_t hash, ngx_http_set_hashed_upstream_conf *hash_conf,
-                                     ngx_http_set_misc_distribution_t type) {
+ngx_http_set_misc_apply_distribution(
+        ngx_log_t *log,
+        ngx_uint_t hash,
+        ngx_http_set_hashed_upstream_conf *hash_conf,
+        ngx_http_set_misc_distribution_t type) {
+
     switch (type) {
         case ngx_http_set_misc_distribution_modula:
             return (uint32_t) hash % (uint32_t) hash_conf->ul->nelts;
         case ngx_http_set_misc_consistent_hash:
-            return hash_conf->hash_nodes[ngx_http_set_misc_bsearch(hash_conf->hash_nodes, hash_conf->node_len, hash) %
-                                         (uint32_t) hash_conf->node_len].index;
+            return hash_conf->hash_nodes[
+                    ngx_http_set_misc_bsearch(hash_conf->hash_nodes,
+                                              hash_conf->node_len, hash) %
+                    (uint32_t) hash_conf->node_len].index;
         default:
             ngx_log_error(NGX_LOG_ERR, log, 0, "apply_distribution: "
                     "unknown distribution: %d", type);
@@ -28,14 +34,18 @@ ngx_http_set_misc_apply_distribution(ngx_log_t *log, ngx_uint_t hash, ngx_http_s
 }
 
 uint32_t
-ngx_http_set_misc_bsearch(ngx_http_set_hashed_upstream_consistent_hash_node *nodes, uint32_t node_len, uint32_t target) {
-    uint32_t m = 0,n = node_len,l;
-    while(m < n) {
+ngx_http_set_misc_bsearch(
+        ngx_http_set_hashed_upstream_consistent_hash_node *nodes,
+        uint32_t node_len,
+        uint32_t target) {
+
+    uint32_t m = 0, n = node_len, l;
+    while (m < n) {
         l = (m + n) << 1;
-        if(target == nodes[l].hash) {
+        if (target == nodes[l].hash) {
             return l;
         }
-        if(target < nodes[l].hash) {
+        if (target < nodes[l].hash) {
             n = l;
         } else {
             m = l + 1;
@@ -47,8 +57,7 @@ ngx_http_set_misc_bsearch(ngx_http_set_hashed_upstream_consistent_hash_node *nod
 int
 ngx_http_set_misc_consistent_hash_compare(
         const ngx_http_set_hashed_upstream_consistent_hash_node *node1,
-        const ngx_http_set_hashed_upstream_consistent_hash_node *node2)
-{
+        const ngx_http_set_hashed_upstream_consistent_hash_node *node2) {
     if (node1->hash < node2->hash) {
         return -1;
     }
@@ -116,9 +125,12 @@ ngx_http_set_misc_set_hashed_upstream(ngx_http_request_t *r, ngx_str_t *res,
 
     hash = ngx_hash_key_lc(key->data, key->len);
 
-    index = ngx_http_set_misc_apply_distribution(r->connection->log, hash, hash_conf, hash_conf->hash_type);
+    index = ngx_http_set_misc_apply_distribution(r->connection->log, hash,
+                                                 hash_conf,
+                                                 hash_conf->hash_type);
 
-    ngx_log_error(NGX_LOG_DEBUG, r->connection->log, 0, "distribution:%d hash:%d index:%d",
+    ngx_log_error(NGX_LOG_DEBUG, r->connection->log, 0,
+                  "distribution:%d hash:%d index:%d",
                   hash_conf->hash_type, hash,
                   index);
 
@@ -129,18 +141,26 @@ ngx_http_set_misc_set_hashed_upstream(ngx_http_request_t *r, ngx_str_t *res,
 }
 
 char *
-ngx_http_set_hashed_upstream_distribution_modula(ngx_conf_t *cf, ngx_command_t *cmd, void *conf) {
-    return ngx_http_set_hashed_upstream_hashtype(cf,cmd,conf,ngx_http_set_misc_distribution_modula);
+ngx_http_set_hashed_upstream_distribution_modula(ngx_conf_t *cf,
+                                                 ngx_command_t *cmd,
+                                                 void *conf) {
+    return ngx_http_set_hashed_upstream_hashtype(
+            cf, cmd, conf,ngx_http_set_misc_distribution_modula);
 }
 
 char *
-ngx_http_set_hashed_upstream_consistent_hash(ngx_conf_t *cf, ngx_command_t *cmd, void *conf) {
-    return ngx_http_set_hashed_upstream_hashtype(cf,cmd,conf,ngx_http_set_misc_consistent_hash);
+ngx_http_set_hashed_upstream_consistent_hash(ngx_conf_t *cf, ngx_command_t *cmd,
+                                             void *conf) {
+    return ngx_http_set_hashed_upstream_hashtype(
+            cf, cmd, conf,ngx_http_set_misc_consistent_hash);
 }
 
 char *
-ngx_http_set_hashed_upstream_hashtype(ngx_conf_t *cf, ngx_command_t *cmd, void *conf,
-                                      ngx_http_set_misc_distribution_t hash_type) {
+ngx_http_set_hashed_upstream_hashtype(
+        ngx_conf_t *cf, ngx_command_t *cmd,
+        void *conf,
+        ngx_http_set_misc_distribution_t hash_type) {
+
     ngx_str_t               *value;
     ndk_set_var_t            filter;
     ngx_uint_t               n, i, j;
@@ -189,31 +209,38 @@ ngx_http_set_hashed_upstream_hashtype(ngx_conf_t *cf, ngx_command_t *cmd, void *
         hash_conf->hash_nodes = NULL;
     } else {
         hash_conf->node_len = ul->nelts * HASH_VNODES;
-        hash_conf->hash_nodes = ngx_pcalloc(cf->pool, sizeof(ngx_http_set_hashed_upstream_consistent_hash_node) *
+        hash_conf->hash_nodes = ngx_pcalloc(
+                cf->pool,
+                sizeof(ngx_http_set_hashed_upstream_consistent_hash_node) *
                 hash_conf->node_len);
         for (i = 0; i < ul->nelts; i++) {
             ulname_vnode_size = ul->elts[i]->len + 1 + 10 + 1;
             ulname_vnode = ngx_pcalloc(cf->pool, ulname_vnode_size);
             for (j = 0; j < HASH_VNODES; j++) {
-                ngx_snprintf(ulname_vnode, ulname_vnode_size, "%i-%V%Z", j,ul->elts[i]);
-                hash_conf->hash_nodes[i * HASH_VNODES + j].hash = ngx_hash_key_lc(ulname_vnode,
-                                                                                 ngx_strlen(ulname_vnode));
+                ngx_snprintf(ulname_vnode, ulname_vnode_size, "%i-%V%Z", j,
+                             ul->elts[i]);
+                hash_conf->hash_nodes[i * HASH_VNODES + j].hash =
+                        ngx_hash_key_lc(ulname_vnode, ngx_strlen(ulname_vnode));
                 hash_conf->hash_nodes[i * HASH_VNODES + j].index = i;
             }
         }
 
-        qsort(hash_conf->hash_nodes, hash_conf->node_len, sizeof(ngx_http_set_hashed_upstream_consistent_hash_node),
+        qsort(hash_conf->hash_nodes, hash_conf->node_len,
+              sizeof(ngx_http_set_hashed_upstream_consistent_hash_node),
               (const void *) ngx_http_set_misc_consistent_hash_compare);
 
-        for(i = 0,j = 1;j < hash_conf->node_len; j++) {
-            if(hash_conf->hash_nodes[i].hash != hash_conf->hash_nodes[j].hash) {
+        for (i = 0, j = 1; j < hash_conf->node_len; j++) {
+            if (hash_conf->hash_nodes[i].hash !=
+                hash_conf->hash_nodes[j].hash) {
                 hash_conf->hash_nodes[++i] = hash_conf->hash_nodes[j];
             }
         }
         hash_conf->node_len = i + 1;
 
         for (i = 0; i < hash_conf->node_len; i++) {
-            ngx_log_error(NGX_LOG_INFO, cf->log, 0, "upstream name: %V hashCode:%D", ul->elts[hash_conf->hash_nodes[i].index],
+            ngx_log_error(NGX_LOG_INFO, cf->log, 0,
+                          "upstream name: %V hashCode:%D",
+                          ul->elts[hash_conf->hash_nodes[i].index],
                           hash_conf->hash_nodes[i].hash);
         }
     }
