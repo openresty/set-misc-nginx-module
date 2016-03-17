@@ -37,9 +37,8 @@ ngx_http_set_misc_apply_distribution(ngx_log_t *log, ngx_uint_t hash,
 
 uint32_t
 ngx_http_set_misc_bsearch(
-        ngx_http_set_hashed_upstream_consistent_hash_node *nodes,
-        uint32_t node_len,
-        uint32_t target)
+    ngx_http_set_hashed_upstream_consistent_hash_node *nodes, uint32_t node_len,
+    uint32_t target)
 {
 
     uint32_t m = 0, n = node_len, l;
@@ -59,8 +58,8 @@ ngx_http_set_misc_bsearch(
 
 int
 ngx_http_set_misc_consistent_hash_compare(
-        const ngx_http_set_hashed_upstream_consistent_hash_node *node1,
-        const ngx_http_set_hashed_upstream_consistent_hash_node *node2)
+    const ngx_http_set_hashed_upstream_consistent_hash_node *node1,
+    const ngx_http_set_hashed_upstream_consistent_hash_node *node2)
 {
     if (node1->hash < node2->hash) {
         return -1;
@@ -145,8 +144,8 @@ ngx_http_set_misc_set_hashed_upstream(ngx_http_request_t *r, ngx_str_t *res,
 }
 
 char *
-ngx_http_set_hashed_upstream_distribution_modula(ngx_conf_t *cf, ngx_command_t *cmd,
-    void *conf)
+ngx_http_set_hashed_upstream_distribution_modula(ngx_conf_t *cf,
+    ngx_command_t *cmd, void *conf)
 {
     return ngx_http_set_hashed_upstream_hashtype(
             cf, cmd, conf,ngx_http_set_misc_distribution_modula);
@@ -206,13 +205,13 @@ ngx_http_set_hashed_upstream_hashtype(ngx_conf_t *cf, ngx_command_t *cmd,
 
     hash_conf = ngx_pcalloc(cf->pool,sizeof(ngx_http_set_hashed_upstream_conf));
 
-    if(hash_conf == NULL) {
+    if (hash_conf == NULL) {
         return NGX_CONF_ERROR;
     }
 
     hash_conf->ul = ul;
     hash_conf->hash_type = hash_type;
-    if(ul->nelts <= 0) {
+    if (ul->nelts <= 0) {
         hash_conf->node_len = 0;
         hash_conf->hash_nodes = NULL;
     } else {
@@ -221,9 +220,15 @@ ngx_http_set_hashed_upstream_hashtype(ngx_conf_t *cf, ngx_command_t *cmd,
                 cf->pool,
                 sizeof(ngx_http_set_hashed_upstream_consistent_hash_node) *
                 hash_conf->node_len);
+        if (hash_conf->hash_nodes == NULL) {
+            return NGX_CONF_ERROR;
+        }
         for (i = 0; i < ul->nelts; i++) {
             ulname_vnode_size = ul->elts[i]->len + 1 + 10 + 1;
             ulname_vnode = ngx_pcalloc(cf->pool, ulname_vnode_size);
+            if (ulname_vnode == NULL) {
+                return NGX_CONF_ERROR;
+            }
             for (j = 0; j < HASH_VNODES; j++) {
                 ngx_snprintf(ulname_vnode, ulname_vnode_size, "%i-%V%Z", j,
                              ul->elts[i]);
