@@ -31,9 +31,8 @@ ngx_http_set_misc_apply_distribution(ngx_log_t *log, ngx_uint_t hash,
     }
 
     /* impossible to reach here */
-
-
 }
+
 
 uint32_t
 ngx_http_set_misc_bsearch(
@@ -55,6 +54,7 @@ ngx_http_set_misc_bsearch(
     }
     return m;
 }
+
 
 int
 ngx_http_set_misc_consistent_hash_compare(
@@ -148,6 +148,7 @@ ngx_http_set_misc_set_hashed_upstream(ngx_http_request_t *r, ngx_str_t *res,
     return NGX_OK;
 }
 
+
 char *
 ngx_http_set_hashed_upstream_distribution_modula(ngx_conf_t *cf,
     ngx_command_t *cmd, void *conf)
@@ -156,6 +157,7 @@ ngx_http_set_hashed_upstream_distribution_modula(ngx_conf_t *cf,
             cf, cmd, conf, ngx_http_set_misc_distribution_modula);
 }
 
+
 char *
 ngx_http_set_hashed_upstream_consistent_hash(ngx_conf_t *cf, ngx_command_t *cmd,
                                              void *conf)
@@ -163,6 +165,7 @@ ngx_http_set_hashed_upstream_consistent_hash(ngx_conf_t *cf, ngx_command_t *cmd,
     return ngx_http_set_hashed_upstream_hashtype(
             cf, cmd, conf, ngx_http_set_misc_consistent_hash);
 }
+
 
 char *
 ngx_http_set_hashed_upstream_hashtype(ngx_conf_t *cf, ngx_command_t *cmd,
