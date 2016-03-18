@@ -21,6 +21,7 @@ typedef struct {
 
 typedef struct {
     ndk_upstream_list_t                                     *ul;
+    u_int32_t                                               ul_var:1;
     ngx_http_set_hashed_upstream_consistent_hash_node       *hash_nodes;
     uint32_t                                                node_len;
     ngx_http_set_misc_distribution_t                        hash_type;
