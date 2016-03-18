@@ -160,7 +160,7 @@ ngx_http_set_hashed_upstream_distribution_modula(ngx_conf_t *cf,
 
 char *
 ngx_http_set_hashed_upstream_consistent_hash(ngx_conf_t *cf, ngx_command_t *cmd,
-                                             void *conf)
+    void *conf)
 {
     return ngx_http_set_hashed_upstream_hashtype(
             cf, cmd, conf, ngx_http_set_misc_consistent_hash);
