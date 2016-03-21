@@ -489,7 +489,7 @@ set_consistent_hashed_upstream
 
 **phase:** *rewrite*
 
-Map `<src>`to one of the upstream name included in the upstream list named `<upstream_list_name>`. If `<upstream_list_name>` needs to be resized or updated, cache miss rate can be estimated in advance.
+Map `<src>`to one of the upstream name included in the upstream list named `<upstream_list_name>` by consistent hash.
 
 Here's an example,
 
