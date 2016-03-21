@@ -25,6 +25,7 @@ Table of Contents
     * [set_unescape_uri](#set_unescape_uri)
     * [set_escape_uri](#set_escape_uri)
     * [set_hashed_upstream](#set_hashed_upstream)
+    * [set_consistent_hashed_upstream](#set_consistent_hashed_upstream)
     * [set_encode_base32](#set_encode_base32)
     * [set_base32_padding](#set_base32_padding)
     * [set_misc_base32_padding](#set_misc_base32_padding)
@@ -119,6 +120,11 @@ Synopsis
  upstream earth { ... }
  location /foo {
      set_hashed_upstream $backend universe $arg_id;
+     drizzle_pass $backend; # used with ngx_drizzle
+ }
+
+ location /foo_consistent_hashed {
+     set_consistent_hashed_upstream $backend universe $arg_id;
      drizzle_pass $backend; # used with ngx_drizzle
  }
 
@@ -462,6 +468,43 @@ Here's an example,
      set_unescape_uri $key $arg_key;
      set $list_name universe;
      set_hashed_upstream $backend $list_name $key;
+
+     echo $backend;
+ }
+```
+
+Then `GET /test?key=blah` will output either "moon", "sun", or "earth", depending on the actual value of the `key` query argument.
+
+This directive is usually used to compute an nginx variable to be passed to [memc-nginx-module](http://github.com/openresty/memc-nginx-module)'s [memc_pass](http://github.com/openresty/memc-nginx-module#memc_pass) directive, [redis2-nginx-module](http://github.com/openresty/redis2-nginx-module)'s [[HttpRedis2Module#redis2_pass]] directive, and [ngx_http_proxy_module](http://nginx.org/en/docs/http/ngx_http_proxy_module.html)'s [proxy_pass](http://nginx.org/en/docs/http/ngx_http_proxy_module.html#proxy_pass) directive, among others.
+
+[Back to TOC](#table-of-contents)
+
+set_consistent_hashed_upstream
+-------------------
+**syntax:** *set_consistent_hashed_upstream $dst &lt;upstream_list_name&gt; &lt;src&gt;*
+
+**default:** *no*
+
+**context:** *location, location if*
+
+**phase:** *rewrite*
+
+Map `<src>`to one of the upstream name included in the upstream list named `<upstream_list_name>`. If `<upstream_list_name>` needs to be resized or updated, cache miss rate can be estimated in advance.
+
+Here's an example,
+
+```nginx
+
+ upstream moon { ... }
+ upstream sun { ... }
+ upstream earth { ... }
+
+ upstream_list universe moon sun earth;
+
+ location /test {
+     set_unescape_uri $key $arg_key;
+     set $list_name universe;
+     set_consistent_hashed_upstream $backend $list_name $key;
 
      echo $backend;
  }
@@ -1006,8 +1049,8 @@ set_rotate
 
 **phase:** *rewrite*
 
-Increments `$value` but keeps it in range from `<from>` to `<to>`. 
-If `$value` is greater than `<to>` or less than `<from>` is will be 
+Increments `$value` but keeps it in range from `<from>` to `<to>`.
+If `$value` is greater than `<to>` or less than `<from>` is will be
 set to `<from>` value.
 
 The current value after running this directive will always be saved on a per-location basis. And the this saved value will be used for incrementation when the `$value` is not initialized or has a bad value.
@@ -1330,4 +1373,3 @@ See Also
 * [The OpenResty bundle](http://openresty.org)
 
 [Back to TOC](#table-of-contents)
-
