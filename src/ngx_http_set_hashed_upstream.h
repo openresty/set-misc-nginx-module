@@ -28,8 +28,7 @@ typedef struct {
 } ngx_http_set_hashed_upstream_conf;
 
 
-ngx_uint_t ngx_http_set_misc_apply_distribution
-        (ngx_log_t *log, ngx_uint_t hash,
+ngx_uint_t ngx_http_set_misc_apply_distribution(ngx_log_t *log, ngx_uint_t hash,
          ngx_http_set_hashed_upstream_conf *hash_conf,
          ngx_http_set_misc_distribution_t type);
 
