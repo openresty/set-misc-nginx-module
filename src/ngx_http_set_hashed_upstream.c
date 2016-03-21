@@ -240,8 +240,8 @@ ngx_http_set_hashed_upstream_hashtype(ngx_conf_t *cf, ngx_command_t *cmd,
     } else if (hash_type == ngx_http_set_misc_consistent_hash) {
         hash_conf->node_len = ul->nelts * HASH_VNODES;
         hash_nodes_size =
-                sizeof(ngx_http_set_hashed_upstream_consistent_hash_node) *
-                hash_conf->node_len;
+            sizeof(ngx_http_set_hashed_upstream_consistent_hash_node) *
+            hash_conf->node_len;
         hash_conf->hash_nodes = ngx_pcalloc(cf->pool, hash_nodes_size);
         if (hash_conf->hash_nodes == NULL) {
             return NGX_CONF_ERROR;
