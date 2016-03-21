@@ -503,8 +503,7 @@ Here's an example,
 
  location /test {
      set_unescape_uri $key $arg_key;
-     set $list_name universe;
-     set_consistent_hashed_upstream $backend $list_name $key;
+     set_consistent_hashed_upstream $backend universe $key;
 
      echo $backend;
  }
