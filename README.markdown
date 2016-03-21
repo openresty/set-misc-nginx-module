@@ -1048,8 +1048,8 @@ set_rotate
 
 **phase:** *rewrite*
 
-Increments `$value` but keeps it in range from `<from>` to `<to>`.
-If `$value` is greater than `<to>` or less than `<from>` is will be
+Increments `$value` but keeps it in range from `<from>` to `<to>`. 
+If `$value` is greater than `<to>` or less than `<from>` is will be 
 set to `<from>` value.
 
 The current value after running this directive will always be saved on a per-location basis. And the this saved value will be used for incrementation when the `$value` is not initialized or has a bad value.
@@ -1372,3 +1372,4 @@ See Also
 * [The OpenResty bundle](http://openresty.org)
 
 [Back to TOC](#table-of-contents)
+
