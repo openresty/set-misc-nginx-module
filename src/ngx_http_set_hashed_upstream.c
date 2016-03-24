@@ -268,6 +268,7 @@ ngx_http_set_hashed_upstream_hashtype(ngx_conf_t *cf, ngx_command_t *cmd,
             if (ulname_vnode == NULL) {
                 return NGX_CONF_ERROR;
             }
+            
             for (j = 0; j < HASH_VNODES; j++) {
                 ngx_snprintf(ulname_vnode, ulname_vnode_size, "%i-%V%Z", j,
                              ul->elts[i]);
