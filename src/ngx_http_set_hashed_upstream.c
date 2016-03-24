@@ -194,8 +194,6 @@ ngx_http_set_hashed_upstream_hashtype(ngx_conf_t *cf, ngx_command_t *cmd,
     size_t                               hash_nodes_size;
     u_char                              *ulname_vnode;
     size_t                               ulname_vnode_size;
-    uint32_t                             ulname_vnode_hash1;
-    uint32_t                             ulname_vnode_hash2;
 
     value = cf->args->elts;
 
@@ -283,10 +281,9 @@ ngx_http_set_hashed_upstream_hashtype(ngx_conf_t *cf, ngx_command_t *cmd,
                   (const void *) ngx_http_set_misc_consistent_hash_compare);
 
         for (i = 0, j = 1; j < hash_conf->node_len; j++) {
-            ulname_vnode_hash1 = hash_conf->hash_nodes[i].hash;
-            ulname_vnode_hash2 = hash_conf->hash_nodes[j].hash;
-
-            if (ulname_vnode_hash1 != ulname_vnode_hash2) {
+            if (hash_conf->hash_nodes[i].hash
+                != hash_conf->hash_nodes[j].hash)
+            {
                 hash_conf->hash_nodes[++i] = hash_conf->hash_nodes[j];
             }
         }
