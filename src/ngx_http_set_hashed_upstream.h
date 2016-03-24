@@ -9,9 +9,9 @@
 
 
 typedef enum {
-    ngx_http_set_misc_distribution_modula,
-    ngx_http_set_misc_consistent_hash,
-    ngx_http_set_misc_distribution_random /* XXX not used */
+    set_misc_hash,
+    set_misc_consistent_hash,
+    set_misc_distribution_random /* XXX not used */
 } ngx_http_set_misc_distribution_t;
 
 typedef struct {
