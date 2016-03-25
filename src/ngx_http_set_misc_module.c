@@ -334,8 +334,8 @@ static ngx_command_t  ngx_http_set_misc_commands[] = {
     },
     {
         ngx_string("set_consistent_hashed_upstream"),
-        NGX_HTTP_MAIN_CONF | NGX_HTTP_SRV_CONF | NGX_HTTP_SIF_CONF
-        | NGX_HTTP_LOC_CONF | NGX_HTTP_LIF_CONF | NGX_CONF_TAKE3,
+        NGX_HTTP_MAIN_CONF|NGX_HTTP_SRV_CONF|NGX_HTTP_SIF_CONF
+            |NGX_HTTP_LOC_CONF|NGX_HTTP_LIF_CONF|NGX_CONF_TAKE3,
         ngx_http_set_hashed_upstream_consistent_hash,
         0,
         0,
