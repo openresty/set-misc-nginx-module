@@ -2,9 +2,7 @@
 #define NGX_HTTP_SET_HASH_H
 
 
-#include <ngx_core.h>
-#include <ngx_config.h>
-#include <ngx_http.h>
+#include "ngx_http_set_misc_module.h"
 
 
 ngx_int_t ngx_http_set_misc_set_sha1(ngx_http_request_t *r,
