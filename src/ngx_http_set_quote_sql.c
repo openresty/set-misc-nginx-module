@@ -240,7 +240,7 @@ ngx_http_set_misc_quote_sql_str(ngx_http_request_t *r, ngx_str_t *res,
 
 
 uintptr_t
-ngx_http_set_misc_escape_sql_str(u_char *dst, u_char *src, size_t size)
+ngx_http_set_misc_escape_sql_str(u_char *dst, const u_char *src, size_t size)
 {
     ngx_uint_t               n;
 
@@ -336,3 +336,75 @@ ngx_http_set_misc_escape_sql_str(u_char *dst, u_char *src, size_t size)
     return (uintptr_t) dst;
 }
 
+
+#ifndef NGX_LUA_NO_FFI_API
+int
+ngx_http_lua_ffi_set_misc_escape_sql_str(u_char *dst, const u_char *str,
+    size_t size)
+{
+    u_char                  *p;
+    ngx_int_t                escape;
+
+    if (dst == NULL) {
+        escape = ngx_http_set_misc_escape_sql_str(NULL, str, size);
+        return 1 + sizeof("''") -  1 + escape + size;   /* format: E'xxxx' */
+    }
+
+    p = dst;
+    *p++ = 'E';
+    *p++ = '\'';
+
+    p =(u_char *) ngx_http_set_misc_escape_sql_str(p, str, size);
+    *p++ = '\'';
+
+    return p - dst;
+}
+
+
+int
+ngx_http_lua_ffi_pg_utf_escape(u_char *dst, const u_char *str, size_t size)
+{
+    ngx_int_t                l, count;
+    const u_char            *d;
+    u_char                  *p;
+
+    if (dst == NULL) {
+        l      = size;
+        d      = str;
+        count  = 0;
+
+        if (ngx_http_pg_utf_islegal(str, size)) {
+            return size;
+        }
+
+        while (l-- > 0) {
+            if (*d & 0x80) {
+                count += 4;
+            }
+            d++;
+            count++;
+        }
+
+        return count;
+    }
+
+    d = str;
+    l = size;
+
+    p  = dst;
+    while (l-- > 0) {
+        if ((*d & 0x80)) {
+            *p++ = '\\';
+            *p++ = '\\';
+            *p++ = (*d >> 6) + '0';
+            *p++ = ((*d >> 3) & 07) + '0';
+            *p++ = (*d & 07) + '0';
+        } else {
+            *p++ = *d;
+        }
+        d++;
+    }
+
+    return p - dst;
+}
+#endif

@@ -7,7 +7,7 @@
 #include <ngx_http.h>
 
 
-uintptr_t ngx_http_set_misc_escape_sql_str(u_char *dst, u_char *src,
+uintptr_t ngx_http_set_misc_escape_sql_str(u_char *dst, const u_char *src,
         size_t size);
 
 ngx_int_t ngx_http_set_misc_quote_sql_str(ngx_http_request_t *r,
