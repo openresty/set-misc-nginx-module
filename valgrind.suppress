@@ -35,7 +35,6 @@ fun:ngx_pnalloc
 Memcheck:Leak
 fun:malloc
 fun:ngx_alloc
-fun:(below main)
 }
 {
 <insert_a_suppression_name_here>
@@ -91,35 +90,10 @@ fun:main
    fun:main
 }
 {
-   /lib/libc-2.12.so
+   libc-2.12.so
    Memcheck:Param
    epoll_ctl(event)
    fun:epoll_ctl
-}
-{
-   <insert_a_suppression_name_here>
-   Memcheck:Leak
-   fun:malloc
-   fun:CRYPTO_malloc
-   fun:lh_insert
-   obj:/lib64/libcrypto.so.0.9.8
-   fun:ERR_load_strings
-   fun:ngx_ssl_init
-   fun:main
-}
-{
-   <insert_a_suppression_name_here>
-   Memcheck:Leak
-   fun:malloc
-   fun:CRYPTO_malloc
-   fun:lh_insert
-   obj:/lib64/libcrypto.so.0.9.8
-   fun:ERR_load_strings
-   fun:ERR_load_OCSP_strings
-   fun:ERR_load_crypto_strings
-   fun:SSL_load_error_strings
-   fun:ngx_ssl_init
-   fun:main
 }
 {
    <insert_a_suppression_name_here>
