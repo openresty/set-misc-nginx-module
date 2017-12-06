@@ -86,63 +86,89 @@ ngx_http_pg_utf_islegal(const unsigned char *s, ngx_int_t len)
 
     while (slen > 0) {
         mblen = ngx_http_pg_utf_mblen(s);
-        if (slen < mblen)
+        if (slen < mblen) {
             return 0;
-
-        switch(mblen)
-        {
-            default:
-                return 0;
-            case 4:
-                a = *(s + 3);
-                if (a < 0x80 || a > 0xBF)
-                    return 0;
-
-                /* fall through */
-
-            case 3:
-                a = *(s + 2);
-                if (a < 0x80 || a > 0xBF)
-                    return 0;
-
-                /* fall through */
-
-            case 2:
-                a = *(s + 1);
-                switch (*s)
-                {
-                    case 0xE0:
-                        if (a < 0xA0 || a > 0xBF)
-                            return 0;
-                        break;
-                    case 0xED:
-                        if (a < 0x80 || a > 0x9F)
-                            return 0;
-                        break;
-                    case 0xF0:
-                        if (a < 0x90 || a > 0xBF)
-                            return 0;
-                        break;
-                    case 0xF4:
-                        if (a < 0x80 || a > 0x8F)
-                            return 0;
-                        break;
-                    default:
-                        if (a < 0x80 || a > 0xBF)
-                            return 0;
-                        break;
-                }
-            case 1:
-                a = *s;
-                if (a >= 0x80 && a < 0xC2)
-                    return 0;
-                if (a > 0xF4)
-                    return 0;
-                break;
         }
 
-        s       += mblen;
-        slen    -= mblen;
+        switch (mblen) {
+
+        case 4:
+            a = *(s + 3);
+            if (a < 0x80 || a > 0xBF) {
+                return 0;
+            }
+
+            break;
+
+        case 3:
+            a = *(s + 2);
+            if (a < 0x80 || a > 0xBF) {
+                return 0;
+            }
+
+            break;
+
+        case 2:
+            a = *(s + 1);
+
+            switch (*s) {
+
+            case 0xE0:
+                if (a < 0xA0 || a > 0xBF) {
+                    return 0;
+                }
+
+                break;
+
+            case 0xED:
+                if (a < 0x80 || a > 0x9F) {
+                    return 0;
+                }
+
+                break;
+
+            case 0xF0:
+                if (a < 0x90 || a > 0xBF) {
+                    return 0;
+                }
+
+                break;
+
+            case 0xF4:
+                if (a < 0x80 || a > 0x8F) {
+                    return 0;
+                }
+
+                break;
+
+            default:
+                if (a < 0x80 || a > 0xBF) {
+                    return 0;
+                }
+
+                break;
+            }
+
+            break;
+
+        case 1:
+            a = *s;
+            if (a >= 0x80 && a < 0xC2) {
+                return 0;
+            }
+
+            if (a > 0xF4) {
+                return 0;
+            }
+
+            break;
+
+        default:
+            return 0;
+        }
+
+        s += mblen;
+        slen -= mblen;
     }
 
     return 1;
