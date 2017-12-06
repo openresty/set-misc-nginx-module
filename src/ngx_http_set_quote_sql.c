@@ -97,10 +97,12 @@ ngx_http_pg_utf_islegal(const unsigned char *s, ngx_int_t len)
                 a = *(s + 3);
                 if (a < 0x80 || a > 0xBF)
                     return 0;
+                /* fall through */
             case 3:
                 a = *(s + 2);
                 if (a < 0x80 || a > 0xBF)
                     return 0;
+                /* fall through */
             case 2:
                 a = *(s + 1);
                 switch (*s)
