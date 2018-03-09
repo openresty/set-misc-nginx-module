@@ -27,4 +27,3 @@ __DATA__
 --- request
 GET /foo
 --- response_body eval: $main::str
-

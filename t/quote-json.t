@@ -67,5 +67,3 @@ null
 GET /foo
 --- response_body
 null
-
-

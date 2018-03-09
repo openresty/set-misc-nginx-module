@@ -68,4 +68,3 @@ sun
 moon
 earth
 earth
-

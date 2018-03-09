@@ -166,4 +166,3 @@ __DATA__
     GET /rand
 --- response_body
 0
-

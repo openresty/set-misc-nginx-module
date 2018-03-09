@@ -82,4 +82,3 @@ GET /bar
 GET /bar
 --- response_body
 [hello world]
-

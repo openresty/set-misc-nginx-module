@@ -268,4 +268,3 @@ a = 2
 a = 2
 --- no_error_log
 [error]
-
