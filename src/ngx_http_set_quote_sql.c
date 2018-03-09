@@ -292,6 +292,7 @@ ngx_http_set_misc_escape_sql_str(u_char *dst, u_char *src, size_t size)
                     case '\\':
                     case '\'':
                     case '"':
+                    case '$':
                     case 26: /* \Z */
                         n++;
                         break;
@@ -347,6 +348,11 @@ ngx_http_set_misc_escape_sql_str(u_char *dst, u_char *src, size_t size)
                 case '"':
                     *dst++ = '\\';
                     *dst++ = '"';
+                    break;
+
+                case '$':
+                    *dst++ = '\\';
+                    *dst++ = '$';
                     break;
 
                 case 26:

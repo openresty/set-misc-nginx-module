@@ -180,3 +180,16 @@ GET /foo?a=a%1ab%1a
 --- response_body
 'a\Zb\Z'
 
+
+
+=== TEST 13: set quote sql value
+--- config
+    location /foo {
+        set_unescape_uri $foo $arg_a;
+        set_quote_sql_str $foo $foo;
+        echo $foo;
+    }
+--- request
+GET /foo?a=$$
+--- response_body
+'\$\$'
