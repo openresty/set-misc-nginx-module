@@ -105,4 +105,3 @@ __DATA__
 --- request
     GET /lcalpha
 --- response_body_like: ^[a-z]{16}$
-

@@ -86,4 +86,3 @@ GET /foo?bar=71
 --- response_body
 71
 25
-

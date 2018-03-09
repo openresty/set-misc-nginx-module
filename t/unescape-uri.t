@@ -56,5 +56,3 @@ hello world
     GET /bar
 --- response_body
 a b
-
-

@@ -137,4 +137,3 @@ GET /foo
 GET /foo
 --- response_body
 %22a%2Fb%3D%7B%7D%3A%3C%3E%3B%26%5B%5D%5C%5E
-

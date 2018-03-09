@@ -38,4 +38,3 @@ YWJjZGU=
     GET /bar
 --- response_body
 abcde
-

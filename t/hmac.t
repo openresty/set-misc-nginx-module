@@ -44,5 +44,3 @@ R/pvxzHC4NLtj7S+kXFg/NePTmk=
     GET /bar
 --- response_body
 +9sdGxiqbAgyS31ktx+3Y3BpDh0=
-
-
