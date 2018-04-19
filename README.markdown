@@ -60,7 +60,7 @@ Table of Contents
 Version
 =======
 
-This document describes ngx_set_misc [v0.31](https://github.com/openresty/set-misc-nginx-module/tags) released on 15 August 2016.
+This document describes ngx_set_misc [v0.32](https://github.com/openresty/set-misc-nginx-module/tags) released on 19 April 2018.
 
 Synopsis
 ========
@@ -1303,7 +1303,7 @@ This wiki page is also maintained by the author himself, and everybody is encour
 Copyright & License
 ===================
 
-Copyright (C) 2009-2017, Yichun Zhang (章亦春) <agentzh@gmail.com>, OpenResty Inc.
+Copyright (C) 2009-2018, Yichun Zhang (章亦春) <agentzh@gmail.com>, OpenResty Inc.
 
 This module is licensed under the terms of the BSD license.
 
