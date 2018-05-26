@@ -1193,7 +1193,7 @@ the version 1.13.6 (see [nginx compatibility](#compatibility)), and then build t
  make install
 ```
 
-Download the latest version of the release tarball of this module from [set-misc-nginx-module file list](http://github.com/openresty/set-misc-nginx-module/tags), and the latest tarball for [ngx_devel_kit](https://github.com/simpl/ngx_devel_kit) from its [file list](https://github.com/simpl/ngx_devel_kit/tags).
+Download the latest version of the release tarball of this module from [set-misc-nginx-module file list](http://github.com/openresty/set-misc-nginx-module/tags), and the latest tarball for [ngx_devel_kit](https://github.com/simplresty/ngx_devel_kit) from its [file list](https://github.com/simplresty/ngx_devel_kit/tags).
 
 [Back to TOC](#table-of-contents)
 
