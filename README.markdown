@@ -664,7 +664,7 @@ set_encode_base64url
 
 **category:** *ndk_set_var_value*
 
-When taking two arguments, this directive will encode the value of the second argument `<src>` to its base64 digest and assign the result into the first argument, variable `$dst`. For example,
+When taking two arguments, this directive will encode the value of the second argument `<src>` to its base64 url safe digest and assign the result into the first argument, variable `$dst`. For example,
 
 ```nginx
 
@@ -734,7 +734,7 @@ set_decode_base64url
 
 **category:** *ndk_set_var_value*
 
-Similar to the [set_encode_base64url](#set_encode_base64url) directive, but does exactly the the opposite operation, .i.e, decoding a base64 digest into its original form.
+Similar to the [set_encode_base64url](#set_encode_base64url) directive, but does exactly the the opposite operation, .i.e, decoding a base64 url safe digest into its original form.
 
 [Back to TOC](#table-of-contents)
 
