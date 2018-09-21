@@ -17,6 +17,7 @@
 #include "ngx_http_set_hash.h"
 #include "ngx_http_set_hex.h"
 #include "ngx_http_set_base64.h"
+#include "ngx_http_set_base64url.h"
 #if NGX_OPENSSL
 #include "ngx_http_set_hmac.h"
 #endif
@@ -55,6 +56,19 @@ static ndk_set_var_t  ngx_http_set_misc_set_decode_base64_filter = {
     NULL
 };
 
+static ndk_set_var_t  ngx_http_set_misc_set_encode_base64url_filter = {
+    NDK_SET_VAR_VALUE,
+    (void *) ngx_http_set_misc_set_encode_base64url,
+    1,
+    NULL
+};
+
+static ndk_set_var_t  ngx_http_set_misc_set_decode_base64url_filter = {
+    NDK_SET_VAR_VALUE,
+    (void *) ngx_http_set_misc_set_decode_base64url,
+    1,
+    NULL
+};
 
 static ndk_set_var_t  ngx_http_set_misc_set_decode_hex_filter = {
     NDK_SET_VAR_VALUE,
@@ -223,6 +237,22 @@ static ngx_command_t  ngx_http_set_misc_commands[] = {
         0,
         &ngx_http_set_misc_set_decode_base64_filter
     },
+    {   ngx_string ("set_encode_base64url"),
+        NGX_HTTP_MAIN_CONF|NGX_HTTP_SRV_CONF|NGX_HTTP_SIF_CONF
+            |NGX_HTTP_LOC_CONF|NGX_HTTP_LIF_CONF|NGX_CONF_TAKE12,
+        ndk_set_var_value,
+        0,
+        0,
+        &ngx_http_set_misc_set_encode_base64url_filter
+    },
+    {   ngx_string ("set_decode_base64url"),
+        NGX_HTTP_MAIN_CONF|NGX_HTTP_SRV_CONF|NGX_HTTP_SIF_CONF
+            |NGX_HTTP_LOC_CONF|NGX_HTTP_LIF_CONF|NGX_CONF_TAKE12,
+        ndk_set_var_value,
+        0,
+        0,
+        &ngx_http_set_misc_set_decode_base64url_filter
+    },    
     {   ngx_string ("set_decode_hex"),
         NGX_HTTP_MAIN_CONF|NGX_HTTP_SRV_CONF|NGX_HTTP_SIF_CONF
             |NGX_HTTP_LOC_CONF|NGX_HTTP_LIF_CONF|NGX_CONF_TAKE12,
