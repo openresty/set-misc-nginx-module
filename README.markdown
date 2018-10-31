@@ -592,7 +592,7 @@ set_decode_base32
 
 **category:** *ndk_set_var_value*
 
-Similar to the [set_encode_base32](#set_encode_base32) directive, but does exactly the the opposite operation, .i.e, decoding a base32(hex) digest into its original form.
+Similar to the [set_encode_base32](#set_encode_base32) directive, but does exactly the opposite operation, .i.e, decoding a base32(hex) digest into its original form.
 
 [Back to TOC](#table-of-contents)
 
@@ -662,7 +662,7 @@ set_decode_base64
 
 **category:** *ndk_set_var_value*
 
-Similar to the [set_encode_base64](#set_encode_base64) directive, but does exactly the the opposite operation, .i.e, decoding a base64 digest into its original form.
+Similar to the [set_encode_base64](#set_encode_base64) directive, but does exactly the opposite operation, .i.e, decoding a base64 digest into its original form.
 
 [Back to TOC](#table-of-contents)
 
@@ -732,7 +732,7 @@ set_decode_hex
 
 **category:** *ndk_set_var_value*
 
-Similar to the [set_encode_hex](#set_encode_hex) directive, but does exactly the the opposite operation, .i.e, decoding a hexadecimal digest into its original form.
+Similar to the [set_encode_hex](#set_encode_hex) directive, but does exactly the opposite operation, .i.e, decoding a hexadecimal digest into its original form.
 
 [Back to TOC](#table-of-contents)
 
