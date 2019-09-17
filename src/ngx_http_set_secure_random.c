@@ -71,6 +71,7 @@ ngx_http_set_misc_set_secure_random_common(int alphabet_type,
         ngx_log_error(NGX_LOG_ERR, r->connection->log, 0,
                       "set_secure_random: could not read all %i byte(s) from "
                       "/dev/urandom", length);
+        ngx_close_file(fd);
         return NGX_ERROR;
     }
 
