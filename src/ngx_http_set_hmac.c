@@ -51,20 +51,31 @@ ngx_http_set_misc_set_hmac_sha1(ngx_http_request_t *r, ngx_str_t *res,
 /* this function's implementation is partly borrowed from
  * https://github.com/anomalizer/ngx_aws_auth */
 ngx_int_t
-ngx_http_set_misc_set_hmac_sha256(ngx_http_request_t *r, ngx_str_t *res,
+ngx_http_set_misc_set_hmac(ngx_http_request_t *r, ngx_str_t *res,
     ngx_http_variable_value_t *v)
 {
-    ngx_http_variable_value_t   *secret, *string_to_sign;
+    ngx_http_variable_value_t   *algo, *secret, *string_to_sign;
     unsigned int                 md_len = 0;
     unsigned char                md[EVP_MAX_MD_SIZE];
     const EVP_MD                *evp_md;
 
-    evp_md = EVP_sha256();
+    algo = v;
+    secret = v + 1;
+    string_to_sign = v + 2;
 
-    secret = v;
-    string_to_sign = v + 1;
+    if (ngx_strcmp("sha256", algo->data) == 0) {
+        evp_md = EVP_sha256();
+    }
+    else if (ngx_strcmp("sha1", algo->data) == 0) {
+        evp_md = EVP_sha1();
+    }
+    else {
+        res->len = 0;
+        return NGX_ERROR;
+    }
 
-    dd("secret=%.*s, string_to_sign=%.*s", (int) secret->len, secret->data,
+    dd("algo=%.*s, secret=%.*s, string_to_sign=%.*s", (int) algo->len, algo->data,
+       (int) secret->len, secret->data,
        (int) string_to_sign->len, string_to_sign->data);
 
     HMAC(evp_md, secret->data, secret->len, string_to_sign->data,
