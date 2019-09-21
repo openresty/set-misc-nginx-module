@@ -46,12 +46,42 @@ R/pvxzHC4NLtj7S+kXFg/NePTmk=
 +9sdGxiqbAgyS31ktx+3Y3BpDh0=
 
 
-=== TEST 3: hmac-sha256
+=== TEST 3: hmac-sha1
 --- config
     location /bar {
         set $secret 'thisisverysecretstuff';
         set $string_to_sign 'some string we want to sign';
-        set_hmac_sha256 $signature $secret $string_to_sign;
+        set_hmac $signature 'sha1' $secret $string_to_sign;
+        set_encode_base64 $signature $signature;
+        echo $signature;
+    }
+--- request
+    GET /bar
+--- response_body
+R/pvxzHC4NLtj7S+kXFg/NePTmk=
+
+
+=== TEST 4: hmac-sha1 empty vars
+--- config
+    location /bar {
+        set $secret '';
+        set $string_to_sign '';
+        set_hmac $signature 'sha1' $secret $string_to_sign;
+        set_encode_base64 $signature $signature;
+        echo $signature;
+    }
+--- request
+    GET /bar
+--- response_body
++9sdGxiqbAgyS31ktx+3Y3BpDh0=
+
+
+=== TEST 5: hmac-sha256
+--- config
+    location /bar {
+        set $secret 'thisisverysecretstuff';
+        set $string_to_sign 'some string we want to sign';
+        set_hmac $signature 'sha256' $secret $string_to_sign;
         set_encode_base64 $signature $signature;
         echo $signature;
     }
@@ -61,12 +91,12 @@ R/pvxzHC4NLtj7S+kXFg/NePTmk=
 4pU3GRQrKKIoeLb9CqYsavHE2l6Hx+KMmRmesU+Cfrs=
 
 
-=== TEST 4: hmac-sha256 empty vars
+=== TEST 6: hmac-sha256 empty vars
 --- config
     location /bar {
         set $secret '';
         set $string_to_sign '';
-        set_hmac_sha256 $signature $secret $string_to_sign;
+        set_hmac $signature 'sha256' $secret $string_to_sign;
         set_encode_base64 $signature $signature;
         echo $signature;
     }
