@@ -12,16 +12,13 @@
 
 /* this function's implementation is partly borrowed from
  * https://github.com/anomalizer/ngx_aws_auth */
-ngx_int_t
-ngx_http_set_misc_set_hmac_sha1(ngx_http_request_t *r, ngx_str_t *res,
-    ngx_http_variable_value_t *v)
+static ngx_int_t
+ngx_http_set_misc_set_hmac(ngx_http_request_t *r, ngx_str_t *res,
+    ngx_http_variable_value_t *v, const EVP_MD *evp_md)
 {
     ngx_http_variable_value_t   *secret, *string_to_sign;
     unsigned int                 md_len = 0;
     unsigned char                md[EVP_MAX_MD_SIZE];
-    const EVP_MD                *evp_md;
-
-    evp_md = EVP_sha1();
 
     secret = v;
     string_to_sign = v + 1;
@@ -48,3 +45,18 @@ ngx_http_set_misc_set_hmac_sha1(ngx_http_request_t *r, ngx_str_t *res,
     return NGX_OK;
 }
 
+
+ngx_int_t
+ngx_http_set_misc_set_hmac_sha1(ngx_http_request_t *r, ngx_str_t *res,
+    ngx_http_variable_value_t *v)
+{
+    return ngx_http_set_misc_set_hmac(r, res, v, EVP_sha1());
+}
+
+
+ngx_int_t
+ngx_http_set_misc_set_hmac_sha256(ngx_http_request_t *r, ngx_str_t *res,
+    ngx_http_variable_value_t *v)
+{
+    return ngx_http_set_misc_set_hmac(r, res, v, EVP_sha256());
+}

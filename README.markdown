@@ -37,6 +37,7 @@ Table of Contents
     * [set_sha1](#set_sha1)
     * [set_md5](#set_md5)
     * [set_hmac_sha1](#set_hmac_sha1)
+    * [set_hmac_sha256](#set_hmac_sha256)
     * [set_random](#set_random)
     * [set_secure_random_alphanum](#set_secure_random_alphanum)
     * [set_secure_random_lcalpha](#set_secure_random_lcalpha)
@@ -881,7 +882,48 @@ R/pvxzHC4NLtj7S+kXFg/NePTmk=
 
 Please note that we're using [echo-nginx-module](http://github.com/openresty/echo-nginx-module)'s [echo directive](http://github.com/openresty/echo-nginx-module#echo) here to output values of nginx variables directly.
 
-This directive requires the OpenSSL library enabled in your Nignx build (usually by passing the `--with-http_ssl_module` option to the `./configure` script).
+This directive requires the OpenSSL library enabled in your Nginx build (usually by passing the `--with-http_ssl_module` option to the `./configure` script).
+
+[Back to TOC](#table-of-contents)
+
+set_hmac_sha256
+---------------
+**syntax:** *set_hmac_sha256 $dst &lt;secret_key&gt; &lt;src&gt;*
+
+**syntax:** *set_hmac_sha256 $dst*
+
+**default:** *no*
+
+**context:** *location, location if*
+
+**phase:** *rewrite*
+
+Computes the [HMAC-SHA256](http://en.wikipedia.org/wiki/HMAC) digest of the argument `<src>` and assigns the result into the argument variable `$dst` with the secret key `<secret_key>`.
+
+The raw binary form of the `HMAC-SHA256` digest will be generated, use [set_encode_base64](#set_encode_base64), for example, to encode the result to a textual representation if desired.
+
+For example,
+
+```nginx
+
+ location /test {
+     set $secret 'thisisverysecretstuff';
+     set $string_to_sign 'some string we want to sign';
+     set_hmac_sha256 $signature $secret $string_to_sign;
+     set_encode_base64 $signature $signature;
+     echo $signature;
+ }
+```
+
+Then request `GET /test` will yield the following output
+
+```
+4pU3GRQrKKIoeLb9CqYsavHE2l6Hx+KMmRmesU+Cfrs=
+```
+
+Please note that we're using [echo-nginx-module](http://github.com/openresty/echo-nginx-module)'s [echo directive](http://github.com/openresty/echo-nginx-module#echo) here to output values of nginx variables directly.
+
+This directive requires the OpenSSL library enabled in your Nginx build (usually by passing the `--with-http_ssl_module` option to the `./configure` script).
 
 [Back to TOC](#table-of-contents)
 
