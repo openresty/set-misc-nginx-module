@@ -80,6 +80,7 @@ static ndk_set_var_t  ngx_http_set_misc_set_hmac_sha1_filter = {
     NULL
 };
 
+
 static ndk_set_var_t  ngx_http_set_misc_set_hmac_sha256_filter = {
     NDK_SET_VAR_MULTI_VALUE,
     (void *) ngx_http_set_misc_set_hmac_sha256,
