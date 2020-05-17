@@ -20,7 +20,7 @@
 #include <stdarg.h>
 
 static ngx_inline void
-dd(const char* fmt, ...) {
+dd(const char *fmt, ...) {
 }
 
 #    endif
@@ -36,7 +36,7 @@ dd(const char* fmt, ...) {
 #include <stdarg.h>
 
 static ngx_inline void
-dd(const char* fmt, ...) {
+dd(const char *fmt, ...) {
 }
 
 #   endif

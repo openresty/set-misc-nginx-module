@@ -11,7 +11,6 @@ ngx_int_t
 ngx_http_set_misc_set_decode_hex(ngx_http_request_t *r, ngx_str_t *res,
     ngx_http_variable_value_t *v)
 {
-
     u_char      *p;
     ngx_int_t    n;
     ngx_uint_t   i;
