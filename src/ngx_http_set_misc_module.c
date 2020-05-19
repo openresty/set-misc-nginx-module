@@ -252,7 +252,7 @@ static ngx_command_t  ngx_http_set_misc_commands[] = {
         0,
         0,
         &ngx_http_set_misc_set_decode_base64url_filter
-    },    
+    },
     {   ngx_string ("set_decode_hex"),
         NGX_HTTP_MAIN_CONF|NGX_HTTP_SRV_CONF|NGX_HTTP_SIF_CONF
             |NGX_HTTP_LOC_CONF|NGX_HTTP_LIF_CONF|NGX_CONF_TAKE12,
