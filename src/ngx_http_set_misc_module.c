@@ -49,12 +49,14 @@ static ndk_set_var_t  ngx_http_set_misc_set_encode_base64_filter = {
     NULL
 };
 
+
 static ndk_set_var_t  ngx_http_set_misc_set_decode_base64_filter = {
     NDK_SET_VAR_VALUE,
     (void *) ngx_http_set_misc_set_decode_base64,
     1,
     NULL
 };
+
 
 static ndk_set_var_t  ngx_http_set_misc_set_encode_base64url_filter = {
     NDK_SET_VAR_VALUE,
@@ -63,12 +65,14 @@ static ndk_set_var_t  ngx_http_set_misc_set_encode_base64url_filter = {
     NULL
 };
 
+
 static ndk_set_var_t  ngx_http_set_misc_set_decode_base64url_filter = {
     NDK_SET_VAR_VALUE,
     (void *) ngx_http_set_misc_set_decode_base64url,
     1,
     NULL
 };
+
 
 static ndk_set_var_t  ngx_http_set_misc_set_decode_hex_filter = {
     NDK_SET_VAR_VALUE,
