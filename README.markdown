@@ -33,6 +33,7 @@ Table of Contents
     * [set_encode_base64](#set_encode_base64)
     * [set_decode_base64](#set_decode_base64)
     * [set_encode_hex](#set_encode_hex)
+    * [set_encode_hex_dash](#set_encode_hex_dash)
     * [set_decode_hex](#set_decode_hex)
     * [set_sha1](#set_sha1)
     * [set_md5](#set_md5)
@@ -716,6 +717,41 @@ When taking a single argument, this directive will do in-place modification of t
 then request `GET /test` will give exactly the same output as the previous example.
 
 This directive can be invoked by [lua-nginx-module](http://github.com/openresty/lua-nginx-module)'s [ndk.set_var.DIRECTIVE](http://github.com/openresty/lua-nginx-module#ndkset_vardirective) interface and [array-var-nginx-module](http://github.com/openresty/array-var-nginx-module)'s [array_map_op](http://github.com/openresty/array-var-nginx-module#array_map_op) directive.
+
+
+[Back to TOC](#table-of-contents)
+
+set_encode_hex_dash
+-----------------
+**syntax:** *set_encode_hex_dash $dst &lt;src&gt;*
+
+**syntax:** *set_encode_hex_dash $dst*
+
+**default:** *no*
+
+**context:** *location, location if*
+
+**phase:** *rewrite*
+
+**category:** *ndk_set_var_value*
+
+```nginx
+
+ location /test {
+     set $raw "章亦春";
+     set_encode_hex $digest $raw;
+     set_encode_hex_dash $digest_dashed $digest;
+
+     echo $digest_dashed;
+ }
+```
+
+Then request `GET /test` will yield the following output
+
+
+    \xe7\xab\xa0\xe4\xba\xa6\xe6\x98\xa5
+
+
 
 [Back to TOC](#table-of-contents)
 
