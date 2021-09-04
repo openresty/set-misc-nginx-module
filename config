@@ -29,6 +29,7 @@ SET_MISC_SRCS="                                                             \
             $ngx_addon_dir/src/ngx_http_set_local_today.c                   \
             $ngx_addon_dir/src/ngx_http_set_hex.c                           \
             $ngx_addon_dir/src/ngx_http_set_base64.c                        \
+            $ngx_addon_dir/src/ngx_http_set_base64url.c                     \
             $ngx_addon_dir/src/ngx_http_set_random.c                        \
             $ngx_addon_dir/src/ngx_http_set_secure_random.c                 \
             $ngx_addon_dir/src/ngx_http_set_rotate.c
@@ -45,6 +46,7 @@ SET_MISC_DEPS="                                                             \
             $ngx_addon_dir/src/ngx_http_set_hash.h                          \
             $ngx_addon_dir/src/ngx_http_set_local_today.h                   \
             $ngx_addon_dir/src/ngx_http_set_hex.h                           \
+            $ngx_addon_dir/src/ngx_http_set_base64url.h                     \
             $ngx_addon_dir/src/ngx_http_set_base64.h                        \
             $ngx_addon_dir/src/ngx_http_set_random.h                        \
             $ngx_addon_dir/src/ngx_http_set_rotate.h                        \

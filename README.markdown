@@ -32,6 +32,8 @@ Table of Contents
     * [set_decode_base32](#set_decode_base32)
     * [set_encode_base64](#set_encode_base64)
     * [set_decode_base64](#set_decode_base64)
+    * [set_encode_base64url](#set_encode_base64url)
+    * [set_decode_base64url](#set_decode_base64url)
     * [set_encode_hex](#set_encode_hex)
     * [set_decode_hex](#set_decode_hex)
     * [set_sha1](#set_sha1)
@@ -649,6 +651,58 @@ This directive can be invoked by [lua-nginx-module](http://github.com/openresty/
 
 [Back to TOC](#table-of-contents)
 
+set_encode_base64url
+-----------------
+**syntax:** *set_encode_base64url $dst &lt;src&gt;*
+
+**syntax:** *set_encode_base64url $dst*
+
+**default:** *no*
+
+**context:** *location, location if*
+
+**phase:** *rewrite*
+
+**category:** *ndk_set_var_value*
+
+When taking two arguments, this directive will encode the value of the second argument `<src>` to its base64 url safe digest and assign the result into the first argument, variable `$dst`. For example,
+
+```nginx
+
+ location /test {
+     set $raw "abcde";
+     set_encode_base64url $digest $raw;
+
+     echo $digest;
+ }
+```
+
+Then request `GET /test` will yield the following output
+
+```
+YWJjZGU=
+```
+
+Please note that we're using [echo-nginx-module](http://github.com/openresty/echo-nginx-module)'s [echo directive](http://github.com/openresty/echo-nginx-module#echo) here to output values of nginx variables directly.
+
+When taking a single argument, this directive will do in-place modification of the argument variable. For example,
+
+```nginx
+
+ location /test {
+     set $value "abcde";
+     set_encode_base64url $value;
+
+     echo $value;
+ }
+```
+
+then request `GET /test` will give exactly the same output as the previous example.
+
+This directive can be invoked by [lua-nginx-module](http://github.com/openresty/lua-nginx-module)'s [ndk.set_var.DIRECTIVE](http://github.com/openresty/lua-nginx-module#ndkset_vardirective) interface and [array-var-nginx-module](http://github.com/openresty/array-var-nginx-module)'s [array_map_op](http://github.com/openresty/array-var-nginx-module#array_map_op) directive.
+
+[Back to TOC](#table-of-contents)
+
 set_decode_base64
 -----------------
 **syntax:** *set_decode_base64 $dst &lt;src&gt;*
@@ -664,6 +718,24 @@ set_decode_base64
 **category:** *ndk_set_var_value*
 
 Similar to the [set_encode_base64](#set_encode_base64) directive, but does exactly the opposite operation, .i.e, decoding a base64 digest into its original form.
+
+[Back to TOC](#table-of-contents)
+
+set_decode_base64url
+-----------------
+**syntax:** *set_decode_base64url $dst &lt;src&gt;*
+
+**syntax:** *set_decode_base64url $dst*
+
+**default:** *no*
+
+**context:** *location, location if*
+
+**phase:** *rewrite*
+
+**category:** *ndk_set_var_value*
+
+Similar to the [set_encode_base64url](#set_encode_base64url) directive, but does exactly the the opposite operation, .i.e, decoding a base64 url safe digest into its original form.
 
 [Back to TOC](#table-of-contents)
 
