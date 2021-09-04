@@ -37,6 +37,8 @@ install:
   - git clone https://github.com/calio/iconv-nginx-module.git ../iconv-nginx-module
 
 script:
+  - ngx-releng > check.txt || true
+  - if [ `wc -l check.txt` != "3" ]; then cat check.txt; exit 1; fi
   - cd luajit2
   - make -j$JOBS CCDEBUG=-g Q= PREFIX=$LUAJIT_PREFIX CC=$CC XCFLAGS='-DLUA_USE_APICHECK -DLUA_USE_ASSERT' > build.log 2>&1 || (cat build.log && exit 1)
   - sudo make install PREFIX=$LUAJIT_PREFIX > build.log 2>&1 || (cat build.log && exit 1)
