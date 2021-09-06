@@ -52,6 +52,7 @@ ngx_http_set_misc_set_hashed_upstream(ngx_http_request_t *r, ngx_str_t *res,
         }
 
         key = v + 1;
+
     } else {
         key = v;
     }

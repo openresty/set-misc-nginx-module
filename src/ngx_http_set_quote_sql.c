@@ -191,6 +191,7 @@ ngx_http_pg_utf_escape(ngx_http_request_t *r, ngx_str_t *res)
         if (*d & 0x80) {
             count += 4;
         }
+
         d++;
         count++;
     }
@@ -211,9 +212,11 @@ ngx_http_pg_utf_escape(ngx_http_request_t *r, ngx_str_t *res)
             *p++ = (*d >> 6) + '0';
             *p++ = ((*d >> 3) & 07) + '0';
             *p++ = (*d & 07) + '0';
+
         } else {
             *p++ = *d;
         }
+
         d++;
     }
 
@@ -300,6 +303,7 @@ ngx_http_set_misc_escape_sql_str(u_char *dst, u_char *src, size_t size)
                         break;
                 }
             }
+
             src++;
             size--;
         }
@@ -364,9 +368,11 @@ ngx_http_set_misc_escape_sql_str(u_char *dst, u_char *src, size_t size)
                     *dst++ = *src;
                     break;
             }
+
         } else {
             *dst++ = *src;
         }
+
         src++;
         size--;
     } /* while (size) */

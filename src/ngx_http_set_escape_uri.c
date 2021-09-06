@@ -182,6 +182,7 @@ ngx_escape_uri_patched(u_char *dst, u_char *src, size_t size, ngx_uint_t type)
             if (escape[*src >> 5] & (1 << (*src & 0x1f))) {
                 n++;
             }
+
             src++;
             size--;
         }
@@ -199,6 +200,7 @@ ngx_escape_uri_patched(u_char *dst, u_char *src, size_t size, ngx_uint_t type)
         } else {
             *dst++ = *src++;
         }
+
         size--;
     }
 
