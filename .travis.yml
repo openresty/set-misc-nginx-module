@@ -1,5 +1,5 @@
 sudo: required
-dist: xenial
+dist: bionic
 
 branches:
   only:
@@ -51,4 +51,4 @@ script:
   - export NGX_BUILD_CC=$CC
   - sh util/build.sh $NGINX_VERSION > build.log 2>&1 || (cat build.log && exit 1)
   - nginx -V
-  - prove -r t
+  - prove -I. -r t
