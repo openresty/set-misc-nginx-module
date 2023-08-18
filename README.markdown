@@ -1121,10 +1121,10 @@ set_rotate
 **phase:** *rewrite*
 
 Increments `$value` but keeps it in range from `<from>` to `<to>`. 
-If `$value` is greater than `<to>` or less than `<from>` is will be 
+If `$value` is greater than `<to>` or less than `<from>` it will be 
 set to `<from>` value.
 
-The current value after running this directive will always be saved on a per-location basis. And the this saved value will be used for incrementation when the `$value` is not initialized or has a bad value.
+The current value after running this directive will always be saved on a per-location basis. And then this saved value will be used for incrementation when the `$value` is not initialized or has a bad value.
 
 Only non-negative numbers are allowed for the `<from>` and `<to>` arguments.
 
@@ -1191,7 +1191,7 @@ then request `GET /today` will output something like
 2011-08-16
 ```
 
-and year, the actual date you get here will vary every day ;)
+and yeah, the actual date you get here will vary every day ;)
 
 Behind the scene, this directive utilizes the `ngx_time` API in the Nginx core, so usually no syscall is involved due to the time caching mechanism in the Nginx core.
 
