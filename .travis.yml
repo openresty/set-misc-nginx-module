@@ -1,5 +1,5 @@
 sudo: required
-dist: bionic
+dist: focal
 
 branches:
   only:
@@ -28,7 +28,7 @@ before_install:
   - sudo apt-get install -qq -y axel cpanminus libtest-base-perl libtext-diff-perl liburi-perl libwww-perl libtest-longstring-perl liblist-moreutils-perl > build.log 2>&1 || (cat build.log && exit 1)
 
 install:
-  - git clone https://github.com/openresty/nginx-devel-utils.git
+  - git clone https://github.com/openresty/openresty-devel-utils.git
   - git clone https://github.com/openresty/openresty.git ../openresty
   - git clone https://github.com/openresty/no-pool-nginx.git ../no-pool-nginx
   - git clone https://github.com/simpl/ngx_devel_kit.git ../ndk-nginx-module
@@ -41,7 +41,7 @@ install:
   - git clone https://github.com/calio/iconv-nginx-module.git ../iconv-nginx-module
 
 script:
-  - export PATH=$PWD/work/nginx/sbin:$PWD/nginx-devel-utils:$PATH
+  - export PATH=$PWD/work/nginx/sbin:$PWD/openresty-devel-utils:$PATH
   - ngx-releng > check.txt || true
   - lines=`wc -l check.txt | awk '{print $1}'`; if [ $lines -gt 3 ]; then cat check.txt; exit 1; fi
   - cd luajit2
