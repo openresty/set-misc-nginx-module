@@ -558,6 +558,11 @@ ngx_http_set_misc_merge_loc_conf(ngx_conf_t *cf, void *parent, void *child)
 
     ngx_conf_merge_value(conf->current, prev->current, NGX_CONF_UNSET);
 
+    /* mark every byte value as invalid (sentinel 77) before populating the
+     * valid alphabet positions, so that ngx_http_set_misc_decode_base32()
+     * can reliably reject characters outside the configured alphabet. */
+    ngx_memset(conf->basis32, 77, sizeof(conf->basis32));
+
     for (i = 0; i < BASE32_ALPHABET_LEN; i++) {
         conf->basis32[conf->base32_alphabet.data[i]] = (u_char) i;
     }
