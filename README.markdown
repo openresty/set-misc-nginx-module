@@ -1120,8 +1120,8 @@ set_rotate
 
 **phase:** *rewrite*
 
-Increments `$value` but keeps it in range from `<from>` to `<to>`. 
-If `$value` is greater than `<to>` or less than `<from>` it will be 
+Increments `$value` but keeps it in range from `<from>` to `<to>`.
+If `$value` is greater than `<to>` or less than `<from>` it will be
 set to `<from>` value.
 
 The current value after running this directive will always be saved on a per-location basis. And then this saved value will be used for incrementation when the `$value` is not initialized or has a bad value.
@@ -1286,7 +1286,28 @@ may lead to segmentation faults.
 Installation
 ============
 
-This module is included and enabled by default in the [OpenResty bundle](http://openresty.org). If you want to install this module manually with your own Nginx source tarball, then follow the steps below:
+This module is included and enabled by default in the [OpenResty bundle](http://openresty.org).
+
+Pre-built packages for this module are also freely available from the GetPageSpeed repository for Ubuntu and Debian:
+
+```bash
+# Install the repository keyring
+sudo install -d -m 0755 /etc/apt/keyrings
+curl -fsSL https://extras.getpagespeed.com/deb-archive-keyring.gpg \
+  | sudo tee /etc/apt/keyrings/getpagespeed.gpg >/dev/null
+
+# Add the repository (Ubuntu example - replace 'ubuntu' and 'jammy' for your distro)
+echo "deb [signed-by=/etc/apt/keyrings/getpagespeed.gpg] https://extras.getpagespeed.com/ubuntu jammy main" \
+  | sudo tee /etc/apt/sources.list.d/getpagespeed-extras.list
+
+# Install nginx and the module (NDK is installed automatically as a dependency)
+sudo apt-get update
+sudo apt-get install nginx nginx-module-set-misc
+```
+
+The module is automatically enabled after installation. Supported distributions include Debian 12/13 and Ubuntu 20.04/22.04/24.04 (both amd64 and arm64). See [the complete setup instructions](https://apt-nginx-extras.getpagespeed.com/apt-setup/).
+
+If you want to install this module manually with your own Nginx source tarball, then follow the steps below:
 
 Grab the nginx source code from [nginx.org](http://nginx.org/), for example,
 the version 1.13.6 (see [nginx compatibility](#compatibility)), and then build the source with this module:
@@ -1448,4 +1469,3 @@ See Also
 * [The OpenResty bundle](http://openresty.org)
 
 [Back to TOC](#table-of-contents)
-
